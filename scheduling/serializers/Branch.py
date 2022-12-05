@@ -1,0 +1,16 @@
+from rest_framework import serializers
+from scheduling.models import Branch
+
+"""
+name = models.CharField(max_length=256)
+address = models.CharField(max_length=256)
+description = models.CharField(max_length=256)
+tubs = models.IntegerField()
+
+"""
+
+
+class BranchSerializer(serializers.ModelSerializer):
+	class Meta:
+		model = Branch
+		fields = ('name', 'address', 'description', 'tubs')
