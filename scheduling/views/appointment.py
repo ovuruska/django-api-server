@@ -9,5 +9,4 @@ class AppointmentCreateAPIView(generics.CreateAPIView):
 	queryset = Appointment.objects.all()
 
 	def perform_create(self, serializer):
-		print(serializer.validated_data)
 		serializer.save(user=self.request.user)
