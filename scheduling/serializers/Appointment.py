@@ -7,4 +7,4 @@ class AppointmentSerializer(serializers.ModelSerializer):
 
 	class Meta:
 		model = Appointment
-		fields = ('customer_notes','dog', 'start_time', 'end_time', 'services','products')
+		fields = '__all__'

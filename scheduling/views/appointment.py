@@ -10,3 +10,11 @@ class AppointmentCreateAPIView(generics.CreateAPIView):
 
 	def perform_create(self, serializer):
 		serializer.save(user=self.request.user)
+
+
+class AppointmentModifyAPIView(generics.UpdateAPIView):
+	serializer_class = AppointmentSerializer
+	queryset = Appointment.objects.all()
+
+	def patch(self, request, *args, **kwargs):
+		...

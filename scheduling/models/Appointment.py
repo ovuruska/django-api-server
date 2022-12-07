@@ -1,4 +1,5 @@
 from django.db import models
+
 from scheduling.common import BaseModel
 
 
@@ -14,3 +15,4 @@ class Appointment(BaseModel):
 	cost = models.DecimalField(max_digits=5, decimal_places=2, default=0.00)
 	products = models.ManyToManyField("Product", related_name="products+")
 	branch = models.ForeignKey("Branch", on_delete=models.DO_NOTHING, related_name="appointments")
+	employee = models.ForeignKey("Employee", on_delete=models.DO_NOTHING, related_name="appointments")
