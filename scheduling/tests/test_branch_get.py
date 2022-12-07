@@ -1,21 +1,8 @@
 from django.test import TestCase
 
 from scheduling.models import Branch
+from mock import branches as test_branches
 
-test_branches = [
-	{
-		'name': 'Branch 1',
-		'address': 'Address 1',
-		'description': 'Description 1',
-		'tubs': 1,
-	},
-	{
-		'name': 'Branch 2',
-		'address': 'Address 2',
-		'description': 'Description 2',
-		'tubs': 2,
-	},
-]
 
 
 class AppointmentTestCase(TestCase):

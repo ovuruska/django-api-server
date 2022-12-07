@@ -2,20 +2,8 @@ from django.test import TestCase
 
 from scheduling.models import Branch
 
-test_branches = [
-	{
-		'name': 'Branch 1',
-		'address': 'Address 1',
-		'description': 'Description 1',
-		'tubs': 1,
-	},
-	{
-		'name': 'Branch 2',
-		'address': 'Address 2',
-		'description': 'Description 2',
-		'tubs': 2,
-	},
-]
+from mock.branches import branches as test_branches
+
 
 
 
@@ -33,7 +21,6 @@ class AppointmentTestCase(TestCase):
 			test_branches[0],
 			content_type="application/json"
 		)
-
 		self.assertEqual(results.status_code, 201)
 
 		results = self.client.post(

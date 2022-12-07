@@ -8,4 +8,6 @@ class Customer(BaseModel):
 	email = models.EmailField()
 	phone = models.CharField(max_length=32)
 	address = models.CharField(max_length=128)
-	dogs = models.ManyToManyField("Dog", related_name="owners")
+
+	class Meta:
+		ordering = ["name","email"]

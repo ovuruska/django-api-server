@@ -3,7 +3,7 @@ from scheduling.common import BaseModel
 
 
 class Appointment(BaseModel):
-	#customer = models.ForeignKey("Customer", on_delete=models.DO_NOTHING, related_name="appointments")
+	customer = models.ForeignKey("Customer", on_delete=models.DO_NOTHING, related_name="appointments")
 	dog = models.ForeignKey("Dog", on_delete=models.CASCADE, related_name="appointments")
 	start_time = models.DateTimeField()
 	end_time = models.DateTimeField()
