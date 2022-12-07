@@ -2,8 +2,8 @@ from django.test import TestCase
 
 from scheduling.models import Customer
 
-from mock import customers as customers
-from mock import dogs as test_dogs
+from .mock import customers as customers
+from .mock import dogs as test_dogs
 
 
 
@@ -50,3 +50,21 @@ class DogsTestCase(TestCase):
 		self.assertEqual(response.status_code, 200)
 		self.assertEqual(len(response.data), 0)
 
+	def test_modify_dogs(self):
+		uid = customers[0]['uid']
+		for dog in test_dogs:
+			self.add_dog(dog,uid),
+
+		response = self.client.get(f'/api/dogs/{uid}')
+		self.assertEqual(response.status_code, 200)
+		self.assertEqual(len(response.data), len(test_dogs))
+		first_dog = response.data[0]
+		first_dog['name'] = 'new name'
+		response = self.client.patch(f'/api/dog/{first_dog["id"]}', data={
+			"name":first_dog['name']
+		}, content_type="application/json")
+		self.assertEqual(response.status_code, 200)
+		self.assertEqual(response.data['name'], 'new name')
+		response = self.client.get(f'/api/dog/{first_dog["id"]}')
+		self.assertEqual(response.status_code, 200)
+		self.assertEqual(response.data['name'], 'new name')

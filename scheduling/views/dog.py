@@ -6,7 +6,7 @@ from scheduling.serializers.Dog import DogSerializer
 
 
 
-class DogModifyAPIView(CreateAPIView,UpdateAPIView):
+class DogModifyAPIView(CreateAPIView):
 	serializer_class = DogSerializer
 	queryset = Dog.objects.all()
 
@@ -18,7 +18,7 @@ class DogModifyAPIView(CreateAPIView,UpdateAPIView):
 		return self.create(request, *args, **kwargs)
 
 
-class DogRetrieveAPIView(RetrieveAPIView,DestroyAPIView):
+class DogRetrieveAPIView(RetrieveAPIView,DestroyAPIView,UpdateAPIView):
 	serializer_class = DogSerializer
 	queryset = Dog.objects.all()
 	
