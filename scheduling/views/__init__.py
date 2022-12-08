@@ -1,4 +1,4 @@
-from .appointment import AppointmentCreateAPIView
+from .appointment import *
 from .branch_get import BranchRetrieveAPIView
 from .branch_modify import BranchModifyAPIView
 from .customer import CustomerRetrieveAPIView,CustomerDogsRetrieveAPIView

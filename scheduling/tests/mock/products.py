@@ -3,6 +3,7 @@ products = [
 		"name": "Dog Food",
 		"description": "Dog Food",
 		"cost": 10.00,
+
 	},
 	{
 		"name": "Cat Food",

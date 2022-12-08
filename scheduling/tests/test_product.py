@@ -5,7 +5,7 @@ class ProductTestCase(TestCase):
 
 	def test_create_product(self):
 
-		response = self.client.post('/api/product',data=products[0],content_type='application/json')
+		response = self.client.post()
 		self.assertEqual(response.status_code, 201)
 
 
@@ -27,10 +27,8 @@ class ProductTestCase(TestCase):
 		response = self.client.delete('/api/product/1')
 		self.assertEqual(response.status_code, 204)
 
-
-
-		self.client.post('/api/product',data=products[0],content_type='application/json')
-		self.client.post('/api/product',data=products[1],content_type='application/json')
+		self.client.post()
+		self.client.post()
 
 		response = self.client.get('/api/products/all')
 		self.assertEqual(response.status_code, 200)

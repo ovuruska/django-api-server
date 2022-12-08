@@ -1,7 +1,6 @@
 from rest_framework.generics import RetrieveAPIView, CreateAPIView, DestroyAPIView, UpdateAPIView
 
 from scheduling.models import Dog,Customer
-from scheduling.serializers.Customer import CustomerSerializer
 from scheduling.serializers.Dog import DogSerializer
 
 

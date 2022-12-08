@@ -5,7 +5,7 @@ class ServiceTestCase(TestCase):
 
 	def test_create_service(self):
 
-		response = self.client.post('/api/service',data=services[0],content_type='application/json')
+		response = self.client.post()
 		self.assertEqual(response.status_code, 201)
 
 
@@ -27,10 +27,8 @@ class ServiceTestCase(TestCase):
 		response = self.client.delete('/api/service/1')
 		self.assertEqual(response.status_code, 204)
 
-
-
-		self.client.post('/api/service',data=services[0],content_type='application/json')
-		self.client.post('/api/service',data=services[1],content_type='application/json')
+		self.client.post()
+		self.client.post()
 
 		response = self.client.get('/api/services/all')
 		self.assertEqual(response.status_code, 200)

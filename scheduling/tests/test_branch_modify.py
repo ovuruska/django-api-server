@@ -16,18 +16,10 @@ class AppointmentTestCase(TestCase):
 
 
 	def test_create_branch(self):
-		results = self.client.post(
-			'/api/admin/branch/',
-			test_branches[0],
-			content_type="application/json"
-		)
+		results = self.client.post()
 		self.assertEqual(results.status_code, 201)
 
-		results = self.client.post(
-			'api/admin/branch/',
-			test_branches[1],
-			content_type="application/json"
-		)
+		results = self.client.post()
 		self.assertEqual(results.status_code, 201)
 
 	def get_branches(self):

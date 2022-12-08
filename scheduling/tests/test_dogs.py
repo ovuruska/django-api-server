@@ -19,7 +19,7 @@ class DogsTestCase(TestCase):
 
 	def add_dog(self,dog,user_id):
 		dog['owner'] = user_id
-		response = self.client.post('/api/dog', data=dog)
+		response = self.client.post()
 		return response
 
 
