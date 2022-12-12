@@ -1,4 +1,4 @@
-django>=4.0.0,<4.1.0
+django
 djangorestframework
 pyyaml
 requests
@@ -8,4 +8,3 @@ firebase_auth
 pyrebase4
 django-phonenumber-field
 django-phonenumbers
-dateutil

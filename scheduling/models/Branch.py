@@ -10,6 +10,5 @@ class Branch(BaseModel):
 	tubs = models.IntegerField()
 
 
-
 	class Meta:
 		...

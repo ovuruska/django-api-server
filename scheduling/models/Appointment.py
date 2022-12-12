@@ -6,8 +6,8 @@ from scheduling.common import BaseModel
 class Appointment(BaseModel):
 	customer = models.ForeignKey("Customer", on_delete=models.DO_NOTHING, related_name="appointments",blank=False)
 	dog = models.ForeignKey("Dog", on_delete=models.CASCADE, related_name="appointments",blank=False)
-	start_time = models.DateTimeField()
-	end_time = models.DateTimeField()
+	start = models.DateTimeField()
+	end = models.DateTimeField()
 	customer_notes = models.TextField()
 	employee_notes = models.TextField()
 	services = models.ManyToManyField("Service", related_name="appointments",blank=False)
