@@ -36,8 +36,8 @@ class ScheduleTestCase(TestCase):
 		response = self.client.get('/api/schedule/1?start=2020-01-01&end=2020-01-02')
 		self.assertEqual(response.status_code, 200)
 		response_data = response.json()
-		self.assertEqual(len(response_data), 1)
+		self.assertEqual(len(response_data), 10)
 
-		free_hours = response_data[0]
+		free_hours = response_data
 		self.assertEqual(sum(free_hours),1)
 		self.assertEqual(free_hours[1], 1)

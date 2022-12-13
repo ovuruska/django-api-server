@@ -36,18 +36,14 @@ class ScheduleCustomerListRetrieveView(views.APIView):
 		for _date in datetime_range(start, end, datetime.timedelta(hours=1)):
 			if _date.hour < 9 or _date.hour > 18:
 				continue
-			day_index = _date.day
-			if len(timetable) < day_index:
-				timetable.append([])
-			timetable[day_index-1].append(0)
+			timetable.append(0)
 
 		for interval in intervals:
 			for _date in datetime_range(interval[0], interval[1], datetime.timedelta(hours=1,minutes=1)):
 				if _date.hour < 9 or _date.hour > 18:
 					continue
-				day_index = _date.day
 				hour_index = _date.hour - 9
-				timetable[day_index-1][hour_index] = 1
+				timetable[hour_index] = 1
 
 
 
