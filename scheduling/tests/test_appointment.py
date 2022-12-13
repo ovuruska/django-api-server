@@ -39,7 +39,7 @@ class AppointmentTestCase(TestCase):
 			"branch":1,
 			"dog":1,
 			"customer_notes":"Hello world!",
-			"start_time":"2020-12-12T12:00:00Z",
+			"start":"2020-12-12T12:00:00Z",
 			"services":[1],
 			"products":[]
 		},content_type="application/json")
@@ -57,5 +57,51 @@ class AppointmentTestCase(TestCase):
 
 
 
-	def test_create_appointment_with_dog(self):
-		...
+	def test_create_appointment_with_dog_name(self):
+		response = self.client.post("/api/appointment", {
+			"customer": customers[0]["uid"],
+			"branch": 1,
+			"dog": dogs[0]["name"],
+			"customer_notes": "Hello world!",
+			"start": "2020-12-12T14:00:00Z",
+			"services": [1],
+			"products": []
+		}, content_type="application/json")
+
+		self.assertEqual(response.status_code, 201)
+
+		response = self.client.get("/api/appointment/1")
+		self.assertEqual(response.status_code, 200)
+		self.assertEqual(response.data["products"], [])
+
+		response = self.client.get(f"/api/appointments/{customers[0]['uid']}")
+		self.assertEqual(response.status_code, 200)
+		self.assertEqual(len(response.data), 1)
+		self.assertEqual(response.data[0]["products"], [])
+
+
+	def test_appointment_cannot_be_created_if_busy(self):
+		response = self.client.post("/api/appointment", {
+			"customer": customers[0]["uid"],
+			"branch": 1,
+			"dog": dogs[0]["name"],
+			"customer_notes": "Hello world!",
+			"start": "2020-12-12T14:00:00Z",
+			"services": [1],
+			"products": []
+		}, content_type="application/json")
+
+		self.assertEqual(response.status_code, 201)
+
+		response = self.client.post("/api/appointment", {
+			"customer": customers[0]["uid"],
+			"branch": 1,
+			"dog": dogs[0]["name"],
+			"customer_notes": "Hello world!",
+			"start": "2020-12-12T14:00:00Z",
+			"services": [1],
+			"products": []
+		}, content_type="application/json")
+
+		self.assertEqual(response.status_code, 400)
+		self.assertNotEqual(response.data["error"], None)

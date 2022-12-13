@@ -16,15 +16,12 @@ class ScheduleCustomerListRetrieveView(views.APIView):
 		GET /schedule
 		"""
 
-		start = request.query_params.get('start', None)
+		start = request.query_params.get('date', None)
 
-		end = request.query_params.get('end', None)
-		if not start and not end:
-			return Response(data="Must provide start and end dates",status=422)
-		if start:
-			start = datetime.datetime.strptime(start, '%Y-%m-%d')
-		if end:
-			end = datetime.datetime.strptime(end, '%Y-%m-%d')
+		if not start:
+			return Response(data="Must provide start date",status=422)
+		start = datetime.datetime.strptime(start, '%Y-%m-%d')
+		end = start + datetime.timedelta(days=1)
 		results = Appointment.objects.filter(start__gte=start, end__lte=end)
 		intervals = [
 			(result.start,result.end)
@@ -44,9 +41,6 @@ class ScheduleCustomerListRetrieveView(views.APIView):
 					continue
 				hour_index = _date.hour - 9
 				timetable[hour_index] = 1
-
-
-
 
 		return Response(data=timetable,status=200,headers={"Content-Type": "application/json"})
 		# Get all appointments in the given time range

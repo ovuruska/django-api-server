@@ -5,7 +5,7 @@ from scheduling.models import Appointment
 class AppointmentCreateSerializer(serializers.ModelSerializer):
 	class Meta:
 		model = Appointment
-		fields = ('customer', 'dog', 'customer_notes', 'services', 'products', 'branch','start_time','end_time','employee')
+		fields = ('customer', 'dog', 'customer_notes', 'services', 'products', 'branch','start','end','employee')
 		extra_kwargs = {"employee": {"required": False, "allow_null": True}}
 
 
@@ -20,4 +20,4 @@ class AppointmentEmployeeSerializer(serializers.ModelSerializer):
 class AppointmentCustomerRetrieveSerializer(serializers.ModelSerializer):
 	class Meta:
 		model = Appointment
-		fields = ['id', 'start_time', 'end_time', 'customer_notes','services','products', 'tip', 'cost', 'branch', 'employee']
+		fields = ['id', 'start', 'end', 'customer_notes','services','products', 'tip', 'cost', 'branch', 'employee']

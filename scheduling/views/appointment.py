@@ -1,16 +1,17 @@
-from datetime import datetime
 from datetime import timedelta
 
-from rest_framework import generics
-
-from ..models import Customer, Service
-from ..serializers.Appointment import *
 from dateutil.parser import isoparse
+from rest_framework import generics
+from rest_framework.response import Response
+
+from ..models import Customer, Service, Dog
+from ..serializers.Appointment import *
+
 
 class AppointmentCreateAPIView(generics.CreateAPIView):
 	"""
 
-	start_time: Datetime String in ISO 8601 format : https://www.iso.org/iso-8601-date-and-time-format.html
+	start: Datetime String in ISO 8601 format : https://www.iso.org/iso-8601-date-and-time-format.html
 	"""
 
 	serializer_class = AppointmentCreateSerializer
@@ -19,14 +20,37 @@ class AppointmentCreateAPIView(generics.CreateAPIView):
 	def post(self, request, *args, **kwargs):
 		customer = Customer.objects.get(uid=request.data["customer"])
 		request.data["customer"] = customer.id
+		dog_data = request.data["dog"]
+		if type(dog_data) == int:
+			request.data["dog"] = dog_data
+		else:
+			dog, _ = Dog.objects.get_or_create(
+				owner=customer,
+				name=dog_data,
+			)
+			request.data["dog"] = dog.id
+
+		branch_id = request.data["branch"]
+
 		total_duration = timedelta()
 		for service in request.data["services"]:
 			service_instance = Service.objects.get(id=service)
 			total_duration += service_instance.duration
-		start_time = isoparse(request.data["start_time"])
-		request.data["start_time"] = start_time
-		request.data["end_time"] = start_time + total_duration
-		return super().create(request, *args, **kwargs)
+		start = isoparse(request.data["start"])
+		request.data["start"] = start
+		request.data["end"] = start + total_duration
+		try:
+			Appointment.objects.get(
+				branch=branch_id,
+				start__gte=request.data["start"],
+				end__lte=request.data["end"]
+			)
+			return Response({"error": "There is already an appointment at this time"}, status=400,
+			                content_type="application/json")
+
+		except Appointment.DoesNotExist:
+
+			return self.create(request, *args, **kwargs)
 
 
 class AppointmentModifyAPIView(generics.UpdateAPIView):
