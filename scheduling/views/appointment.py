@@ -64,7 +64,7 @@ class AppointmentCustomerListRetrieveAPIView(generics.ListAPIView):
 
 	def get(self, request, *args, **kwargs):
 		self.queryset = self.queryset.filter(customer__uid=self.kwargs['uid'])
-		return super().get(request, *args, **kwargs)
+		return self.get(request, *args, **kwargs)
 
 
 class AppointmentEmployeeRetrieveAPIView(generics.RetrieveAPIView):

@@ -11,3 +11,9 @@ class ProductSerializer(serializers.ModelSerializer):
 
 
 
+class ProductRetrieveSerializer(serializers.ModelSerializer):
+	"""Serializer for product retrieval."""
+
+	class Meta:
+		model = Product
+		fields = ["id", "name", "cost", "description"]

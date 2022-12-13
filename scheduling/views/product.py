@@ -1,7 +1,7 @@
 from rest_framework import generics
 
 from scheduling.models import Product
-from scheduling.serializers.Product import ProductSerializer
+from scheduling.serializers.Product import ProductSerializer, ProductRetrieveSerializer
 
 
 class ProductCreateAPIView(generics.CreateAPIView):
@@ -14,7 +14,7 @@ class ProductModifyAPIView(generics.UpdateAPIView, generics.RetrieveAPIView, gen
 
 
 class ProductListAllAPIView(generics.ListAPIView):
-	serializer_class = ProductSerializer
+	serializer_class = ProductRetrieveSerializer
 	queryset = Product.objects.all()
 
 
