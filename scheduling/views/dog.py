@@ -1,8 +1,9 @@
 from rest_framework.generics import RetrieveAPIView, CreateAPIView, DestroyAPIView, UpdateAPIView
+from rest_framework.response import Response
 
 from scheduling.models import Dog,Customer
 from scheduling.serializers.Dog import DogSerializer
-
+from scheduling.services.dog import is_dog_available
 
 
 class DogCreateAPIView(CreateAPIView):
@@ -15,15 +16,10 @@ class DogCreateAPIView(CreateAPIView):
 		except AttributeError:
 			pass
 		owner_id = request.data["owner"]
-		customer_instance = Customer.objects.get_or_create(uid=owner_id)
-		if type(customer_instance) is tuple:
-			customer_instance = customer_instance[0]
-		request.data["owner"] = customer_instance.id
 		dog_name = request.data["name"]
-		try:
-			_ = Dog.objects.get(name=dog_name)
-			return Response({"message": "Dog already exists"}, status=400)
-		except Dog.DoesNotExist:
+		if is_dog_available(owner_id,dog_name):
+			return Response({"message":"Dog already exists"})
+		else:
 			return self.create(request, *args, **kwargs)
 
 

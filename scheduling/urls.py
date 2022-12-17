@@ -27,6 +27,13 @@ appointments = [
 	path('admin/appointment', views.AppointmentModifyAPIView.as_view(), name='appointment_employee_modify'),
 ]
 
+employees = [
+	path('employee', views.EmployeeCreateAPIView.as_view(), name='employee_create'),
+	path('employee/groomers', views.EmployeeGroomerListRetrieve.as_view(), name='groomers_retrieve'),
+	path('employee/<pk>', views.EmployeeRetrieveModifyDestroyAPIView.as_view(), name='employee_modify'),
+
+]
+
 schedule = [
 	path('schedule/<pk>', views.ScheduleCustomerListRetrieveView.as_view(), name='schedule_query'),
 
@@ -38,4 +45,4 @@ urlpatterns = [
 	path('me/<uid>',views.CustomerRetrieveAPIView.as_view(),name="get_customer_details"),
 ]
 
-urlpatterns = urlpatterns + products + services + dogs + appointments + schedule
+urlpatterns = urlpatterns + products + services + dogs + appointments + schedule + employees
