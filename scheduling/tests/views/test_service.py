@@ -5,9 +5,17 @@ class ServiceTestCase(TestCase):
 
 	def test_create_service(self):
 
-		response = self.client.post()
+		response = self.client.post(
+			'/api/service',
+			services[0],
+		)
 		self.assertEqual(response.status_code, 201)
 
+		response = self.client.post(
+			'/api/service',
+			services[1],
+		)
+		self.assertEqual(response.status_code, 201)
 
 
 		response = self.client.get('/api/service/1')
@@ -24,13 +32,19 @@ class ServiceTestCase(TestCase):
 		self.assertEqual(response.data['description'], services[0]["description"])
 
 
-		response = self.client.delete('/api/service/1')
-		self.assertEqual(response.status_code, 204)
-
-		self.client.post()
-		self.client.post()
-
 		response = self.client.get('/api/services/all')
 		self.assertEqual(response.status_code, 200)
 		self.assertEqual(len(response.data), 2)
 
+	def test_remove_service(self):
+		response = self.client.post(
+			'/api/service',
+			services[0],
+		)
+		self.assertEqual(response.status_code, 201)
+		response = self.client.delete('/api/service/1')
+		self.assertEqual(response.status_code, 204)
+
+		response = self.client.get('/api/services/all')
+		self.assertEqual(response.status_code, 200)
+		self.assertEqual(len(response.data), 0)

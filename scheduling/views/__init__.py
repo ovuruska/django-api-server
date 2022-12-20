@@ -7,3 +7,7 @@ from .employee import *
 from .product import *
 from .schedule import ScheduleCustomerListRetrieveView
 from .service import *
+
+
+class BranchListAllAPIView:
+	pass

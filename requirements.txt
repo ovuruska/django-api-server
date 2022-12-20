@@ -8,3 +8,4 @@ firebase_auth
 pyrebase4
 django-phonenumber-field
 django-phonenumbers
+Faker

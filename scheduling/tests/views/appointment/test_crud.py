@@ -3,10 +3,14 @@ from datetime import timedelta
 from django.test import TestCase
 
 from scheduling.models import Employee, Customer, Dog, Branch, Service, Product
-from .mock import *
+from ..mock import *
 
 
-class AppointmentTestCase(TestCase):
+class AppointmentCRUDTestCase(TestCase):
+	"""
+		Tests if the appointment can be updated
+
+	"""
 
 	def setUp(self) -> None:
 		Customer.objects.create(
@@ -105,3 +109,27 @@ class AppointmentTestCase(TestCase):
 
 		self.assertEqual(response.status_code, 400)
 		self.assertNotEqual(response.data["error"], None)
+
+
+
+
+	def test_fetch(self):
+		response = self.client.post("/api/appointment", {
+			"customer": customers[0]["uid"],
+			"branch": 1,
+			"dog": dogs[0]["name"],
+			"customer_notes": "Hello world!",
+			"start": "2020-12-12T14:00:00Z",
+			"services": [1],
+			"products": []
+		}, content_type="application/json")
+
+		self.assertEqual(response.status_code, 201)
+
+		response = self.client.get("/api/appointment/1")
+		self.assertEqual(response.status_code, 200)
+		self.assertEqual(response.data["products"], [])
+		self.assertEqual(response.data["customer"]["name"], customers[0]["name"])
+
+		self.assertEqual(response.data["dog"]["name"], dogs[0]["name"])
+

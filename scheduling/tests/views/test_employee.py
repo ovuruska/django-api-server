@@ -14,13 +14,17 @@ class EmployeeTestCase(TestCase):
 		# Create employee with no branch
 		employee = employees[0]
 		employee["branch"] = 1
+		employee["role"] = "Full Grooming"
 		result = self.client.post('/api/employee', data=employee,content_type="application/json")
+
 		self.assertEqual(result.status_code, 201)
 
 
 	def test_remove_employee(self):
 		employee = employees[0]
 		employee["branch"] = 1
+		employee["role"] = "Full Grooming"
+
 		self.client.post('/api/employee', data=employee, content_type="application/json")
 		result = self.client.delete('/api/employee/1')
 

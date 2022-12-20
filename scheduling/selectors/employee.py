@@ -8,7 +8,7 @@ def get_groomers(branch_name=None):
 
 	"""
 	if branch_name is None:
-		return Employee.objects.filter(role=Employee.Staff.GROOMER)
+		return Employee.objects.filter(role=Employee.Role.FULL_GROOMING)
 
 	else:
-		return Employee.objects.filter(role=Employee.Staff.GROOMER, branch__name=branch_name)
+		return Employee.objects.filter(role=Employee.Role.FULL_GROOMING, branch__name=branch_name)

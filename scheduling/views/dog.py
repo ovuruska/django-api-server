@@ -15,9 +15,8 @@ class DogCreateAPIView(CreateAPIView):
 			request.data._mutable = True
 		except AttributeError:
 			pass
-		owner_id = request.data["owner"]
-		dog_name = request.data["name"]
-		if is_dog_available(owner_id,dog_name):
+		request.data['owner'] = Customer.objects.get(uid=request.data['owner']).id
+		if is_dog_available(request.data["owner"],request.data["name"]):
 			return Response({"message":"Dog already exists"})
 		else:
 			return self.create(request, *args, **kwargs)

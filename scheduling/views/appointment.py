@@ -54,24 +54,36 @@ class AppointmentCreateAPIView(generics.CreateAPIView):
 
 
 class AppointmentModifyAPIView(generics.UpdateAPIView):
+	"""
+	This view will be used in employee application to update the status of the appointment.
+	"""
 	serializer_class = AppointmentEmployeeSerializer
 	queryset = Appointment.objects.all()
+
+	def patch(self, request, *args, **kwargs):
+		"""
+		Updates the appointment with the given id
+		"""
+		pk = self.kwargs.get("pk")
+		appointment = Appointment.objects.get(id=pk)
+		if not appointment.is_modifiable():
+			return Response({"error": "Cannot modify a completed appointment"}, status=400,
+			                content_type="application/json")
+		return self.partial_update(request, *args, **kwargs)
 
 
 class AppointmentCustomerListRetrieveAPIView(generics.ListAPIView):
 	serializer_class = AppointmentCustomerRetrieveSerializer
 	queryset = Appointment.objects.all()
 
-	def get(self, request, *args, **kwargs):
-		self.queryset = self.queryset.filter(customer__uid=self.kwargs['uid'])
-		return self.get(request, *args, **kwargs)
+	def get_queryset(self):
+		return self.queryset.filter(customer__uid=self.kwargs['uid'])
 
 
-class AppointmentEmployeeRetrieveAPIView(generics.RetrieveAPIView):
-	serializer_class = AppointmentEmployeeSerializer
-	queryset = Appointment.objects.all()
 
 
 class AppointmentCustomerRetrieve(generics.RetrieveAPIView):
 	serializer_class = AppointmentCustomerRetrieveSerializer
 	queryset = Appointment.objects.all()
+
+

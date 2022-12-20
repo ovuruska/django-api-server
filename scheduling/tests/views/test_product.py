@@ -3,9 +3,9 @@ from .mock import products
 
 class ProductTestCase(TestCase):
 
-	def test_create_product(self):
+	def test_remove_product(self):
 
-		response = self.client.post()
+		response = self.client.post("/api/product",data=products[0],content_type= "application/json")
 		self.assertEqual(response.status_code, 201)
 
 
@@ -27,10 +27,20 @@ class ProductTestCase(TestCase):
 		response = self.client.delete('/api/product/1')
 		self.assertEqual(response.status_code, 204)
 
-		self.client.post()
-		self.client.post()
+
+		response = self.client.get('/api/products/all')
+		self.assertEqual(response.status_code, 200)
+		self.assertEqual(len(response.data), 0)
+
+
+	def test_create_multiple_products(self):
+
+		response = self.client.post("/api/product",data=products[0],content_type= "application/json")
+		self.assertEqual(response.status_code, 201)
+
+		response = self.client.post("/api/product",data=products[1],content_type= "application/json")
+		self.assertEqual(response.status_code, 201)
 
 		response = self.client.get('/api/products/all')
 		self.assertEqual(response.status_code, 200)
 		self.assertEqual(len(response.data), 2)
-

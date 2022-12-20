@@ -5,11 +5,6 @@ from scheduling.models import Customer
 from .mock import customers as customers
 from .mock import dogs as test_dogs
 
-
-
-
-
-
 class DogsTestCase(TestCase):
 
 	def setUp(self) -> None:
@@ -19,7 +14,7 @@ class DogsTestCase(TestCase):
 
 	def add_dog(self,dog,user_id):
 		dog['owner'] = user_id
-		response = self.client.post()
+		response = self.client.post("/api/dog", data=dog, content_type="application/json")
 		return response
 
 

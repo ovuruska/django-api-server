@@ -1,6 +1,6 @@
 from rest_framework import serializers
 
-from scheduling.models.Customer import Customer
+from scheduling.models.customer import Customer
 
 
 class CustomerSerializer(serializers.ModelSerializer):

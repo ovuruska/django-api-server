@@ -1,7 +1,6 @@
 from django.test import TestCase
 
 from scheduling.models import Branch
-from mock import branches as test_branches
 
 
 
