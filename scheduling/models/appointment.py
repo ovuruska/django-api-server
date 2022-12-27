@@ -1,3 +1,4 @@
+from django.utils import timezone
 from django.db import models
 from django.utils.translation import gettext_lazy as _
 
@@ -17,14 +18,14 @@ class Appointment(BaseModel):
 
 	customer = models.ForeignKey("Customer", on_delete=models.DO_NOTHING, related_name="appointments", blank=False)
 	dog = models.ForeignKey("Dog", on_delete=models.CASCADE, related_name="appointments", blank=False)
-	start = models.DateTimeField()
-	end = models.DateTimeField()
+	start = models.DateTimeField(default=timezone.now)
+	end = models.DateTimeField(default=timezone.now)
 	customer_notes = models.TextField()
 	employee_notes = models.TextField()
 	services = models.ManyToManyField("Service", related_name="appointments", blank=True,default=[])
 	tip = models.DecimalField(max_digits=5, decimal_places=2, default=0.00)
 	cost = models.DecimalField(max_digits=5, decimal_places=2, default=0.00)
-	products = models.ManyToManyField("Product", related_name="products+", blank=True)
+	products = models.ManyToManyField("Product", related_name="products+", blank=True,default=[])
 	branch = models.ForeignKey("Branch", on_delete=models.DO_NOTHING, related_name="appointments", blank=False)
 	employee = models.ForeignKey("Employee", on_delete=models.DO_NOTHING, related_name="appointments", blank=True,
 	                             null=True)

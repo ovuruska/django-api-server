@@ -3,9 +3,8 @@ djangorestframework
 pyyaml
 requests
 django-cors-headers
-django-firebase-authentication
-firebase_auth
-pyrebase4
 django-phonenumber-field
 django-phonenumbers
 Faker
+django-filter
+firebase-admin

@@ -22,9 +22,11 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = 'django-insecure-n72^h9zigpr59^p)+n99w*t#yb793s89rboma3hjqjx_z46bk-'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = os.environ.get('DJANGO_DEBUG', '') != 'False'
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = [
+	"*"
+]
 
 # Application definition
 
@@ -36,11 +38,16 @@ INSTALLED_APPS = [
 	'django.contrib.messages',
 	'django.contrib.staticfiles',
 	'rest_framework',
-	'scheduling'
+	'scheduling',
+	'django_filters',
 ]
 
 FIREBASE_CONFIG = os.path.join(BASE_DIR, 'firebase-config.json')
+REST_FRAMEWORK = {
+    'DEFAULT_FILTER_BACKENDS': ['django_filters.rest_framework.DjangoFilterBackend']
+}
 
+STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 
 
 MIDDLEWARE = [

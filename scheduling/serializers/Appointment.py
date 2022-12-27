@@ -16,7 +16,12 @@ class AppointmentCreateSerializer(serializers.ModelSerializer):
 
 
 class AppointmentEmployeeSerializer(serializers.ModelSerializer):
-
+	employee = EmployeeSerializer()
+	services = ServiceSerializer(many=True)
+	products = ProductSerializer(many=True)
+	branch = BranchSerializer()
+	customer = CustomerSerializer()
+	dog = DogSerializer()
 
 	class Meta:
 		model = Appointment
