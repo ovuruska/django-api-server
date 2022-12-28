@@ -4,7 +4,6 @@ from rest_framework import views
 from rest_framework.response import Response
 
 from ..common.datetime_range import datetime_range
-from ..models.branch import Branch
 
 from scheduling.models import Appointment
 

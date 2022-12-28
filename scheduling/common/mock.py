@@ -124,6 +124,8 @@ class Mock:
 				customer = customers[fake.random_int(min=0, max=self.number_of_customers - 1)],
 				customer_notes=fake.text(),
 				employee_notes=fake.text(),
+				cost = fake.pydecimal(positive=True, min_value=1, max_value=250),
+				tip = fake.pydecimal(positive=True, min_value=1, max_value=100),
 				status=models.Appointment.Status.choices[
 					fake.random_int(min=0, max=len(models.Appointment.Status.choices) - 1)][
 					0],

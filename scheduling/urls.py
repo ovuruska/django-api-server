@@ -39,6 +39,9 @@ employees = [
 
 ]
 
+payrolls = [
+	path('payrolls', views.PayrollListRetrieveView.as_view(), name='payroll_list'),
+]
 
 
 urlpatterns = [
@@ -47,4 +50,4 @@ urlpatterns = [
 	path('me/<uid>',views.CustomerRetrieveAPIView.as_view(),name="get_customer_details"),
 ]
 
-urlpatterns = urlpatterns + products + services + dogs + appointments + employees + scheduling_appointments
+urlpatterns = urlpatterns + products + services + dogs + appointments + employees + scheduling_appointments + payrolls

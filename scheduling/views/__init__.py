@@ -8,3 +8,4 @@ from .product import *
 from .schedule import ScheduleCustomerListRetrieveView
 from .service import *
 from .appointment_filter import *
+from .payroll import *
