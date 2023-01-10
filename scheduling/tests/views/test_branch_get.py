@@ -31,3 +31,15 @@ class AppointmentTestCase(TestCase):
 		self.assertEqual(result.json()[0]['tubs'], 1)
 
 
+	def test_create_branch(self):
+		result = self.client.post('/api/branch', data={
+			"name": "branch3",
+			"address": "address3",
+			"description": "description3",
+			"tubs": 3
+		}, content_type="application/json")
+		self.assertEqual(result.status_code, 201)
+		self.assertEqual(result.json()['name'], "branch3")
+		self.assertEqual(result.json()['address'], "address3")
+		self.assertEqual(result.json()['description'], "description3")
+		self.assertEqual(result.json()['tubs'], 3)

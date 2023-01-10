@@ -1,4 +1,6 @@
 from django.urls import path
+
+import scheduling.views.branch
 from . import views
 
 products = [
@@ -45,9 +47,13 @@ payrolls = [
 ]
 
 
+branches = [
+	path('branch', views.BranchCreateAPIView.as_view(), name='branch_create'),
+]
+
 urlpatterns = [
 	path('branch/<pk>', views.BranchRetrieveAPIView.as_view(), name='branch_list'),
-	path('admin/branch/',views.BranchModifyAPIView.as_view(),name="admin_branch_modify"),
+	path('admin/branch/', scheduling.views.branch.BranchModifyAPIView.as_view(), name="admin_branch_modify"),
 	path('me/<uid>',views.CustomerRetrieveAPIView.as_view(),name="get_customer_details"),
 ]
 
@@ -57,4 +63,4 @@ signed_url = [
 	path('confirmation/<token>/reschedule', views.SignedUrlCancelAPIView.as_view(), name='signed_url_reschedule'),
 ]
 
-urlpatterns = urlpatterns + products + services + dogs + appointments + employees + scheduling_appointments + payrolls + signed_url
+urlpatterns = urlpatterns + products + services + dogs + appointments + employees + scheduling_appointments + payrolls + signed_url + branches
