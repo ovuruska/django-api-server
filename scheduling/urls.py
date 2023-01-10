@@ -52,8 +52,7 @@ branches = [
 ]
 
 urlpatterns = [
-	path('branch/<pk>', views.BranchRetrieveAPIView.as_view(), name='branch_list'),
-	path('admin/branch/', scheduling.views.branch.BranchModifyAPIView.as_view(), name="admin_branch_modify"),
+	path('branch/<pk>', scheduling.views.branch.BranchRetrieveModifyAPIView.as_view(), name="admin_branch_modify"),
 	path('me/<uid>',views.CustomerRetrieveAPIView.as_view(),name="get_customer_details"),
 ]
 

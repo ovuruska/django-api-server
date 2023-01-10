@@ -13,4 +13,4 @@ tubs = models.IntegerField()
 class BranchSerializer(serializers.ModelSerializer):
 	class Meta:
 		model = Branch
-		fields = ('name', 'address', 'description', 'tubs')
+		fields = "__all__"
