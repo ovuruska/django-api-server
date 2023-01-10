@@ -1,8 +1,8 @@
 from django.test import TestCase
 
 from scheduling.models import Branch
-from .mock import branches
-from .mock import employees
+from ..mock import branches
+from ..mock import employees
 
 class EmployeeTestCase(TestCase):
 
@@ -43,6 +43,7 @@ class EmployeeTestCase(TestCase):
 		result = self.client.get("/api/employee/1")
 		self.assertEqual(result.status_code, 200)
 		self.assertEqual(result.data["name"], "Robert Paulsen")
+
 
 
 

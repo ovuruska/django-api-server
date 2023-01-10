@@ -36,6 +36,7 @@ employees = [
 	path('employee', views.EmployeeCreateAPIView.as_view(), name='employee_create'),
 	path('employee/groomers', views.EmployeeGroomerListRetrieve.as_view(), name='groomers_retrieve'),
 	path('employee/<pk>', views.EmployeeRetrieveModifyDestroyAPIView.as_view(), name='employee_modify'),
+	path('employees',views.EmployeeFilterView.as_view(), name='employee_filter'),
 
 ]
 
@@ -50,4 +51,10 @@ urlpatterns = [
 	path('me/<uid>',views.CustomerRetrieveAPIView.as_view(),name="get_customer_details"),
 ]
 
-urlpatterns = urlpatterns + products + services + dogs + appointments + employees + scheduling_appointments + payrolls
+signed_url = [
+	path('confirmation/<token>/approve', views.SignedUrlRescheduleAPIView.as_view(), name='signed_url_approve'),
+	path('confirmation/<token>/cancel', views.SignedUrlApproveAPIView.as_view(), name='signed_url_cancel'),
+	path('confirmation/<token>/reschedule', views.SignedUrlCancelAPIView.as_view(), name='signed_url_reschedule'),
+]
+
+urlpatterns = urlpatterns + products + services + dogs + appointments + employees + scheduling_appointments + payrolls + signed_url

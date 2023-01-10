@@ -1,12 +1,14 @@
-from datetime import timedelta
+from datetime import datetime
 
-from dateutil.parser import isoparse
+from django.core.signing import Signer
+from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework import generics
 from rest_framework.response import Response
 
-from ..models import Customer, Service, Dog
+from templates.email import approval_email
+from ..models import Customer
 from ..serializers.Appointment import *
-
+from ..services.send_email import send_email
 
 class AppointmentCreateAPIView(generics.CreateAPIView):
 	"""
@@ -18,40 +20,33 @@ class AppointmentCreateAPIView(generics.CreateAPIView):
 	queryset = Appointment.objects.all()
 
 	def post(self, request, *args, **kwargs):
-		customer = Customer.objects.get(uid=request.data["customer"])
-		request.data["customer"] = customer.id
-		dog_data = request.data["dog"]
-		if type(dog_data) == int:
-			request.data["dog"] = dog_data
+		request.data._mutable = True
+
+		if request.data.get("customer__id") is not None:
+			customer = Customer.objects.get(id=request.data.get("customer__id"))
 		else:
-			dog, _ = Dog.objects.get_or_create(
-				owner=customer,
-				name=dog_data,
-			)
-			request.data["dog"] = dog.id
+			customer = Customer.objects.get(uid=request.data["customer"])
 
-		branch_id = request.data["branch"]
+		request.data["customer"] = customer.id
 
-		total_duration = timedelta()
-		for service in request.data["services"]:
-			service_instance = Service.objects.get(id=service)
-			total_duration += service_instance.duration
-		start = isoparse(request.data["start"])
-		request.data["start"] = start
-		request.data["end"] = start + total_duration
-		try:
-			Appointment.objects.get(
-				branch=branch_id,
-				start__gte=request.data["start"],
-				end__lte=request.data["end"]
-			)
-			return Response({"error": "There is already an appointment at this time"}, status=400,
-			                content_type="application/json")
+		to = customer.email
+		title = "Scrubbers - Appointment Confirmation"
+		signer = Signer()
+		response = self.create(request, *args, **kwargs)
+		appointment = response.data
+		token = signer.sign(appointment["id"])
+		accept_url = f"http://localhost:8000/confirmation/{token}/approve"
+		cancel_url = f"http://localhost:8000/confirmation/{token}/cancel"
+		reschedule_url = f"http://localhost:8000/confirmation/{token}/reschedule"
+		start = appointment["start"]
+		datetime_value = datetime.strptime(start, "%Y-%m-%dT%H:%M:%S.%fZ")
+		date = datetime_value.strftime("%m/%d/%Y")
+		hours = datetime_value.strftime("%I:%M %p")
 
-		except Appointment.DoesNotExist:
+		body = approval_email(date, hours,accept_url, cancel_url, reschedule_url)
+		send_email(to,title,body)
 
-			return self.create(request, *args, **kwargs)
-
+		return response
 
 class AppointmentModifyAPIView(generics.UpdateAPIView):
 	"""

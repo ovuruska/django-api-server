@@ -111,3 +111,5 @@ class AppointmentFilterTestCase(TestCase):
 		data = response.data
 		for appointment in data:
 			self.assertEqual(appointment["appointment_type"], service_type)
+
+

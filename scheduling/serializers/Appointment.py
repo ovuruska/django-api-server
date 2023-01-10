@@ -11,7 +11,7 @@ from scheduling.serializers.Service import ServiceSerializer
 class AppointmentCreateSerializer(serializers.ModelSerializer):
 	class Meta:
 		model = Appointment
-		fields = ('customer', 'dog', 'customer_notes', 'services', 'products', 'branch','start','end','employee')
+		fields = '__all__'
 		extra_kwargs = {"employee": {"required": False, "allow_null": True}}
 
 
