@@ -5,6 +5,7 @@ from scheduling.serializers.Branch import BranchSerializer
 
 
 class EmployeeSerializer(serializers.ModelSerializer):
+	branch = BranchSerializer(allow_null=True, required=False)
 	class Meta:
 		model = Employee
 		fields = '__all__'
