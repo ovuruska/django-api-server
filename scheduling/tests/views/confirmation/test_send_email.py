@@ -50,4 +50,3 @@ class EmailConfirmationTestCase(TestCase):
 		})
 		self.assertEqual(response.status_code, 201)
 
-		self.ass

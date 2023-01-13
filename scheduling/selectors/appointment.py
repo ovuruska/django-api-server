@@ -50,3 +50,5 @@ def is_available(appointment_id):
 	"""
 	appointment = Appointment.objects.get(id=appointment_id)
 	return appointment.is_available()
+
+

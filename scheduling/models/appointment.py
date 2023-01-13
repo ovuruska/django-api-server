@@ -40,3 +40,6 @@ class Appointment(BaseModel):
 
 	def is_available(self):
 		return self.status in [self.Status.PENDING, self.Status.RESCHEDULING]
+
+	class Meta:
+		ordering = ['-start']

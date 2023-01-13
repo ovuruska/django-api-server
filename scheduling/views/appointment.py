@@ -20,7 +20,10 @@ class AppointmentCreateAPIView(generics.CreateAPIView):
 	queryset = Appointment.objects.all()
 
 	def post(self, request, *args, **kwargs):
-		request.data._mutable = True
+		try:
+			request.data._mutable = True
+		except AttributeError:
+			pass
 
 		if request.data.get("customer__id") is not None:
 			customer = Customer.objects.get(id=request.data.get("customer__id"))
@@ -35,9 +38,9 @@ class AppointmentCreateAPIView(generics.CreateAPIView):
 		response = self.create(request, *args, **kwargs)
 		appointment = response.data
 		token = signer.sign(appointment["id"])
-		accept_url = f"http://localhost:8000/confirmation/{token}/approve"
-		cancel_url = f"http://localhost:8000/confirmation/{token}/cancel"
-		reschedule_url = f"http://localhost:8000/confirmation/{token}/reschedule"
+		accept_url = f"http://localhost:8000/api/confirmation/{token}/approve"
+		cancel_url = f"http://localhost:8000/api/confirmation/{token}/cancel"
+		reschedule_url = f"http://localhost:8000/api/confirmation/{token}/reschedule"
 		start = appointment["start"]
 		datetime_value = datetime.strptime(start, "%Y-%m-%dT%H:%M:%S.%fZ")
 		date = datetime_value.strftime("%m/%d/%Y")
