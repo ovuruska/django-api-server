@@ -19,7 +19,6 @@ class EmployeeUserRetrieveSerializer(serializers.ModelSerializer):
 class EmployeeFilterSerializer(serializers.ModelSerializer):
 	branch = BranchSerializer()
 
-
 	class Meta:
 		model = Employee
 		fields = '__all__'

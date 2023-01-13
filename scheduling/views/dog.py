@@ -1,12 +1,14 @@
+from django_filters.rest_framework import DjangoFilterBackend
+from rest_framework import generics
 from rest_framework.generics import RetrieveAPIView, CreateAPIView, DestroyAPIView, UpdateAPIView
 from rest_framework.response import Response
 
-from scheduling.models import Dog,Customer
+from scheduling.models import Dog, Customer
 from scheduling.serializers.Dog import DogSerializer
 from scheduling.services.dog import is_dog_available
 
 
-class DogCreateAPIView(CreateAPIView):
+class PetCreateAPIView(CreateAPIView):
 	serializer_class = DogSerializer
 	queryset = Dog.objects.all()
 
@@ -16,13 +18,19 @@ class DogCreateAPIView(CreateAPIView):
 		except AttributeError:
 			pass
 		request.data['owner'] = Customer.objects.get(uid=request.data['owner']).id
-		if is_dog_available(request.data["owner"],request.data["name"]):
-			return Response({"message":"Dog already exists"})
+		if is_dog_available(request.data["owner"], request.data["name"]):
+			return Response({"message": "Dog already exists"})
 		else:
 			return self.create(request, *args, **kwargs)
 
 
-class DogModifyRetrieveDestroyAPIView(RetrieveAPIView, DestroyAPIView, UpdateAPIView):
+class PetModifyRetrieveDestroyAPIView(RetrieveAPIView, DestroyAPIView, UpdateAPIView):
 	serializer_class = DogSerializer
 	queryset = Dog.objects.all()
-	
+
+
+class PetFilterView(generics.ListAPIView):
+	queryset = Dog.objects.all()
+	serializer_class = DogSerializer
+	filter_backends = [DjangoFilterBackend]
+	filterset_fields = "__all__"

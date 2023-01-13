@@ -16,9 +16,10 @@ services = [
 ]
 
 dogs = [
-	path('dog', views.DogCreateAPIView.as_view(), name="dog_crud"),
-	path('dog/<pk>', views.DogModifyRetrieveDestroyAPIView.as_view(), name="dog_retrieve"),
+	path('dog', views.PetCreateAPIView.as_view(), name="dog_crud"),
+	path('dog/<pk>', views.PetModifyRetrieveDestroyAPIView.as_view(), name="dog_retrieve"),
 	path('dogs/<uid>', views.CustomerDogsRetrieveAPIView.as_view(), name="get_customer_dogs"),
+	path('pets', views.PetFilterView.as_view(), name="dog_filter"),
 ]
 
 appointments = [
