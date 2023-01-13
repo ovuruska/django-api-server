@@ -15,7 +15,7 @@ class SignedUrlRescheduleAPIView(APIView):
 			appointment = get_appointment_by_id(result)
 			if appointment.is_available():
 				appointment.status = Appointment.Status.RESCHEDULING
-
+				appointment.save()
 				return render(request, "web/reschedule.html")
 			else:
 				request.status_code = 404
@@ -33,6 +33,7 @@ class SignedUrlApproveAPIView(APIView):
 			appointment = get_appointment_by_id(result)
 			if appointment.is_available():
 				appointment.status = Appointment.Status.CONFIRMED
+				appointment.save()
 
 				return render(request, "web/approve.html")
 			else:
@@ -54,6 +55,7 @@ class SignedUrlCancelAPIView(APIView):
 			appointment = get_appointment_by_id(result)
 			if appointment.is_available():
 				appointment.status = Appointment.Status.CANCELLED
+				appointment.save()
 
 				return render(request, "web/decline.html")
 			else:

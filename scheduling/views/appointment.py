@@ -42,7 +42,7 @@ class AppointmentCreateAPIView(generics.CreateAPIView):
 		cancel_url = f"http://localhost:8000/api/confirmation/{token}/cancel"
 		reschedule_url = f"http://localhost:8000/api/confirmation/{token}/reschedule"
 		start = appointment["start"]
-		datetime_value = datetime.strptime(start, "%Y-%m-%dT%H:%M:%S.%fZ")
+		datetime_value = datetime.strptime(start, "%Y-%m-%dT%H:%M:%SZ")
 		date = datetime_value.strftime("%m/%d/%Y")
 		hours = datetime_value.strftime("%I:%M %p")
 
