@@ -58,9 +58,9 @@ urlpatterns = [
 ]
 
 signed_url = [
-	path('confirmation/<token>/approve', views.SignedUrlRescheduleAPIView.as_view(), name='signed_url_approve'),
-	path('confirmation/<token>/cancel', views.SignedUrlApproveAPIView.as_view(), name='signed_url_cancel'),
-	path('confirmation/<token>/reschedule', views.SignedUrlCancelAPIView.as_view(), name='signed_url_reschedule'),
+	path('confirmation/<token>/approve', views.SignedUrlApproveAPIView.as_view(), name='signed_url_approve'),
+	path('confirmation/<token>/cancel', views.SignedUrlCancelAPIView.as_view(), name='signed_url_cancel'),
+	path('confirmation/<token>/reschedule', views.SignedUrlRescheduleAPIView.as_view(), name='signed_url_reschedule'),
 ]
 
 urlpatterns = urlpatterns + products + services + dogs + appointments + employees + scheduling_appointments + payrolls + signed_url + branches
