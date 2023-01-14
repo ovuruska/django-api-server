@@ -1,9 +1,8 @@
-from rest_framework.permissions import IsAuthenticated
 from rest_framework import generics
 
 from scheduling.models import Employee
 from scheduling.selectors.employee import get_groomers
-from scheduling.serializers.Employee import EmployeeUserRetrieveSerializer, EmployeeSerializer
+from scheduling.serializers.Employee import EmployeeUserRetrieveSerializer, EmployeeSerializer, EmployeeModifySerializer
 
 
 class EmployeeGroomerListRetrieve(generics.ListAPIView):
@@ -19,9 +18,6 @@ class EmployeeCreateAPIView(generics.CreateAPIView):
 	queryset = Employee.objects.all()
 
 
-class EmployeeRetrieveModifyDestroyAPIView(generics.DestroyAPIView,generics.RetrieveAPIView,generics.UpdateAPIView):
-	serializer_class = EmployeeSerializer
+class EmployeeRetrieveModifyDestroyAPIView(generics.DestroyAPIView, generics.RetrieveAPIView, generics.UpdateAPIView):
+	serializer_class = EmployeeModifySerializer
 	queryset = Employee.objects.all()
-
-
-

@@ -47,6 +47,10 @@ payrolls = [
 	path('payrolls', views.PayrollListRetrieveView.as_view(), name='payroll_list'),
 ]
 
+customers = [
+	path("customers", views.CustomerFilterAPIView.as_view(), name="customer_filter"),
+]
+
 
 branches = [
 	path('branch', views.BranchCreateAPIView.as_view(), name='branch_create'),
@@ -64,4 +68,4 @@ signed_url = [
 	path('confirmation/<token>/reschedule', views.SignedUrlRescheduleAPIView.as_view(), name='signed_url_reschedule'),
 ]
 
-urlpatterns = urlpatterns + products + services + dogs + appointments + employees + scheduling_appointments + payrolls + signed_url + branches
+urlpatterns = urlpatterns + products + services + dogs + appointments + employees + scheduling_appointments + payrolls + signed_url + branches + customers

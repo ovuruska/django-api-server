@@ -1,7 +1,9 @@
 import json
 
+from django_filters.rest_framework import DjangoFilterBackend
 from firebase_admin import auth
-from rest_framework.generics import RetrieveAPIView,ListAPIView
+from rest_framework import generics
+from rest_framework.generics import RetrieveAPIView, ListAPIView
 from rest_framework.response import Response
 
 from ..models import Dog
@@ -20,8 +22,9 @@ class CustomerDogsRetrieveAPIView(ListAPIView):
 	def list(self, request, *args, **kwargs):
 		queryset = self.get_queryset()
 		dogs = Dog.objects.filter(owner=queryset[0].id)
-		serializer = DogSerializer(dogs , many=True)
+		serializer = DogSerializer(dogs, many=True)
 		return Response(serializer.data)
+
 
 class CustomerRetrieveAPIView(RetrieveAPIView):
 	serializer_class = CustomerSerializer
@@ -46,3 +49,10 @@ class CustomerRetrieveAPIView(RetrieveAPIView):
 
 			customer_repr = CustomerSerializer().to_representation(customer)
 			return Response(json.dumps(customer_repr), status=200, headers={"Content-Type": "application/json"})
+
+
+class CustomerFilterAPIView(generics.ListAPIView):
+	queryset = Customer.objects.all()
+	serializer_class = CustomerSerializer
+	filter_backends = [DjangoFilterBackend]
+	filterset_fields = "__all__"

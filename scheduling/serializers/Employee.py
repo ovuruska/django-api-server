@@ -4,6 +4,11 @@ from scheduling.models import Employee
 from scheduling.serializers.Branch import BranchSerializer
 
 
+class EmployeeModifySerializer(serializers.ModelSerializer):
+	class Meta:
+		model = Employee
+		fields = ('name', 'email', 'phone', 'branch', 'role')
+
 class EmployeeSerializer(serializers.ModelSerializer):
 	branch = BranchSerializer(allow_null=True, required=False)
 	class Meta:

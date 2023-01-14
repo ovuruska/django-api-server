@@ -29,8 +29,8 @@ ALLOWED_HOSTS = ["*"]
 # Application definition
 
 INSTALLED_APPS = ['django.contrib.admin', 'django.contrib.auth', 'django.contrib.contenttypes',
-	'django.contrib.sessions', 'django.contrib.messages', 'django.contrib.staticfiles', 'rest_framework', 'corsheaders',
-	'scheduling', 'django_filters', ]
+                  'django.contrib.sessions', 'django.contrib.messages', 'django.contrib.staticfiles', 'rest_framework',
+                  'corsheaders', 'scheduling', 'django_filters', ]
 
 FIREBASE_CONFIG = os.path.join(BASE_DIR, 'firebase-config.json')
 REST_FRAMEWORK = {'DEFAULT_FILTER_BACKENDS': ['django_filters.rest_framework.DjangoFilterBackend']}
@@ -39,28 +39,19 @@ CORS_ORIGIN_ALLOW_ALL = True
 STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 
 MIDDLEWARE = ['django.middleware.security.SecurityMiddleware', 'django.contrib.sessions.middleware.SessionMiddleware',
-	'django.middleware.common.CommonMiddleware', 'django.middleware.csrf.CsrfViewMiddleware',
-	'django.contrib.auth.middleware.AuthenticationMiddleware', 'django.contrib.messages.middleware.MessageMiddleware',
-	'django.middleware.clickjacking.XFrameOptionsMiddleware', 'corsheaders.middleware.CorsMiddleware',
-              ]
-DATE_INPUT_FORMATS = [
-[
-    '%Y-%m-%d %H:%M:%S',     # '2006-10-25 14:30:59'
-    '%Y-%m-%d %H:%M',        # '2006-10-25 14:30'
-    '%m/%d/%Y %H:%M:%S',     # '10/25/2006 14:30:59'
-    '%m/%d/%Y %H:%M',        # '10/25/2006 14:30'
-    '%m/%d/%y %H:%M:%S',     # '10/25/06 14:30:59'
-    '%m/%d/%y %H:%M',        # '10/25/06 14:30'
-]
-]
+              'django.middleware.common.CommonMiddleware', 'scheduling.common.DisableCSRFMiddleware',
+              'django.contrib.auth.middleware.AuthenticationMiddleware',
+              'django.contrib.messages.middleware.MessageMiddleware',
+              'django.middleware.clickjacking.XFrameOptionsMiddleware', 'corsheaders.middleware.CorsMiddleware', ]
 
 ROOT_URLCONF = 'scrubbers_backend.urls'
 
 TEMPLATES = [
 	{'BACKEND': 'django.template.backends.django.DjangoTemplates', 'DIRS': [BASE_DIR / 'templates'], 'APP_DIRS': True,
-		'OPTIONS': {'context_processors': ['django.template.context_processors.debug',
-			'django.template.context_processors.request', 'django.contrib.auth.context_processors.auth',
-			'django.contrib.messages.context_processors.messages', ], }, }, ]
+	 'OPTIONS': {'context_processors': ['django.template.context_processors.debug',
+	                                    'django.template.context_processors.request',
+	                                    'django.contrib.auth.context_processors.auth',
+	                                    'django.contrib.messages.context_processors.messages', ], }, }, ]
 
 WSGI_APPLICATION = 'scrubbers_backend.wsgi.application'
 
@@ -73,9 +64,9 @@ DATABASES = {'default': {'ENGINE': 'django.db.backends.sqlite3', 'NAME': BASE_DI
 # https://docs.djangoproject.com/en/4.0/ref/settings/#auth-password-validators
 
 AUTH_PASSWORD_VALIDATORS = [{'NAME': 'django.contrib.auth.password_validation.UserAttributeSimilarityValidator', },
-	{'NAME': 'django.contrib.auth.password_validation.MinimumLengthValidator', },
-	{'NAME': 'django.contrib.auth.password_validation.CommonPasswordValidator', },
-	{'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator', }, ]
+                            {'NAME': 'django.contrib.auth.password_validation.MinimumLengthValidator', },
+                            {'NAME': 'django.contrib.auth.password_validation.CommonPasswordValidator', },
+                            {'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator', }, ]
 
 # Internationalization
 # https://docs.djangoproject.com/en/4.0/topics/i18n/
