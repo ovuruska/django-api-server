@@ -14,6 +14,12 @@ class AppointmentCreateSerializer(serializers.ModelSerializer):
 		fields = '__all__'
 		extra_kwargs = {"employee": {"required": False, "allow_null": True}}
 
+class AppointmentModifySerializer(serializers.ModelSerializer):
+
+	class Meta:
+		model = Appointment
+		fields = '__all__'
+
 
 class AppointmentEmployeeSerializer(serializers.ModelSerializer):
 	employee = EmployeeShallowSerializer()

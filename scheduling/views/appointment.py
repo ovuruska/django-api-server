@@ -55,7 +55,7 @@ class AppointmentModifyAPIView(generics.UpdateAPIView):
 	"""
 	This view will be used in employee application to update the status of the appointment.
 	"""
-	serializer_class = AppointmentEmployeeSerializer
+	serializer_class = AppointmentModifySerializer
 	queryset = Appointment.objects.all()
 
 	def patch(self, request, *args, **kwargs):

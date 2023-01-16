@@ -17,9 +17,12 @@ class AppointmentFilterListView(generics.ListAPIView):
 	def get_queryset(self):
 		queryset = Appointment.objects.all()
 		start_date = self.request.query_params.get('start__gt', None)
+		if start_date is not None:
+			queryset = queryset.filter(start__gt=start_date)
+
 		end_date = self.request.query_params.get('start__lt', None)
-		if start_date and end_date:
-			queryset = queryset.filter(start__range=[start_date, end_date])
+		if end_date:
+			queryset = queryset.filter(start__lt=end_date)
 		return queryset
 
 

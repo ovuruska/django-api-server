@@ -8,7 +8,7 @@ from django.test import TestCase
 class AppointmentRetrievalBenchmarkTest10000(TestCase):
 
 	root_url = "/api/schedule/appointments"
-	number_of_appointments = 5000
+	number_of_appointments = 10000
 
 	def setUp(self) :
 		self.mock = Mock(number_of_appointments=self.number_of_appointments)
