@@ -18,7 +18,7 @@ class Appointment(BaseModel):
 		WE_WASH = 'We Wash', _('We Wash')
 
 	customer = models.ForeignKey("Customer", on_delete=models.DO_NOTHING, related_name="appointments", blank=False)
-	dog = models.ForeignKey("Dog", on_delete=models.CASCADE, related_name="appointments", blank=False)
+	dog = models.ForeignKey("Dog", on_delete=models.DO_NOTHING, related_name="appointments", blank=False)
 	start = models.DateTimeField(default=timezone.now)
 	end = models.DateTimeField(default=timezone.now)
 	customer_notes = models.TextField(blank=True)
@@ -27,12 +27,20 @@ class Appointment(BaseModel):
 	tip = models.DecimalField(max_digits=5, decimal_places=2, default=0.00)
 	cost = models.DecimalField(max_digits=5, decimal_places=2, default=0.00)
 	products = models.ManyToManyField("Product", related_name="products+", blank=True,default=[])
-	branch = models.ForeignKey("Branch", on_delete=models.DO_NOTHING, related_name="appointments", blank=False)
+	branch = models.ForeignKey("Branch", on_delete=models.CASCADE, related_name="appointments", blank=False)
 	employee = models.ForeignKey("Employee", on_delete=models.DO_NOTHING, related_name="appointments", blank=True,
 	                             null=True)
 	status = models.CharField(max_length=20, choices=Status.choices, default=Status.PENDING)
 
 	appointment_type = models.CharField(max_length=20, choices=AppointmentType.choices, default=AppointmentType.WE_WASH)
+	reminder_sent = models.DateTimeField(blank=True, null=True)
+	check_in = models.DateTimeField(blank=True, null=True)
+	pick_up = models.DateTimeField(blank=True, null=True)
+	confirmed_on = models.DateTimeField(blank=True, null=True)
+	special_handling = models.BooleanField(default=False)
+	checkout_by = models.ForeignKey("Employee", on_delete=models.DO_NOTHING, related_name="checkout_appointments",null=True, blank=True)
+	checkout_time = models.DateTimeField(blank=True, null=True)
+	checkout_status = models.BooleanField(default=False)
 
 	def is_modifiable(self):
 		return self.status != self.Status.COMPLETED
