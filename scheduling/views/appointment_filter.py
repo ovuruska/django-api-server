@@ -9,11 +9,20 @@ from scheduling.serializers.Branch import FreeHoursSerializer
 
 
 class AppointmentFilterListView(generics.ListAPIView):
-	queryset = Appointment.objects.all()
 	serializer_class = AppointmentEmployeeSerializer
-	filter_backends = [DjangoFilterBackend]
-	filterset_fields = ["employee__name", "appointment_type", "branch__name", "dog__breed", "created_at", "status",
-	                    "start", "appointment_type"]
+	filter_backends = (DjangoFilterBackend,)
+
+	filterset_fields = ["start","branch"]
+
+	def get_queryset(self):
+		queryset = Appointment.objects.all()
+		start_date = self.request.query_params.get('start__gt', None)
+		end_date = self.request.query_params.get('start__lt', None)
+		if start_date and end_date:
+			queryset = queryset.filter(start__range=[start_date, end_date])
+		return queryset
+
+
 
 class AppointmentAvailableHoursView(generics.RetrieveAPIView):
 

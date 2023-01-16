@@ -2,8 +2,8 @@ from rest_framework import serializers
 from scheduling.models import Appointment
 from scheduling.serializers.Branch import BranchSerializer
 from scheduling.serializers.Customer import CustomerSerializer
-from scheduling.serializers.Dog import DogSerializer
-from scheduling.serializers.Employee import EmployeeSerializer
+from scheduling.serializers.Dog import DogSerializer, DogShallowSerializer
+from scheduling.serializers.Employee import EmployeeSerializer, EmployeeShallowSerializer
 from scheduling.serializers.Product import ProductSerializer
 from scheduling.serializers.Service import ServiceSerializer
 
@@ -16,12 +16,12 @@ class AppointmentCreateSerializer(serializers.ModelSerializer):
 
 
 class AppointmentEmployeeSerializer(serializers.ModelSerializer):
-	employee = EmployeeSerializer()
+	employee = EmployeeShallowSerializer()
 	services = ServiceSerializer(many=True)
 	products = ProductSerializer(many=True)
 	branch = BranchSerializer()
 	customer = CustomerSerializer()
-	dog = DogSerializer()
+	dog = DogShallowSerializer()
 
 	class Meta:
 		model = Appointment
@@ -32,9 +32,9 @@ class AppointmentCustomerRetrieveSerializer(serializers.ModelSerializer):
 	services = ServiceSerializer(many=True)
 	products = ProductSerializer(many=True)
 	branch = BranchSerializer()
-	employee = EmployeeSerializer()
+	employee = EmployeeShallowSerializer()
 	customer = CustomerSerializer()
-	dog = DogSerializer()
+	dog = DogShallowSerializer()
 
 	class Meta:
 		model = Appointment

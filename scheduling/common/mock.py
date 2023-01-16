@@ -15,7 +15,7 @@ class Mock:
 	             number_of_employees: int = 25,
 	             number_of_customers: int = 50,
 	             number_of_dogs: int = 100,
-	             number_of_appointments: int = 50000,
+	             number_of_appointments: int = 1000,
 	             number_of_services: int = 10,
 	             number_of_products: int = 10,
 	             ):

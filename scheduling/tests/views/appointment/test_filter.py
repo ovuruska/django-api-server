@@ -12,6 +12,9 @@ class AppointmentFilterTestCase(TestCase):
 		self.mock = Mock()
 		self.data = self.mock.generate()
 
+	def tearDown(self) -> None:
+		self.mock.remove(self.data)
+
 	def test_get_all(self):
 		response = self.client.get(self.root_url+"?")
 		self.assertEqual(response.status_code, 200)
