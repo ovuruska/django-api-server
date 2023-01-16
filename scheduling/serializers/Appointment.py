@@ -22,12 +22,12 @@ class AppointmentModifySerializer(serializers.ModelSerializer):
 
 
 class AppointmentEmployeeSerializer(serializers.ModelSerializer):
-	employee = EmployeeShallowSerializer()
+	employee = EmployeeSerializer()
 	services = ServiceSerializer(many=True)
 	products = ProductSerializer(many=True)
 	branch = BranchSerializer()
 	customer = CustomerSerializer()
-	dog = DogShallowSerializer()
+	dog = DogSerializer()
 
 	class Meta:
 		model = Appointment

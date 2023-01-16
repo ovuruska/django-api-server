@@ -12,7 +12,7 @@ class AppointmentFilterListView(generics.ListAPIView):
 	serializer_class = AppointmentEmployeeSerializer
 	filter_backends = (DjangoFilterBackend,)
 
-	filterset_fields = ["start","branch"]
+	filterset_fields = ["start","branch","status"]
 
 	def get_queryset(self):
 		queryset = Appointment.objects.all()

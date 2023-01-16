@@ -125,11 +125,19 @@ class Mock:
 			start = pytz.utc.localize(start)
 			end = start + datetime.timedelta(minutes=fake.random.choice([15,30, 45, 60, 75, 90, 105, 120, 135, 150, 165, 180]))
 
+			if start > datetime.datetime.now(tz=pytz.utc):
+				status = models.Appointment.Status.choices[fake.random_int(min=0, max=len(models.Appointment.Status.choices) - 1)][0]
+			else:
+				status = fake.random.choice([models.Appointment.Status.COMPLETED, models.Appointment.Status.CANCELLED])
 
+			branch = branches[fake.random_int(min=0, max=self.number_of_branches - 1)]
+			appointment_type = models.Appointment.AppointmentType.choices[
+				fake.random_int(min=0, max=len(models.Appointment.AppointmentType.choices) - 1)][0]
+			employee = fake.random.choice([employee for employee in employees if employee.branch.id == branch.id and employee.role == appointment_type])
 
 			appointment = models.Appointment(
-				branch = branches[fake.random_int(min=0, max=self.number_of_branches - 1)],
-				employee=employees[fake.random_int(min=0, max=self.number_of_employees - 1)],
+				branch=branch,
+				employee=employee,
 				dog=dogs[fake.random_int(min=0, max=self.number_of_dogs - 1)],
 				start=start,
 				end=end,
@@ -138,11 +146,8 @@ class Mock:
 				employee_notes=fake.text(),
 				cost = fake.pydecimal(positive=True, min_value=1, max_value=250),
 				tip = fake.pydecimal(positive=True, min_value=1, max_value=100),
-				status=models.Appointment.Status.choices[
-					fake.random_int(min=0, max=len(models.Appointment.Status.choices) - 1)][
-					0],
-				appointment_type=models.Appointment.AppointmentType.choices[
-					fake.random_int(min=0, max=len(models.Appointment.AppointmentType.choices) - 1)][0],
+				status=status,
+				appointment_type=appointment_type,
 
 			)
 
