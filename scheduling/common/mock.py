@@ -1,4 +1,8 @@
+import datetime
+
+import pytz
 from faker import Faker
+from tqdm import tqdm, trange
 
 from scheduling import models
 
@@ -6,11 +10,12 @@ from scheduling import models
 class Mock:
 
 	def __init__(self,
+
 	             number_of_branches: int = 5,
 	             number_of_employees: int = 25,
 	             number_of_customers: int = 50,
 	             number_of_dogs: int = 100,
-	             number_of_appointments: int = 100,
+	             number_of_appointments: int = 50000,
 	             number_of_services: int = 10,
 	             number_of_products: int = 10,
 	             ):
@@ -47,7 +52,7 @@ class Mock:
 
 		fake = Faker()
 
-		for ind in range(self.number_of_branches):
+		for ind in trange(self.number_of_branches, desc="Generating branches"):
 			branch = models.Branch(
 				name=fake.company(),
 				address=fake.address(),
@@ -57,7 +62,7 @@ class Mock:
 			branch.save()
 			branches.append(branch)
 
-		for ind in range(self.number_of_employees):
+		for ind in trange(self.number_of_employees, desc="Generating employees"):
 			employee = models.Employee(
 					name=fake.name(),
 					branch=branches[fake.random_int(min=0, max=self.number_of_branches - 1)],
@@ -70,7 +75,7 @@ class Mock:
 			employee.save()
 			employees.append(employee)
 
-		for ind in range(self.number_of_customers):
+		for ind in trange(self.number_of_customers,desc="Generating customers"):
 			customer = models.Customer(
 					name=fake.name(),
 					phone=fake.phone_number(),
@@ -81,7 +86,7 @@ class Mock:
 			customer.save()
 			customers.append(customer)
 
-		for ind in range(self.number_of_dogs):
+		for ind in trange(self.number_of_dogs,desc="Generating dogs"):
 			dog = models.Dog(
 				name=fake.name(),
 				owner=customers[fake.random_int(min=0, max=self.number_of_customers - 1)],
@@ -94,7 +99,7 @@ class Mock:
 				dog
 			)
 
-		for ind in range(self.number_of_services):
+		for ind in trange(self.number_of_services,desc="Generating services"):
 			service = models.Service(
 					name=fake.word(),
 					description=fake.text(),
@@ -104,7 +109,7 @@ class Mock:
 			service.save()
 			services.append(service)
 
-		for ind in range(self.number_of_products):
+		for ind in trange(self.number_of_products,desc="Generating products"):
 			product = models.Product(
 					name=fake.word(),
 					description=fake.text(),
@@ -113,14 +118,21 @@ class Mock:
 			product.save()
 			products.append(product)
 
-		for ind in range(self.number_of_appointments):
+		for ind in trange(self.number_of_appointments, desc='Generating Appointments'):
+
+			start = fake.date_between(start_date='-1y', end_date='+1y')
+			start = datetime.datetime.combine(start,datetime.time(fake.random_int(min=8, max=18),fake.random.choice([0,15,30,45])))
+			start = pytz.utc.localize(start)
+			end = start + datetime.timedelta(minutes=fake.random.choice([15,30, 45, 60, 75, 90, 105, 120, 135, 150, 165, 180]))
+
+
 
 			appointment = models.Appointment(
 				branch = branches[fake.random_int(min=0, max=self.number_of_branches - 1)],
 				employee=employees[fake.random_int(min=0, max=self.number_of_employees - 1)],
 				dog=dogs[fake.random_int(min=0, max=self.number_of_dogs - 1)],
-				start=fake.date_time(),
-				end=fake.date_time(),
+				start=start,
+				end=end,
 				customer = customers[fake.random_int(min=0, max=self.number_of_customers - 1)],
 				customer_notes=fake.text(),
 				employee_notes=fake.text(),
@@ -161,17 +173,17 @@ class Mock:
 		"""
 			Removes all data from the database
 		"""
-		for appointment in generated_data['appointments']:
+		for appointment in tqdm(generated_data['appointments'],desc="Deleting appointments"):
 			appointment.delete()
-		for product in generated_data['products']:
+		for product in tqdm(generated_data['products'],desc="Deleting products"):
 			product.delete()
-		for service in generated_data['services']:
+		for service in tqdm(generated_data['services'],desc="Deleting services"):
 			service.delete()
-		for dog in generated_data['dogs']:
+		for dog in tqdm(generated_data['dogs'],desc="Deleting dogs"):
 			dog.delete()
-		for customer in generated_data['customers']:
+		for customer in tqdm(generated_data['customers'],desc="Deleting customers"):
 			customer.delete()
-		for employee in generated_data['employees']:
+		for employee in tqdm(generated_data['employees'],desc="Deleting employees"):
 			employee.delete()
-		for branch in generated_data['branches']:
+		for branch in tqdm(generated_data['branches'],desc="Deleting branches"):
 			branch.delete()

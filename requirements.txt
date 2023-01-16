@@ -10,3 +10,4 @@ django-filter
 firebase-admin
 boto3
 python-dotenv
+tqdm
