@@ -1,5 +1,3 @@
-from datetime import timedelta
-
 from django.test import TestCase
 
 from scheduling.models import Employee, Customer, Dog, Branch, Service, Product
@@ -39,14 +37,14 @@ class AppointmentCRUDTestCase(TestCase):
 
 	def test_create_appointment_without_product(self):
 		response = self.client.post("/api/appointment", {
-			"customer":customers[0]["uid"],
-			"branch":1,
-			"dog":1,
-			"customer_notes":"Hello world!",
-			"start":"2020-12-12T12:00:00Z",
-			"services":[1],
-			"products":[]
-		},content_type="application/json")
+			"customer": customers[0]["uid"],
+			"branch": 1,
+			"dog": 1,
+			"customer_notes": "Hello world!",
+			"start": "2020-12-12T12:00:00Z",
+			"services": [1],
+			"products": []
+		}, content_type="application/json")
 
 		self.assertEqual(response.status_code, 201)
 
@@ -58,8 +56,6 @@ class AppointmentCRUDTestCase(TestCase):
 		self.assertEqual(response.status_code, 200)
 		self.assertEqual(len(response.data), 1)
 		self.assertEqual(response.data[0]["products"], [])
-
-
 
 	def test_create_appointment_with_dog_name(self):
 		response = self.client.post("/api/appointment", {
@@ -83,12 +79,11 @@ class AppointmentCRUDTestCase(TestCase):
 		self.assertEqual(len(response.data), 1)
 		self.assertEqual(response.data[0]["products"], [])
 
-
 	def test_appointment_cannot_be_created_if_busy(self):
 		response = self.client.post("/api/appointment", {
 			"customer": customers[0]["uid"],
 			"branch": 1,
-			"dog": dogs[0]["name"],
+			"dog": dogs[0]["id"],
 			"customer_notes": "Hello world!",
 			"start": "2020-12-12T14:00:00Z",
 			"services": [1],
@@ -110,9 +105,6 @@ class AppointmentCRUDTestCase(TestCase):
 		self.assertEqual(response.status_code, 400)
 		self.assertNotEqual(response.data["error"], None)
 
-
-
-
 	def test_fetch(self):
 		response = self.client.post("/api/appointment", {
 			"customer": customers[0]["uid"],
@@ -132,4 +124,3 @@ class AppointmentCRUDTestCase(TestCase):
 		self.assertEqual(response.data["customer"]["name"], customers[0]["name"])
 
 		self.assertEqual(response.data["dog"]["name"], dogs[0]["name"])
-

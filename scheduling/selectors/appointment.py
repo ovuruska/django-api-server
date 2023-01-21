@@ -1,4 +1,6 @@
-from scheduling.models import Appointment
+from typing import Union
+
+from scheduling.models import Appointment, Dog, Customer
 
 
 def get_pending_appointments():
@@ -7,12 +9,14 @@ def get_pending_appointments():
 	"""
 	return Appointment.objects.filter(status=Appointment.Status.PENDING)
 
+
 def get_appointment_by_id(appointment_id):
 	"""
 	:param appointment_id: The id of the appointment
 	:return: The appointment with the given id
 	"""
 	return Appointment.objects.get(id=appointment_id)
+
 
 def get_completed_appointments():
 	"""
@@ -52,3 +56,21 @@ def is_available(appointment_id):
 	return appointment.is_available()
 
 
+def get_last_appointment_by_same_dog(dog_id) -> Union[Appointment, None]:
+	"""
+
+	"""
+
+	dog_appointments = Appointment.objects.filter(dog__id=dog_id).order_by("start")
+	if len(dog_appointments) == 0:
+		return None
+	else:
+		return dog_appointments.last()
+
+
+def get_last_appointment_by_same_customer(customer_id) -> Union[Appointment, None]:
+	customer_appointments = Appointment.objects.filter(customer__id=customer_id).order_by("start")
+	if len(customer_appointments) == 0:
+		return None
+	else:
+		return customer_appointments.last()

@@ -42,6 +42,10 @@ class Appointment(BaseModel):
 	checkout_time = models.DateTimeField(blank=True, null=True)
 	checkout_status = models.BooleanField(default=False)
 
+	last_dog_appointment = models.DateTimeField(blank=True,null=True)
+	last_customer_appointment = models.DateTimeField(blank = True,null=True)
+
+
 	def is_modifiable(self):
 		return self.status != self.Status.COMPLETED
 

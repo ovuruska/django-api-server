@@ -7,6 +7,7 @@ from rest_framework.response import Response
 
 from templates.email import approval_email
 from ..models import Customer
+from ..selectors import get_last_appointment_by_same_dog, get_last_appointment_by_same_customer
 from ..serializers.Appointment import *
 from ..services.send_email import send_email
 
@@ -29,10 +30,19 @@ class AppointmentCreateAPIView(generics.CreateAPIView):
 			customer = Customer.objects.get(id=request.data.get("customer__id"))
 		else:
 			customer = Customer.objects.get(uid=request.data["customer"])
+			request.data["customer__id"] = customer.id
 
 		request.data["customer"] = customer.id
 
+		last_dog_appointment =  get_last_appointment_by_same_dog(request.data["dog"])
+		last_customer_appointment = get_last_appointment_by_same_customer(customer.id)
+		if last_dog_appointment is not None:
+			request.data["last_dog_appointment"] = last_dog_appointment.start
+		if last_customer_appointment is not None:
+			request.data["last_customer_appointment"] = last_customer_appointment.start
+
 		to = customer.email
+
 		title = "Scrubbers - Appointment Confirmation"
 		signer = Signer()
 		response = self.create(request, *args, **kwargs)
@@ -46,8 +56,9 @@ class AppointmentCreateAPIView(generics.CreateAPIView):
 		date = datetime_value.strftime("%m/%d/%Y")
 		hours = datetime_value.strftime("%I:%M %p")
 
-		body = approval_email(date, hours,accept_url, cancel_url, reschedule_url)
-		send_email(to,title,body)
+
+		#body = approval_email(date, hours,accept_url, cancel_url, reschedule_url)
+		#send_email(to,title,body)
 
 		return response
 
