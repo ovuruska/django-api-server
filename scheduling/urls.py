@@ -1,7 +1,8 @@
-from django.urls import path
+from django.urls import path, include
 
 import scheduling.views.branch
 from . import views
+from .views import LoginAPIView
 
 products = [
 	path('product/<pk>', views.ProductModifyAPIView.as_view(), name="product_modify"),
@@ -33,6 +34,12 @@ scheduling_appointments = [
 	path('schedule/appointments',views.AppointmentFilterListView.as_view(), name='appointment_filter_and_list'),
 ]
 
+auth = [
+	#path('auth/', include('knox.urls')),
+	path('auth/register', views.RegisterAPIView.as_view(), name='register'),
+	path('auth/login/', LoginAPIView.as_view()),
+
+]
 
 
 employees = [
@@ -68,4 +75,4 @@ signed_url = [
 	path('confirmation/<token>/reschedule', views.SignedUrlRescheduleAPIView.as_view(), name='signed_url_reschedule'),
 ]
 
-urlpatterns = urlpatterns + products + services + dogs + appointments + employees + scheduling_appointments + payrolls + signed_url + branches + customers
+urlpatterns = urlpatterns + products + services + dogs + appointments + employees + scheduling_appointments + payrolls + signed_url + branches + customers + auth

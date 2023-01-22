@@ -1,5 +1,6 @@
 from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework import generics
+from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 
 from scheduling.models import Appointment, Branch
@@ -11,6 +12,7 @@ from scheduling.serializers.Branch import FreeHoursSerializer
 class AppointmentFilterListView(generics.ListAPIView):
 	serializer_class = AppointmentEmployeeSerializer
 	filter_backends = (DjangoFilterBackend,)
+	# permission_classes = [IsAuthenticated]
 
 	filterset_fields = ["start","branch","status"]
 
