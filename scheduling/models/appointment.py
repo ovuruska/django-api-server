@@ -1,5 +1,5 @@
-from django.utils import timezone
 from django.db import models
+from django.utils import timezone
 from django.utils.translation import gettext_lazy as _
 
 from scheduling.common import BaseModel
@@ -12,6 +12,10 @@ class Appointment(BaseModel):
 		COMPLETED = 'Completed', _('Completed')
 		CANCELLED = 'Cancelled', _('Cancelled')
 		RESCHEDULING = "Rescheduling", _("Rescheduling")
+		CHECKED_IN = "CheckedIn", _("Checked In")
+		PICKUP_READY = "PickupReady", _("Pickup Ready")
+		NO_SHOW = "NoShow", _("No Show")
+		CLOSED_CHARGED = "ClosedCharged", _("Closed Charge")
 
 	class AppointmentType(models.TextChoices):
 		FULL_GROOMING = 'Full Grooming', _('Full Grooming')
@@ -22,11 +26,11 @@ class Appointment(BaseModel):
 	start = models.DateTimeField(default=timezone.now)
 	end = models.DateTimeField(default=timezone.now)
 	customer_notes = models.TextField(blank=True)
-	employee_notes = models.TextField(blank = True)
-	services = models.ManyToManyField("Service", related_name="appointments", blank=True,default=[])
+	employee_notes = models.TextField(blank=True)
+	services = models.ManyToManyField("Service", related_name="appointments", blank=True, default=[])
 	tip = models.DecimalField(max_digits=5, decimal_places=2, default=0.00)
 	cost = models.DecimalField(max_digits=5, decimal_places=2, default=0.00)
-	products = models.ManyToManyField("Product", related_name="products+", blank=True,default=[])
+	products = models.ManyToManyField("Product", related_name="products+", blank=True, default=[])
 	branch = models.ForeignKey("Branch", on_delete=models.CASCADE, related_name="appointments", blank=False)
 	employee = models.ForeignKey("Employee", on_delete=models.DO_NOTHING, related_name="appointments", blank=True,
 	                             null=True)
@@ -38,17 +42,14 @@ class Appointment(BaseModel):
 	pick_up = models.DateTimeField(blank=True, null=True)
 	confirmed_on = models.DateTimeField(blank=True, null=True)
 	special_handling = models.BooleanField(default=False)
-	checkout_by = models.ForeignKey("Employee", on_delete=models.DO_NOTHING, related_name="checkout_appointments",null=True, blank=True)
+	checkout_by = models.ForeignKey("Employee", on_delete=models.DO_NOTHING, related_name="checkout_appointments",
+	                                null=True, blank=True)
 	checkout_time = models.DateTimeField(blank=True, null=True)
 	checkout_status = models.BooleanField(default=False)
-
-	last_dog_appointment = models.DateTimeField(blank=True,null=True)
-	last_customer_appointment = models.DateTimeField(blank = True,null=True)
 
 
 	def is_modifiable(self):
 		return self.status != self.Status.COMPLETED
-
 
 	def is_available(self):
 		return self.status in [self.Status.PENDING, self.Status.RESCHEDULING]

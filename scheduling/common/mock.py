@@ -130,10 +130,12 @@ class Mock:
 			else:
 				status = fake.random.choice([models.Appointment.Status.COMPLETED, models.Appointment.Status.CANCELLED])
 
-			branch = branches[fake.random_int(min=0, max=self.number_of_branches - 1)]
-			appointment_type = models.Appointment.AppointmentType.choices[
-				fake.random_int(min=0, max=len(models.Appointment.AppointmentType.choices) - 1)][0]
-			employee = fake.random.choice([employee for employee in employees if employee.branch.id == branch.id and employee.role == appointment_type])
+			employee = fake.random.choice(employees)
+			branch = employee.branch
+			appointment_type = employee.role
+
+			pet = fake.random.choice(dogs)
+			customer = pet.owner
 
 			appointment = models.Appointment(
 				branch=branch,
@@ -141,13 +143,14 @@ class Mock:
 				dog=dogs[fake.random_int(min=0, max=self.number_of_dogs - 1)],
 				start=start,
 				end=end,
-				customer = customers[fake.random_int(min=0, max=self.number_of_customers - 1)],
+				customer = customer,
 				customer_notes=fake.text(),
 				employee_notes=fake.text(),
 				cost = fake.pydecimal(positive=True, min_value=1, max_value=250),
 				tip = fake.pydecimal(positive=True, min_value=1, max_value=100),
 				status=status,
 				appointment_type=appointment_type,
+				special_handling = fake.random.choice(5*[True ]+ 95*[False]),
 
 			)
 
