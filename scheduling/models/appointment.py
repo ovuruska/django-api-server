@@ -13,9 +13,9 @@ class Appointment(BaseModel):
 		CANCELLED = 'Cancelled', _('Cancelled')
 		RESCHEDULING = "Rescheduling", _("Rescheduling")
 		CHECKED_IN = "CheckedIn", _("Checked In")
-		PICKUP_READY = "PickupReady", _("Pickup Ready")
+		PICKUP_READY = "PickUpReady", _("Pickup Ready")
 		NO_SHOW = "NoShow", _("No Show")
-		CLOSED_CHARGED = "ClosedCharged", _("Closed Charge")
+		CLOSED_CHARGED = "ClosedCharged", _("Closed Charged")
 
 	class AppointmentType(models.TextChoices):
 		FULL_GROOMING = 'Full Grooming', _('Full Grooming')

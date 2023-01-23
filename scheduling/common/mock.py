@@ -90,8 +90,12 @@ class Mock:
 			dog = models.Dog(
 				name=fake.name(),
 				owner=customers[fake.random_int(min=0, max=self.number_of_customers - 1)],
-				breed=fake.word(),
+				breed=fake.anim,
 				weight=fake.random.normalvariate(80, 20),
+				employee_notes=fake.text(),
+				customer_notes=fake.text(),
+				special_handling = fake.random.choice(5*[True ]+ 95*[False]),
+				rabies_vaccination=fake.date_time_between(start_date="-3m", end_date="+2y", tzinfo=pytz.utc),
 				age=fake.random_int(min=1, max=20),
 			)
 			dog.save()

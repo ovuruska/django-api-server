@@ -1,6 +1,7 @@
+from django.utils.decorators import method_decorator
+from django.views.decorators.cache import cache_page
 from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework import generics
-from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 
 from scheduling.models import Appointment, Branch
@@ -14,7 +15,11 @@ class AppointmentFilterListView(generics.ListAPIView):
 	filter_backends = (DjangoFilterBackend,)
 	# permission_classes = [IsAuthenticated]
 
-	filterset_fields = ["start","branch","status"]
+	filterset_fields = ["start", "branch", "status","employee"]
+
+	#@method_decorator(cache_page(60 * 60 * 2))
+	def get(self, request, *args, **kwargs):
+		return self.list(request, *args, **kwargs)
 
 	def get_queryset(self):
 		queryset = Appointment.objects.all()
@@ -25,12 +30,15 @@ class AppointmentFilterListView(generics.ListAPIView):
 		end_date = self.request.query_params.get('start__lt', None)
 		if end_date:
 			queryset = queryset.filter(start__lt=end_date)
+
+		employee_id = self.request.query_params.get('employee', None)
+		if employee_id:
+			queryset = queryset.filter(employee=employee_id)
+
 		return queryset
 
 
-
 class AppointmentAvailableHoursView(generics.RetrieveAPIView):
-
 	queryset = Appointment.objects.all()
 	serializer_class = FreeHoursSerializer
 
@@ -50,6 +58,3 @@ class AppointmentAvailableHoursView(generics.RetrieveAPIView):
 				"Content-Type": "application/json"
 			}
 		)
-
-
-

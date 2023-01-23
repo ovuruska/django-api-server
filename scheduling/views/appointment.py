@@ -62,13 +62,14 @@ class AppointmentCreateAPIView(generics.CreateAPIView):
 
 		return response
 
-class AppointmentModifyAPIView(generics.UpdateAPIView):
+class AppointmentModifyAPIView(generics.UpdateAPIView,generics.RetrieveAPIView):
 	"""
 	This view will be used in employee application to update the status of the appointment.
 	"""
 	serializer_class = AppointmentModifySerializer
 	queryset = Appointment.objects.all()
-
+	def get_queryset(self):
+		return self.queryset.filter(id=self.kwargs['pk'])
 	def patch(self, request, *args, **kwargs):
 		"""
 		Updates the appointment with the given id
@@ -83,12 +84,11 @@ class AppointmentModifyAPIView(generics.UpdateAPIView):
 		return Response(serializer.data)
 
 
-class AppointmentCustomerListRetrieveAPIView(generics.ListAPIView):
-	serializer_class = AppointmentCustomerRetrieveSerializer
-	queryset = Appointment.objects.all()
 
-	def get_queryset(self):
-		return self.queryset.filter(customer__uid=self.kwargs['uid'])
+
+class AppointmentEmployeeRetrieveAPIView():
+	serializer_class = AppointmentEmployeeSerializer
+	queryset = Appointment.objects.all()
 
 
 
