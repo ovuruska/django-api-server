@@ -15,7 +15,7 @@ class AppointmentFilterListView(generics.ListAPIView):
 	filter_backends = (DjangoFilterBackend,)
 	# permission_classes = [IsAuthenticated]
 
-	filterset_fields = ["start", "branch", "status","employee"]
+	filterset_fields = ["start", "branch", "status","employee","dog"]
 
 	#@method_decorator(cache_page(60 * 60 * 2))
 	def get(self, request, *args, **kwargs):

@@ -1,15 +1,12 @@
 from datetime import datetime
 
 from django.core.signing import Signer
-from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework import generics
 from rest_framework.response import Response
 
-from templates.email import approval_email
 from ..models import Customer
-from ..selectors import get_last_appointment_by_same_dog, get_last_appointment_by_same_customer
 from ..serializers.Appointment import *
-from ..services.send_email import send_email
+
 
 class AppointmentCreateAPIView(generics.CreateAPIView):
 	"""
@@ -34,7 +31,7 @@ class AppointmentCreateAPIView(generics.CreateAPIView):
 
 		request.data["customer"] = customer.id
 
-		last_dog_appointment =  get_last_appointment_by_same_dog(request.data["dog"])
+		last_dog_appointment = get_last_appointment_by_same_dog(request.data["dog"])
 		last_customer_appointment = get_last_appointment_by_same_customer(customer.id)
 		if last_dog_appointment is not None:
 			request.data["last_dog_appointment"] = last_dog_appointment.start
@@ -56,20 +53,22 @@ class AppointmentCreateAPIView(generics.CreateAPIView):
 		date = datetime_value.strftime("%m/%d/%Y")
 		hours = datetime_value.strftime("%I:%M %p")
 
-
-		#body = approval_email(date, hours,accept_url, cancel_url, reschedule_url)
-		#send_email(to,title,body)
+		# body = approval_email(date, hours,accept_url, cancel_url, reschedule_url)
+		# send_email(to,title,body)
 
 		return response
 
-class AppointmentModifyAPIView(generics.UpdateAPIView,generics.RetrieveAPIView):
+
+class AppointmentModifyAPIView(generics.UpdateAPIView):
 	"""
 	This view will be used in employee application to update the status of the appointment.
 	"""
 	serializer_class = AppointmentModifySerializer
 	queryset = Appointment.objects.all()
+
 	def get_queryset(self):
 		return self.queryset.filter(id=self.kwargs['pk'])
+
 	def patch(self, request, *args, **kwargs):
 		"""
 		Updates the appointment with the given id
@@ -84,17 +83,25 @@ class AppointmentModifyAPIView(generics.UpdateAPIView,generics.RetrieveAPIView):
 		return Response(serializer.data)
 
 
+class AppointmentCustomerListRetrieveAPIView(generics.ListAPIView):
+	serializer_class = AppointmentCustomerRetrieveSerializer
+	queryset = Appointment.objects.all()
+
+	def get_queryset(self):
+		return self.queryset.filter(customer__uid=self.kwargs['uid'])
 
 
-class AppointmentEmployeeRetrieveAPIView():
+class AppointmentEmployeeRetrieveAPIView(generics.RetrieveAPIView):
 	serializer_class = AppointmentEmployeeSerializer
 	queryset = Appointment.objects.all()
 
-
+	def get_queryset(self):
+		return self.queryset.filter(id=self.kwargs['pk'])
 
 
 class AppointmentCustomerRetrieve(generics.RetrieveAPIView):
 	serializer_class = AppointmentCustomerRetrieveSerializer
 	queryset = Appointment.objects.all()
 
-
+	def get_queryset(self):
+		return self.queryset.filter(id=self.kwargs['pk'])

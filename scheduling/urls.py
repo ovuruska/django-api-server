@@ -30,6 +30,8 @@ appointments = [
 
 scheduling_appointments = [
 	path('schedule/appointment/<pk>', views.AppointmentModifyAPIView.as_view(), name='appointment'),
+	path('schedule/appointments/<pk>', views.AppointmentEmployeeRetrieveAPIView.as_view(), name='appointment'),
+
 	path('schedule/appointments',views.AppointmentFilterListView.as_view(), name='appointment_filter_and_list'),
 ]
 

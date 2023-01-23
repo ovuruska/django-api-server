@@ -1,3 +1,5 @@
+import datetime
+
 from django.apps import apps
 
 
@@ -68,13 +70,13 @@ def is_available(appointment_id):
 	return appointment.is_available()
 
 
-def get_last_appointment_by_same_dog(dog_id):
+def get_last_appointment_by_same_dog(dog_id,start):
 	"""
 
 	"""
 	Appointment = apps.get_model('scheduling', 'Appointment')
 
-	dog_appointments = Appointment.objects.filter(dog__id=dog_id,status=Appointment.Status.COMPLETED).order_by("-start")
+	dog_appointments = Appointment.objects.filter(dog__id=dog_id,start__lt=start,status=Appointment.Status.COMPLETED).order_by("-start")
 	if len(dog_appointments) == 0:
 		return None
 	else:
