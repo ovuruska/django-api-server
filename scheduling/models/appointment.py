@@ -25,8 +25,8 @@ class Appointment(BaseModel):
 	dog = models.ForeignKey("Dog", on_delete=models.DO_NOTHING, related_name="appointments", blank=False)
 	start = models.DateTimeField(default=timezone.now)
 	end = models.DateTimeField(default=timezone.now)
-	customer_notes = models.TextField(blank=True)
-	employee_notes = models.TextField(blank=True)
+	customer_notes = models.TextField(blank=True, max_length=1000)
+	employee_notes = models.TextField(blank=True, max_length=1000)
 	services = models.ManyToManyField("Service", related_name="appointments", blank=True, default=[])
 	tip = models.DecimalField(max_digits=5, decimal_places=2, default=0.00)
 	cost = models.DecimalField(max_digits=5, decimal_places=2, default=0.00)
@@ -46,7 +46,6 @@ class Appointment(BaseModel):
 	                                null=True, blank=True)
 	checkout_time = models.DateTimeField(blank=True, null=True)
 	checkout_status = models.BooleanField(default=False)
-
 
 	def is_modifiable(self):
 		return self.status != self.Status.COMPLETED
