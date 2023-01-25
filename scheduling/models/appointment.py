@@ -47,6 +47,7 @@ class Appointment(BaseModel):
 	checkout_time = models.DateTimeField(blank=True, null=True)
 	checkout_status = models.BooleanField(default=False)
 
+
 	def is_modifiable(self):
 		return self.status != self.Status.COMPLETED
 
