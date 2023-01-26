@@ -56,6 +56,7 @@ payrolls = [
 ]
 
 customers = [
+	path('scheduling/customer/<pk>',views.CustomerDetailsAPIView.as_view(),name="customer_modify"),
 	path("customers", views.CustomerFilterAPIView.as_view(), name="customer_filter"),
 ]
 
@@ -66,7 +67,6 @@ branches = [
 
 urlpatterns = [
 	path('branch/<pk>', scheduling.views.branch.BranchRetrieveModifyAPIView.as_view(), name="admin_branch_modify"),
-	path('me/<uid>',views.CustomerRetrieveAPIView.as_view(),name="get_customer_details"),
 	path('branch/<pk>/free_hours',views.AppointmentAvailableHoursView.as_view(),name="get_available_hours")
 ]
 

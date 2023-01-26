@@ -6,6 +6,7 @@ from tqdm import tqdm, trange
 
 from scheduling import models
 
+from .breeds import breeds
 
 class Mock:
 
@@ -90,7 +91,7 @@ class Mock:
 			dog = models.Dog(
 				name=fake.name(),
 				owner=customers[fake.random_int(min=0, max=self.number_of_customers - 1)],
-				breed=fake.anim,
+				breed=fake.random.choice(breeds),
 				weight=fake.random.normalvariate(80, 20),
 				employee_notes=fake.text(),
 				customer_notes=fake.text(),
