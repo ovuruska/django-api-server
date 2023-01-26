@@ -41,9 +41,7 @@ class Appointment(BaseModel):
 	check_in = models.DateTimeField(blank=True, null=True)
 	pick_up = models.DateTimeField(blank=True, null=True)
 	confirmed_on = models.DateTimeField(blank=True, null=True)
-	special_handling = models.BooleanField(default=False)
-	checkout_by = models.ForeignKey("Employee", on_delete=models.DO_NOTHING, related_name="checkout_appointments",
-	                                null=True, blank=True)
+
 	checkout_time = models.DateTimeField(blank=True, null=True)
 	checkout_status = models.BooleanField(default=False)
 
