@@ -27,14 +27,14 @@ class CustomerDetailsSerializer(serializers.ModelSerializer):
 
 	def get_lifetime_tips(self, obj):
 		total_tips = get_customer_lifetime_tips(obj.id)
-		return total_tips["tip__sum"] or 0
+		return round(total_tips["tip__sum"] or 0,2)
 
 	def get_lifetime_product_sales(self, obj):
 		total_product_sales = get_customer_lifetime_product_invoice(obj.id)
-		return total_product_sales["products__cost__sum"] or 0
+		return round(total_product_sales["products__cost__sum"] or 0,2)
 	def get_lifetime_service_sales(self, obj):
 		total_service_sales = get_customer_lifetime_service_invoice(obj.id)
-		return total_service_sales["services__cost__sum"] or 0
+		return round(total_service_sales["services__cost__sum"] or 0,2)
 
 	class Meta:
 		model = Customer
