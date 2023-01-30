@@ -19,6 +19,8 @@ class Mock:
 	             number_of_appointments: int = 1000,
 	             number_of_services: int = 10,
 	             number_of_products: int = 10,
+	             number_of_categories : int = 4
+
 	             ):
 		self.number_of_branches = number_of_branches
 		self.number_of_employees = number_of_employees
@@ -50,6 +52,12 @@ class Mock:
 		services = []
 		products = []
 		appointments = []
+		categories = [
+			"Treats",
+			"Special services",
+			"Conditioners",
+			"Shampoos"
+		]
 
 		fake = Faker()
 
@@ -107,8 +115,8 @@ class Mock:
 
 		for ind in trange(self.number_of_services, desc="Generating services"):
 			service = models.Service(
-				name=fake.word(),
-				description=fake.text(),
+				name=fake.company(),
+				description=fake.bs(),
 				cost=fake.pyfloat(positive=True, min_value=1, max_value=100),
 				duration=fake.time_delta(),
 			)
@@ -117,8 +125,9 @@ class Mock:
 
 		for ind in trange(self.number_of_products, desc="Generating products"):
 			product = models.Product(
-				name=fake.word(),
-				description=fake.text(),
+				name=fake.company(),
+				description=fake.bs(),
+				category=fake.random.choice(categories),
 				cost=fake.pyfloat(positive=True, min_value=1, max_value=100),
 			)
 			product.save()
