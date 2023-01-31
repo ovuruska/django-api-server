@@ -48,6 +48,7 @@ class AppointmentAvailableHoursView(generics.RetrieveAPIView):
 		_ = Branch.objects.get(id=branch_id)
 
 		date = request.GET.get("date")
+
 		free_hours = get_free_hours(branch_id, date)
 		return Response(
 			data={
