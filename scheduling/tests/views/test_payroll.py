@@ -1,6 +1,6 @@
 import datetime
 
-from scheduling.common import Mock
+from common import Mock
 from django.test import TestCase
 
 from scheduling.models import Employee, Appointment

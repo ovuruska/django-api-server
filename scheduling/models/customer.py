@@ -1,5 +1,5 @@
 from django.db import models
-from ..common import BaseModel
+from common import BaseModel
 
 
 class Customer(BaseModel):

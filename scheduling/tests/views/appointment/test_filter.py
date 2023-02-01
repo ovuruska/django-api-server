@@ -1,7 +1,7 @@
 import urllib.parse
 from django.test import TestCase
 
-from scheduling.common import Mock
+from common import Mock
 
 
 class AppointmentFilterTestCase(TestCase):

@@ -4,7 +4,7 @@ from django.test import TestCase
 
 from scheduling.models import Branch, Employee, Customer, Dog, Appointment
 from scheduling.tests.views.mock import branches, employees, customers, dogs
-from scheduling.common.mock import Mock
+from common.mock import Mock
 
 class FreeHoursTestCase(TestCase):
 	"""

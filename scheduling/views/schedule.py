@@ -3,7 +3,7 @@ import datetime
 from rest_framework import views
 from rest_framework.response import Response
 
-from ..common.datetime_range import datetime_range
+from common.datetime_range import datetime_range
 
 from scheduling.models import Appointment
 

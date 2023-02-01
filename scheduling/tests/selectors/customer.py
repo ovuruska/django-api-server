@@ -1,6 +1,6 @@
 from django.test import TestCase
 
-from scheduling.common import Mock
+from common import Mock
 from scheduling.models import Appointment, Dog
 
 

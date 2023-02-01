@@ -1,7 +1,7 @@
 import datetime
 import time
 
-from scheduling.common import Mock
+from common import Mock
 
 from django.test import TestCase
 
