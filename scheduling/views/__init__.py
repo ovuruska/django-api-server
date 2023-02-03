@@ -11,3 +11,4 @@ from .product import *
 from .schedule import *
 from .service import *
 from .signed_url import *
+from .branch_working_hour import *

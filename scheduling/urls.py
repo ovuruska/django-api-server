@@ -42,6 +42,9 @@ auth = [
 
 ]
 
+branch_working_hour = [
+	path('scheduling/hours/branch', views.BranchWorkingHourCreate.as_view(), name='scheduling-hours-create'),
+]
 
 employees = [
 	path('employee', views.EmployeeCreateAPIView.as_view(), name='employee_create'),
@@ -76,4 +79,4 @@ signed_url = [
 	path('confirmation/<token>/reschedule', views.SignedUrlRescheduleAPIView.as_view(), name='signed_url_reschedule'),
 ]
 
-urlpatterns = urlpatterns + products + services + dogs + appointments + employees + scheduling_appointments + payrolls + signed_url + branches + customers + auth
+urlpatterns = urlpatterns + branch_working_hour + products + services + dogs + appointments + employees + scheduling_appointments + payrolls + signed_url + branches + customers + auth
