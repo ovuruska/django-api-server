@@ -4,6 +4,30 @@ from django.apps import apps
 
 from common.datetime_range import datetime_range
 
+def get_branch_working_hours(start,end,branch_id) -> [str]:
+	BranchWorkingHour = apps.get_model('scheduling','BranchWorkingHour')
+
+	branch_working_hours = BranchWorkingHour.objects.filter(branch=branch_id)
+	working_hours = []
+	start = datetime.datetime.strptime(start, "%Y-%m-%d")
+	end = datetime.datetime.strptime(end, "%Y-%m-%d")
+
+	for date in datetime_range(start, end):
+		week_day = date.weekday()
+
+		closest = branch_working_hours.filter(week_day=week_day).order_by('date').first()
+		if closest == None:
+			result = 24 * "0"
+		else:
+			result = closest.working_hours
+
+		working_hours.append({
+			"date": date,
+			"working_hours": result
+		})
+
+	return working_hours
+
 
 def get_employee_working_hours(start, end, employee_id) -> [str]:
 	EmployeeWorkingHour = apps.get_model('scheduling', 'EmployeeWorkingHour')

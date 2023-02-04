@@ -4,5 +4,5 @@ from scheduling.models.branch_working_hour import BranchWorkingHour
 class BranchWorkingHourSerializer(serializers.ModelSerializer):
     class Meta:
         model = BranchWorkingHour
-        fields = ['weekday', 'branch', 'workingHours']
+        fields = ['weekday','date', 'branch', 'workingHours']
 
