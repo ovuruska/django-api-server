@@ -31,7 +31,9 @@ class BranchWorkingHoursTestCase(MockTestCase):
 
 		body = {
 			"branch": branch_id,
-			"working_hours": self.first
+			"working_hours": self.first,
+			"date": self.date_str
+
 		}
 
 		resp = self.client.post(self.root_url, body)
@@ -48,7 +50,8 @@ class BranchWorkingHoursTestCase(MockTestCase):
 		branch_id = 1
 		body = {
 			"branch": branch_id,
-			"working_hours": self.first
+			"working_hours": self.first,
+			"date":self.date_str
 		}
 
 		resp = self.client.post(self.root_url, body)
@@ -56,7 +59,9 @@ class BranchWorkingHoursTestCase(MockTestCase):
 
 		body = {
 			"branch": branch_id,
-			"working_hours": self.second
+			"working_hours": self.second,
+			"date": self.date_str
+
 		}
 
 		resp = self.client.post(self.root_url, body)
@@ -73,19 +78,23 @@ class BranchWorkingHoursTestCase(MockTestCase):
 		branch_id = 1
 		body = {
 			"branch": branch_id,
-			"working_hours": self.first
+			"working_hours": self.first,
+			"date": self.date_str
+
 		}
 
 		resp = self.client.post(self.root_url, body)
-		self.assertEqual(resp.status_code, 201)
+		self.assertEqual(resp.status_code, 200)
 
 		body = {
 			"branch": branch_id,
-			"working_hours": self.second
+			"working_hours": self.second,
+			"date": self.date_str
+
 		}
 
 		resp = self.client.post(self.root_url, body)
-		self.assertEqual(resp.status_code, 201)
+		self.assertEqual(resp.status_code, 200)
 
 		days = 8
 

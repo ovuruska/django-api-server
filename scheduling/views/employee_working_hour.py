@@ -1,16 +1,17 @@
 from rest_framework import generics
 from rest_framework.response import Response
 
+from scheduling.models import EmployeeWorkingHour
 from scheduling.models.branch_working_hour import BranchWorkingHour
 from scheduling.selectors.working_hours import get_employee_working_hours, set_employee_working_hours
 from scheduling.serializers.employee_wh import EmployeeWorkingHourSerializer
 
 
-class EmployeeWorkingHour(generics.CreateAPIView, generics.ListAPIView):
+class EmployeeWorkingHourView(generics.CreateAPIView, generics.ListAPIView):
 	"""
 	API endpoint that allows users to be viewed or edited.
 	"""
-	queryset = BranchWorkingHour.objects.all()
+	queryset = EmployeeWorkingHour.objects.all()
 	serializer_class = EmployeeWorkingHourSerializer
 
 	def get(self, request, *args, **kwargs):

@@ -28,6 +28,25 @@ def get_branch_working_hours(start,end,branch_id) -> [str]:
 
 	return working_hours
 
+def set_branch_working_hours(branch_id,date, working_hours):
+	BranchWorkingHour = apps.get_model('scheduling', 'BranchWorkingHour')
+	date = datetime.datetime.strptime(date, "%Y-%m-%d")
+
+
+	created = {
+		"date": date,
+		"week_day": date.weekday(),
+		"working_hours": working_hours,
+		"branch_id": branch_id
+
+	}
+
+	BranchWorkingHour.objects.filter(branch_id=branch_id, date=date).delete()
+	BranchWorkingHour.objects.update_or_create(
+		**created
+	)
+
+	return created
 
 def get_employee_working_hours(start, end, employee_id) -> [str]:
 	EmployeeWorkingHour = apps.get_model('scheduling', 'EmployeeWorkingHour')
