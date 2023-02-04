@@ -1,10 +1,11 @@
+from django.apps import apps
+
 from .mock import branches
 from .mock import employees
 from django.test import TestCase
 
-from ...models import Branch, Employee
 
-
+Branch = apps.get_model('scheduling', 'Branch')
 class GroomerTestCase(TestCase):
 	def setUp(self):
 		"""

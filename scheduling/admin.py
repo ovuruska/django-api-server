@@ -1,6 +1,6 @@
 from django.contrib import admin
 
-from .models import Branch, Service, Product, Employee, Dog, Customer, Appointment
+from .models import Branch, Service, Product, Employee, Dog, Customer, Appointment, EmployeeWorkingHour
 
 # Register your models here.
 admin.site.register(Branch)
@@ -10,3 +10,4 @@ admin.site.register(Product)
 admin.site.register(Dog)
 admin.site.register(Customer)
 admin.site.register(Appointment)
+admin.site.register(EmployeeWorkingHour)

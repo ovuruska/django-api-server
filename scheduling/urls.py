@@ -1,4 +1,4 @@
-from django.urls import path, include
+from django.urls import path
 
 import scheduling.views.branch
 from . import views
@@ -32,22 +32,29 @@ scheduling_appointments = [
 	path('schedule/appointment/<pk>', views.AppointmentModifyAPIView.as_view(), name='appointment'),
 	path('schedule/appointments/<pk>', views.AppointmentEmployeeRetrieveAPIView.as_view(), name='appointment'),
 
-	path('schedule/appointments',views.AppointmentFilterListView.as_view(), name='appointment_filter_and_list'),
+	path('schedule/appointments', views.AppointmentFilterListView.as_view(), name='appointment_filter_and_list'),
 ]
 
 auth = [
-	#path('auth/', include('knox.urls')),
+	# path('auth/', include('knox.urls')),
 	path('auth/register', views.RegisterAPIView.as_view(), name='register'),
 	path('auth/login/', LoginAPIView.as_view()),
 
 ]
 
+branch_working_hour = [
+	path('scheduling/hours/branch', views.BranchWorkingHourCreate.as_view(), name='scheduling-hours-create'),
+]
+
+employee_working_hour = [
+	path('scheduling/hours/employee', views.EmployeeWorkingHour.as_view(), name='scheduling-hours-create'),
+]
 
 employees = [
 	path('employee', views.EmployeeCreateAPIView.as_view(), name='employee_create'),
 	path('employee/groomers', views.EmployeeGroomerListRetrieve.as_view(), name='groomers_retrieve'),
 	path('employee/<pk>', views.EmployeeRetrieveModifyDestroyAPIView.as_view(), name='employee_modify'),
-	path('employees',views.EmployeeFilterView.as_view(), name='employee_filter'),
+	path('employees', views.EmployeeFilterView.as_view(), name='employee_filter'),
 
 ]
 
@@ -56,10 +63,9 @@ payrolls = [
 ]
 
 customers = [
-	path('scheduling/customer/<pk>',views.CustomerDetailsAPIView.as_view(),name="customer_modify"),
+	path('scheduling/customer/<pk>', views.CustomerDetailsAPIView.as_view(), name="customer_modify"),
 	path("customers", views.CustomerFilterAPIView.as_view(), name="customer_filter"),
 ]
-
 
 branches = [
 	path('branch', views.BranchCreateAPIView.as_view(), name='branch_create'),
@@ -67,7 +73,7 @@ branches = [
 
 urlpatterns = [
 	path('branch/<pk>', scheduling.views.branch.BranchRetrieveModifyAPIView.as_view(), name="admin_branch_modify"),
-	path('branch/<pk>/free_hours',views.AppointmentAvailableHoursView.as_view(),name="get_available_hours")
+	path('branch/<pk>/free_hours', views.AppointmentAvailableHoursView.as_view(), name="get_available_hours")
 ]
 
 signed_url = [
@@ -76,4 +82,5 @@ signed_url = [
 	path('confirmation/<token>/reschedule', views.SignedUrlRescheduleAPIView.as_view(), name='signed_url_reschedule'),
 ]
 
-urlpatterns = urlpatterns + products + services + dogs + appointments + employees + scheduling_appointments + payrolls + signed_url + branches + customers + auth
+urlpatterns = urlpatterns + branch_working_hour + products + services + dogs + appointments + employees \
+              + employee_working_hour + scheduling_appointments + payrolls + signed_url + branches + customers + auth
