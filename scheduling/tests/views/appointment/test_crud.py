@@ -1,5 +1,6 @@
 from django.test import TestCase
 
+from common import Mock
 from scheduling.models import Employee, Customer, Dog, Branch, Service, Product
 from ..mock import *
 
@@ -11,30 +12,11 @@ class AppointmentCRUDTestCase(TestCase):
 	"""
 
 	def setUp(self) -> None:
-		Customer.objects.create(
-			**customers[0]
-		)
-		Dog.objects.create(
-			**dogs[0],
-			owner=Customer.objects.get(id=1)
-		)
-		Branch.objects.create(
-			**branches[0]
-		)
-		Employee.objects.create(
-			**employees[0],
-			branch=Branch.objects.get(id=1)
-		)
-		for service in services:
-			Service.objects.create(
-				**service
-			)
+		self.mock = Mock()
+		self.data = self.mock.generate()
 
-		for product in products:
-			Product.objects.create(
-				**product
-			)
-
+	def tearDown(self):
+		self.mock.remove(self.data)
 	def test_create_appointment_without_product(self):
 		response = self.client.post("/api/appointment", {
 			"customer": customers[0]["uid"],

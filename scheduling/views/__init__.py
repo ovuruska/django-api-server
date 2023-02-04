@@ -2,13 +2,14 @@ from .appointment import *
 from .appointment_filter import *
 from .auth import *
 from .branch import *
+from .branch_working_hour import *
 from .customer import *
 from .dog import *
 from .employee import *
 from .employee_filter import *
+from .employee_working_hour import *
 from .payroll import *
 from .product import *
 from .schedule import *
 from .service import *
 from .signed_url import *
-from .branch_working_hour import *

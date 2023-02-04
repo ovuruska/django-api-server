@@ -6,4 +6,4 @@ from .employee import Employee
 from .payroll import Payroll
 from .product import Product
 from .service import Service
-from .employee_working_hours import EmployeeWorkingHours
+from .employee_wh import EmployeeWorkingHour

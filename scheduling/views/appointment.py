@@ -1,10 +1,10 @@
 from datetime import datetime
 
+from django.apps import apps
 from django.core.signing import Signer
 from rest_framework import generics
 from rest_framework.response import Response
 
-from ..models import Customer
 from ..serializers.Appointment import *
 
 
@@ -13,7 +13,7 @@ class AppointmentCreateAPIView(generics.CreateAPIView):
 
 	start: Datetime String in ISO 8601 format : https://www.iso.org/iso-8601-date-and-time-format.html
 	"""
-
+	Customer = apps.get_model('scheduling', 'Customer')
 	serializer_class = AppointmentCreateSerializer
 	queryset = Appointment.objects.all()
 
