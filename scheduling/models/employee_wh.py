@@ -23,3 +23,4 @@ class EmployeeWorkingHour(models.Model):
 
 	class Meta:
 		unique_together = ('employee', 'date')
+		ordering = ('-date',)

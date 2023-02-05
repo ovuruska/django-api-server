@@ -1,30 +1,72 @@
+import json
+from datetime import datetime
+
+from django.apps import apps
+from django.forms.models import model_to_dict
+from django.http import JsonResponse
 from rest_framework import generics
 from rest_framework.response import Response
 
 from scheduling.models import EmployeeWorkingHour
-from scheduling.models.branch_working_hour import BranchWorkingHour
 from scheduling.selectors.working_hours import get_employee_working_hours, set_employee_working_hours
-from scheduling.serializers.employee_wh import EmployeeWorkingHourSerializer
+from scheduling.serializers.employee_wh import EmployeeWorkingHourSerializer, EmployeeWorkingHourRetrieveSerializer
 
 
-class EmployeeWorkingHourView(generics.CreateAPIView, generics.ListAPIView):
+class EmployeeWorkingHourView(generics.CreateAPIView):
 	"""
 	API endpoint that allows users to be viewed or edited.
 	"""
 	queryset = EmployeeWorkingHour.objects.all()
 	serializer_class = EmployeeWorkingHourSerializer
 
+	def post(self, request, *args, **kwargs):
+		result = set_employee_working_hours(request.data["employee"], request.data["date"],
+		                                    request.data["working_hours"], request.data["branch"])
+		return Response(data=result, status=200)
+
+
+class EmployeeWorkingHourRetrieveView(generics.ListAPIView):
+	"""
+	API endpoint that allows users to be viewed or edited.
+	{
+		"start": "2020-01-01",
+		"end": "2020-01-31",
+		"employee":Employee
+		"working_hours":[
+			{
+				"working_hours":char[24],
+				"branch":Branch,
+				"date":date
+			}
+	}
+
+	"""
+	Employee = apps.get_model(
+		'scheduling',
+		'Employee'
+	)
+	queryset = EmployeeWorkingHour.objects.all()
+	serializer_class = EmployeeWorkingHourRetrieveSerializer
+
 	def get(self, request, *args, **kwargs):
 
 		start = request.query_params.get("start", None)
 		end = request.query_params.get("end", None)
-		employee_id = request.query_params.get("id", None)
+		employee_id = self.kwargs.get("pk", None)
+
 		if start == None or end == None or employee_id == None:
 			return Response(status=400)
 		else:
-			working_hours = get_employee_working_hours(start, end, employee_id)
-			return Response(data=working_hours, status=200)
+			start_date = datetime.strptime(start, "%Y-%m-%d").date()
+			end_date = datetime.strptime(end, "%Y-%m-%d").date()
+			working_hours = get_employee_working_hours(start_date, end_date, employee_id)
+			employee = self.Employee.objects.get(pk=employee_id)
+			employee = model_to_dict(employee)
 
-	def post(self, request, *args, **kwargs):
-		result = set_employee_working_hours(request.data["employee"], request.data["date"], request.data["working_hours"],request.data["branch"])
-		return Response(data=result, status=200)
+			data = {
+				"start": start,
+				"end": end,
+				"employee": employee,
+				"working_hours": working_hours
+			}
+			return JsonResponse(data)

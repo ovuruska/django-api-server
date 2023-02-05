@@ -44,7 +44,7 @@ class EmployeeWorkingHoursTestCase(MockTestCase):
 
 		start = self.date_str
 		end = (self.date + datetime.timedelta(days=1)).strftime("%Y-%m-%d")
-		resp = self.client.get(self.root_url + "?id=" + str(employee_id) + "&start=" + start + "&end=" + end)
+		resp = self.client.get(self.root_url + "/" + str(employee_id) + "?start=" + start + "&end=" + end)
 		self.assertEqual(resp.status_code, 200)
 		self.assertEqual(len(resp.data),2)
 		self.assertEqual(resp.data[0]["working_hours"], self.first)
@@ -75,7 +75,7 @@ class EmployeeWorkingHoursTestCase(MockTestCase):
 
 		start = datetime.datetime.now().strftime("%Y-%m-%d")
 		end = (datetime.datetime.now() + datetime.timedelta(days=1)).strftime("%Y-%m-%d")
-		resp = self.client.get(self.root_url + "?id=" + str(employee_id) + "&start=" + start + "&end=" + end)
+		resp = self.client.get(self.root_url + "/" + str(employee_id) + "?start=" + start + "&end=" + end)
 		self.assertEqual(resp.status_code, 200)
 		self.assertEqual(len(resp.data),2)
 		self.assertEqual(resp.data[0]["working_hours"], self.second)
@@ -109,9 +109,9 @@ class EmployeeWorkingHoursTestCase(MockTestCase):
 
 		start = datetime.datetime.now().strftime("%Y-%m-%d")
 		end = (datetime.datetime.now() + datetime.timedelta(days=days)).strftime("%Y-%m-%d")
-		resp = self.client.get(self.root_url + "?id=" + str(employee_id) + "&start=" + start + "&end=" + end)
+		resp = self.client.get(self.root_url + "/" + str(employee_id) + "?start=" + start + "&end=" + end)
 		self.assertEqual(resp.status_code, 200)
-		self.assertEqual(len(resp.data),days+1)
+		self.assertEqual(len(resp.data),days)
 		self.assertEqual(resp.data[0]["working_hours"], self.second)
 		for i in range(1, 7):
 			self.assertEqual(resp.data[i]["working_hours"], self.all_zero)
