@@ -1,4 +1,3 @@
-import json
 from datetime import datetime
 
 from django.apps import apps
@@ -8,24 +7,14 @@ from rest_framework import generics
 from rest_framework.response import Response
 
 from scheduling.models import EmployeeWorkingHour
-from scheduling.selectors.working_hours import get_employee_working_hours, set_employee_working_hours
-from scheduling.serializers.employee_wh import EmployeeWorkingHourSerializer, EmployeeWorkingHourRetrieveSerializer
+from scheduling.selectors.working_hours import get_employee_working_hours,set_employee_working_hours
+from scheduling.serializers.wh_employee import EmployeeWorkingHourSerializer, EmployeeWorkingHourRetrieveSerializer
 
 
-class EmployeeWorkingHourView(generics.CreateAPIView):
-	"""
-	API endpoint that allows users to be viewed or edited.
-	"""
-	queryset = EmployeeWorkingHour.objects.all()
-	serializer_class = EmployeeWorkingHourSerializer
-
-	def post(self, request, *args, **kwargs):
-		result = set_employee_working_hours(request.data["employee"], request.data["date"],
-		                                    request.data["working_hours"], request.data["branch"])
-		return Response(data=result, status=200)
 
 
-class EmployeeWorkingHourRetrieveView(generics.ListAPIView):
+
+class EmployeeWorkingHourRetrieveCreateView(generics.ListAPIView,generics.CreateAPIView):
 	"""
 	API endpoint that allows users to be viewed or edited.
 	{
@@ -46,7 +35,13 @@ class EmployeeWorkingHourRetrieveView(generics.ListAPIView):
 		'Employee'
 	)
 	queryset = EmployeeWorkingHour.objects.all()
-	serializer_class = EmployeeWorkingHourRetrieveSerializer
+	serializer_class = EmployeeWorkingHourSerializer
+
+	def post(self, request, *args, **kwargs):
+		employee_id = self.kwargs.get("pk", None)
+		result = set_employee_working_hours(employee_id, request.data["date"],
+		                                       request.data["start"], request.data["end"], request.data["branch"])
+		return Response(data=result, status=200)
 
 	def get(self, request, *args, **kwargs):
 

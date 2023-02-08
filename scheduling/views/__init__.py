@@ -2,12 +2,12 @@ from .appointment import *
 from .appointment_filter import *
 from .auth import *
 from .branch import *
-from .branch_working_hour import *
+from .wh_branch import *
 from .customer import *
 from .dog import *
 from .employee import *
 from .employee_filter import *
-from .employee_working_hour import *
+from .wh_employee import *
 from .payroll import *
 from .product import *
 from .schedule import *

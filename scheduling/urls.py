@@ -47,8 +47,8 @@ branch_working_hour = [
 ]
 
 employee_working_hour = [
-	path('scheduling/hours/employee', views.EmployeeWorkingHourView.as_view(), name='scheduling-hours-create'),
-	path('scheduling/hours/employee/<pk>', views.EmployeeWorkingHourRetrieveView.as_view(), name='scheduling-hours-retrieve'),
+	path('scheduling/hours/employee/<pk>', views.EmployeeWorkingHourRetrieveCreateView.as_view(),
+	     name='scheduling-hours-retrieve-and-create'),
 ]
 
 employees = [

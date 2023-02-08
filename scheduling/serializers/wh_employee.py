@@ -17,7 +17,7 @@ class EmployeeWorkingHourSerializer(serializers.ModelSerializer):
 		Metaclass for EmployeeWorkingHourSerializer
 		"""
 		model = EmployeeWorkingHour
-		fields = "__all__"
+		fields = ["employee", "date",  "branch", "start", "end"]
 
 
 class WorkingDaySerializer(serializers.Serializer):

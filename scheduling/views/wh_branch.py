@@ -4,7 +4,7 @@ from rest_framework.response import Response
 from scheduling.models.branch_working_hour import BranchWorkingHour
 from scheduling.selectors.working_hours import set_employee_working_hours, get_employee_working_hours, \
 	set_branch_working_hours, get_branch_working_hours
-from scheduling.serializers.Branch_Working_Hour import BranchWorkingHourSerializer
+from scheduling.serializers.wh_branch import BranchWorkingHourSerializer
 
 
 class BranchWorkingHourView(generics.CreateAPIView, generics.ListAPIView):
