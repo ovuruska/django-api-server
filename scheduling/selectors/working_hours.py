@@ -5,6 +5,13 @@ from django.forms import model_to_dict
 
 from common.datetime_range import datetime_range
 
+def quantize(date: datetime.datetime):
+	if(date.minute < 30):
+		date = date.replace(minute=0)
+	else:
+		date = date.replace(minute=30)
+	return date
+
 
 def get_branch_working_hours(start, end, branch_id) -> [str]:
 	BranchWorkingHour = apps.get_model('scheduling', 'BranchWorkingHour')
@@ -21,8 +28,8 @@ def get_branch_working_hours(start, end, branch_id) -> [str]:
 		start = None
 		end = None
 		if closest is not None:
-			start = closest.start
-			end = closest.end
+			start = quantize(closest.start)
+			end = quantize(closest.end)
 
 		working_hours.append({
 			"date": date,
@@ -78,8 +85,9 @@ def get_employee_working_hours(start, end, employee_id) -> [str]:
 			branch = closest.branch_id
 			branch = Branch.objects.get(id=branch)
 			branch = model_to_dict(branch)
-			start = closest.start
-			end = closest.end
+			start = quantize(closest.start)
+			end = quantize(closest.end)
+
 
 		working_hours.append({
 			"date": date.strftime("%Y-%m-%d"),

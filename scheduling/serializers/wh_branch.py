@@ -1,6 +1,6 @@
 from rest_framework import serializers
 
-from scheduling.models.branch_working_hour import BranchWorkingHour
+from scheduling.models.branch_wh import BranchWorkingHour
 
 
 class BranchWorkingHourSerializer(serializers.ModelSerializer):

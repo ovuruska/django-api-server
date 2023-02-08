@@ -1,7 +1,7 @@
 from rest_framework import generics
 from rest_framework.response import Response
 
-from scheduling.models.branch_working_hour import BranchWorkingHour
+from scheduling.models.branch_wh import BranchWorkingHour
 from scheduling.selectors.working_hours import set_branch_working_hours, get_branch_working_hours
 from scheduling.serializers.wh_branch import BranchWorkingHourSerializer
 
