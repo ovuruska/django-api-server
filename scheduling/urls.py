@@ -43,7 +43,7 @@ auth = [
 ]
 
 branch_working_hour = [
-	path('scheduling/hours/branch', views.BranchWorkingHourView.as_view(), name='scheduling-hours-create'),
+	path('scheduling/hours/branch/<pk>', views.BranchWorkingHourView.as_view(), name='scheduling-hours-create'),
 ]
 
 employee_working_hour = [

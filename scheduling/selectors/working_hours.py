@@ -18,29 +18,33 @@ def get_branch_working_hours(start, end, branch_id) -> [str]:
 		week_day = date.weekday()
 
 		closest = branch_working_hours.filter(week_day=week_day).order_by('date').first()
-		if closest == None:
-			result = 24 * "0"
-		else:
-			result = closest.working_hours
+		start = None
+		end = None
+		if closest is not None:
+			start = closest.start
+			end = closest.end
 
 		working_hours.append({
 			"date": date,
-			"working_hours": result
+			"start": start,
+			"end": end,
 		})
 
 	return working_hours
 
 
-def set_branch_working_hours(branch_id, date, working_hours):
+def set_branch_working_hours(branch_id, date, start,end):
+
+
 	BranchWorkingHour = apps.get_model('scheduling', 'BranchWorkingHour')
 	date = datetime.datetime.strptime(date, "%Y-%m-%d")
 
 	created = {
 		"date": date,
 		"week_day": date.weekday(),
-		"working_hours": working_hours,
-		"branch_id": branch_id
-
+		"start": datetime.datetime.fromisoformat(start).replace(tzinfo=None),
+		"end": datetime.datetime.fromisoformat(end).replace(tzinfo=None),
+		"branch_id": branch_id,
 	}
 
 	BranchWorkingHour.objects.filter(branch_id=branch_id, date=date).delete()
@@ -49,26 +53,6 @@ def set_branch_working_hours(branch_id, date, working_hours):
 	)
 
 	return created
-
-
-"""
-	{
-		"start": "2020-01-01",
-		"end": "2020-01-31",
-		"employee":Employee
-		"working_hours":[
-			{ 
-				"working_hours":char[24],
-				"branch":Branch,
-				"date":date
-			}
-	}
-
-"""
-
-
-def decode_working_hours(working_hours: [str]) -> [bool]:
-	return [bool(int(x)) for x in working_hours]
 
 
 def get_employee_working_hours(start, end, employee_id) -> [str]:
@@ -105,8 +89,6 @@ def get_employee_working_hours(start, end, employee_id) -> [str]:
 		})
 
 	return working_hours
-
-
 
 def set_employee_working_hours(employee_id, date, start,end, branch_id):
 	EmployeeWorkingHour = apps.get_model('scheduling', 'EmployeeWorkingHour')
