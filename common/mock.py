@@ -83,6 +83,7 @@ class Mock:
 
 		for ind in trange(self.number_of_employees, desc="Generating employees"):
 			email = fake.email()
+			password = fake.password()
 			employee = models.Employee(
 				name=fake.name(),
 				branch=branches[fake.random_int(min=0, max=self.number_of_branches - 1)],
@@ -92,17 +93,20 @@ class Mock:
 				models.Employee.Role.choices[fake.random_int(min=0, max=len(models.Employee.Role.choices) - 1)][0],
 				user = User.objects.create_user(
 					username=usernames[current],
-					password=fake.password(),
+					password=password,
 					email=email
 				),
 				uid=fake.uuid4()
 			)
+			if ind == self.number_of_employees -1:
+				print(usernames[current],password)
 			current += 1
 			employee.save()
 			employees.append(employee)
 
 		for ind in trange(self.number_of_customers, desc="Generating customers"):
 			email = fake.email()
+			password = fake.password()
 			customer = models.Customer(
 				name=fake.name(),
 				phone=fake.phone_number(),
@@ -111,11 +115,14 @@ class Mock:
 				address=fake.address(),
 				user=User.objects.create_user(
 					username=usernames[current],
-					password=fake.password(),
+					password=password,
 					email=email
 				)
 			)
+			if ind == self.number_of_customers -1:
+				print(usernames[current],password)
 			current += 1
+
 			customer.save()
 			customers.append(customer)
 

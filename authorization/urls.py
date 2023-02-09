@@ -1,4 +1,7 @@
 from django.urls import path
+
+from authorization import views
+
 """
 urlpatterns = [
 	path("customer/login"),
@@ -7,3 +10,6 @@ urlpatterns = [
 	path("employee/login"),
 ]
 """
+urlpatterns = [
+	path("employee/login", views.EmployeeLoginAPIView.as_view(), name="employee_login"),
+]
