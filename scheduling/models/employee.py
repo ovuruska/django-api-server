@@ -7,6 +7,9 @@ from common import BaseModel
 
 class Employee(BaseModel):
 	class Role(models.TextChoices):
+		ADMIN = 'Admin', _('Admin')
+		ACCOUNTANT = 'Accountant', _('Accountant')
+		MANAGER = 'Manager', _('Manager')
 		FULL_GROOMING = 'Full Grooming', _('Full Grooming')
 		WE_WASH = 'We Wash', _('We Wash')
 
