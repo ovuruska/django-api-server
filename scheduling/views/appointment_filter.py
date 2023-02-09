@@ -14,7 +14,7 @@ from scheduling.serializers.Branch import FreeHoursSerializer
 
 
 class AppointmentFilterListView(generics.ListAPIView, PermissionRequiredMixin):
-	permission_classes = [IsAuthenticated ,CanViewAllAppointments]
+	permission_classes = [CanViewAllAppointments]
 	serializer_class = AppointmentEmployeeSerializer
 	filter_backends = (DjangoFilterBackend,)
 
