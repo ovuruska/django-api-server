@@ -22,8 +22,10 @@ class CustomerRegisterAPIView(GenericAPIView, PermissionRequiredMixin):
 			"token": AuthToken.objects.create(user)[1], "profile": model_to_dict(customer)})
 
 
-class CustomerLoginAPIView(GenericAPIView):
+class CustomerLoginAPIView(GenericAPIView, PermissionRequiredMixin):
 	serializer_class = LoginUserSerializer
+	permission_classes = [AllowAny]
+
 
 	def post(self, request, *args, **kwargs):
 		serializer = self.get_serializer(data=request.data)

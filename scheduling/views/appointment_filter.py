@@ -41,7 +41,8 @@ class AppointmentFilterListView(generics.ListAPIView, PermissionRequiredMixin):
 		return queryset
 
 
-class AppointmentAvailableHoursView(generics.RetrieveAPIView):
+class AppointmentAvailableHoursView(generics.RetrieveAPIView, PermissionRequiredMixin):
+	permission_classes = [CanViewAllAppointments]
 	queryset = Appointment.objects.all()
 	serializer_class = FreeHoursSerializer
 
