@@ -36,9 +36,9 @@ scheduling_appointments = [
 ]
 
 auth = [
-	# path('auth/', include('knox.urls')),
-	path('auth/register', views.RegisterAPIView.as_view(), name='register'),
-	path('auth/login/', LoginAPIView.as_view()),
+	# path('authorization/', include('knox.urls')),
+	path('authorization/register', views.RegisterAPIView.as_view(), name='register'),
+	path('authorization/login/', LoginAPIView.as_view()),
 
 ]
 

@@ -1,3 +1,4 @@
+from django.forms import model_to_dict
 from rest_framework import generics
 from rest_framework.response import Response
 
@@ -18,6 +19,7 @@ class BranchWorkingHourView(generics.CreateAPIView, generics.ListAPIView):
 			return Response(status=400)
 		else:
 			working_hours = get_branch_working_hours(start, end, branch_id)
+
 		return Response(data=working_hours, status=200)
 
 

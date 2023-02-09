@@ -1,3 +1,4 @@
+from django.contrib.auth.models import User
 from django.db import models
 from django.utils.translation import gettext_lazy as _
 
@@ -15,6 +16,7 @@ class Employee(BaseModel):
 	role = models.CharField(max_length=16, choices=Role.choices, default=Role.WE_WASH,blank=True)
 	branch = models.ForeignKey("scheduling.Branch", on_delete=models.CASCADE, related_name='employees',blank=True,null=True)
 	uid = models.CharField(max_length=64,blank=True)
+	user = models.OneToOneField(User, on_delete=models.CASCADE)
 
 	def is_groomer(self):
 		return self.role == self.Role.FULL_GROOMING
