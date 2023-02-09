@@ -1,6 +1,7 @@
 from django.contrib.auth.models import User
 from django.db import models
 from common import BaseModel
+from common.roles import Roles
 
 
 class Customer(BaseModel):
@@ -10,5 +11,7 @@ class Customer(BaseModel):
 	phone = models.CharField(max_length=32)
 	address = models.CharField(max_length=128)
 	user = models.OneToOneField(User, on_delete=models.CASCADE)
+	role = models.PositiveSmallIntegerField(choices=Roles.CHOICES,default=Roles.CUSTOMER)
+
 	class Meta:
 		ordering = ["name"]

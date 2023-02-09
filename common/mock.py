@@ -89,8 +89,6 @@ class Mock:
 				branch=branches[fake.random_int(min=0, max=self.number_of_branches - 1)],
 				phone=fake.phone_number(),
 				email=email,
-				role=
-				models.Employee.Role.choices[fake.random_int(min=0, max=len(models.Employee.Role.choices) - 1)][0],
 				user = User.objects.create_user(
 					username=usernames[current],
 					password=password,

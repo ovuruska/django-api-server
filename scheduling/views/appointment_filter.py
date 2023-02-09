@@ -1,23 +1,26 @@
+from django.contrib.auth.mixins import PermissionRequiredMixin
 from django.utils.decorators import method_decorator
 from django.views.decorators.cache import cache_page
 from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework import generics
+from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 
+from common.permissions.view_all_appointments import CanViewAllAppointments
 from scheduling.models import Appointment, Branch
 from scheduling.selectors.branch import get_free_hours
 from scheduling.serializers.Appointment import AppointmentEmployeeSerializer
 from scheduling.serializers.Branch import FreeHoursSerializer
 
 
-class AppointmentFilterListView(generics.ListAPIView):
+class AppointmentFilterListView(generics.ListAPIView, PermissionRequiredMixin):
+	permission_classes = [IsAuthenticated ,CanViewAllAppointments]
 	serializer_class = AppointmentEmployeeSerializer
 	filter_backends = (DjangoFilterBackend,)
-	# permission_classes = [IsAuthenticated]
 
-	filterset_fields = ["start", "branch", "status","employee","dog"]
+	filterset_fields = ["start", "branch", "status", "employee", "dog"]
 
-	#@method_decorator(cache_page(60 * 60 * 2))
+	# @method_decorator(cache_page(60 * 60 * 2))
 	def get(self, request, *args, **kwargs):
 		return self.list(request, *args, **kwargs)
 
@@ -50,12 +53,4 @@ class AppointmentAvailableHoursView(generics.RetrieveAPIView):
 		date = request.GET.get("date")
 
 		free_hours = get_free_hours(branch_id, date)
-		return Response(
-			data={
-				"free_hours": free_hours
-			},
-			status=200,
-			headers={
-				"Content-Type": "application/json"
-			}
-		)
+		return Response(data={"free_hours": free_hours}, status=200, headers={"Content-Type": "application/json"})
