@@ -1,12 +1,15 @@
+from django.contrib.auth.mixins import PermissionRequiredMixin
 from django.forms import model_to_dict
 from knox.models import AuthToken
 from rest_framework.generics import GenericAPIView
+from rest_framework.permissions import AllowAny
 from rest_framework.response import Response
 
 from scheduling.serializers.auth import UserSerializer, LoginUserSerializer
 
 
-class EmployeeLoginAPIView(GenericAPIView):
+class EmployeeLoginAPIView(GenericAPIView, PermissionRequiredMixin):
+	permission_classes = [AllowAny]
 
 	serializer_class = LoginUserSerializer
 	def post(self, request, *args, **kwargs):

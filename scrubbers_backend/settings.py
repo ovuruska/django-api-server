@@ -26,20 +26,22 @@ SECRET_KEY = 'django-insecure-n72^h9zigpr59^p)+n99w*t#yb793s89rboma3hjqjx_z46bk-
 DEBUG = os.environ.get('DJANGO_DEBUG', '') != 'False'
 
 REST_KNOX = {'SECURE_HASH_ALGORITHM': 'cryptography.hazmat.primitives.hashes.SHA512', 'AUTH_TOKEN_CHARACTER_LENGTH': 64,
-             'TOKEN_TTL': timedelta(hours=24), 'USER_SERIALIZER': 'scheduling.serializers.AuthUserSerializer',
-             'TOKEN_LIMIT_PER_USER': None, 'AUTO_REFRESH': False, }
+             'TOKEN_TTL': timedelta(days=5), 'USER_SERIALIZER': 'scheduling.serializers.AuthUserSerializer',
+             'MIN_REFRESH_INTERVAL': 3600, 'TOKEN_LIMIT_PER_USER': None, 'AUTO_REFRESH': True, }
 
 ALLOWED_HOSTS = ["*"]
 
 # Application definition
 
 INSTALLED_APPS = ['django.contrib.admin', 'django.contrib.auth', 'django.contrib.contenttypes',
-	'django.contrib.sessions', 'django.contrib.messages', 'django.contrib.staticfiles', 'rest_framework', 'knox',
+                  'django.contrib.sessions', 'django.contrib.messages', 'django.contrib.staticfiles', 'rest_framework',
+                  'knox',
 
-	'authorization', 'corsheaders', 'scheduling', 'django_filters', ]
+                  'authorization', 'corsheaders', 'scheduling', 'django_filters', ]
 
 FIREBASE_CONFIG = os.path.join(BASE_DIR, 'firebase-config.json')
 REST_FRAMEWORK = {'DEFAULT_FILTER_BACKENDS': ['django_filters.rest_framework.DjangoFilterBackend'],
+                  'DEFAULT_PERMISSION_CLASSES': ('rest_framework.permissions.IsAuthenticated',),
                   'DEFAULT_AUTHENTICATION_CLASSES': ('knox.auth.TokenAuthentication',), }
 CORS_ORIGIN_ALLOW_ALL = True
 
