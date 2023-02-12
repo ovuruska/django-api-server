@@ -1,4 +1,5 @@
 from django.contrib.auth.mixins import PermissionRequiredMixin
+from django.core.paginator import Paginator
 from django.utils.decorators import method_decorator
 from django.views.decorators.cache import cache_page
 from django_filters.rest_framework import DjangoFilterBackend
@@ -41,10 +42,15 @@ class AppointmentFilterListView(generics.ListAPIView, PermissionRequiredMixin):
 			queryset = queryset.filter(employee=employee_id)
 
 		page_start = self.request.query_params.get('page_start', None)
+		
 		if page_start:
-			page_lenght = self.request.query_params.get('page_length', None)
-			if page_lenght:
-				queryset = queryset[page_start:page_lenght+page_start]
+			page_start = int(page_start)
+			page_length = self.request.query_params.get('page_length', None)
+			if page_length:
+				page_length = int(page_length)
+				p = Paginator(queryset, 1)
+				p_list = p.object_list
+				return p_list[page_start:page_length+page_start]
 
 
 		return queryset
