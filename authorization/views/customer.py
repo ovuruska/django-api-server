@@ -19,13 +19,12 @@ class CustomerRegisterAPIView(GenericAPIView, PermissionRequiredMixin):
 		user = serializer.save()
 		customer = Customer.objects.create(user=user)
 		return Response({"user": UserSerializer(user, context=self.get_serializer_context()).data,
-			"token": AuthToken.objects.create(user)[1], "profile": model_to_dict(customer)})
+		                 "token": AuthToken.objects.create(user)[1], "profile": model_to_dict(customer)})
 
 
 class CustomerLoginAPIView(GenericAPIView, PermissionRequiredMixin):
 	serializer_class = LoginUserSerializer
 	permission_classes = [AllowAny]
-
 
 	def post(self, request, *args, **kwargs):
 		serializer = self.get_serializer(data=request.data)
@@ -33,4 +32,4 @@ class CustomerLoginAPIView(GenericAPIView, PermissionRequiredMixin):
 		user = serializer.validated_data
 		customer = user.customer
 		return Response({"user": UserSerializer(user, context=self.get_serializer_context()).data,
-			"token": AuthToken.objects.create(user)[1], "profile": model_to_dict(customer)})
+		                 "token": AuthToken.objects.create(user)[1], "profile": model_to_dict(customer)})
