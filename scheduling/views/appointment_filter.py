@@ -26,8 +26,6 @@ class AppointmentFilterListView(generics.ListAPIView, PermissionRequiredMixin):
 	def get(self, request, *args, **kwargs):
 		return self.list(request, *args, **kwargs)
 
-
-
 	def get_queryset(self):
 		queryset = Appointment.objects.all()
 		start_date = self.request.query_params.get('start__gt', None)
@@ -42,10 +40,7 @@ class AppointmentFilterListView(generics.ListAPIView, PermissionRequiredMixin):
 		if employee_id:
 			queryset = queryset.filter(employee=employee_id)
 
-		queryset = pagination(self,queryset)
-
-
-
+		queryset = pagination(self.request,queryset)
 
 		return queryset
 
