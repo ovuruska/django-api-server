@@ -7,6 +7,7 @@ from rest_framework import generics
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 
+from common.pagination import pagination
 from common.permissions.view_all_appointments import CanViewAllAppointments
 from scheduling.models import Appointment, Branch
 from scheduling.selectors.branch import get_free_hours
@@ -41,16 +42,9 @@ class AppointmentFilterListView(generics.ListAPIView, PermissionRequiredMixin):
 		if employee_id:
 			queryset = queryset.filter(employee=employee_id)
 
-		page_start = self.request.query_params.get('page_start', None)
-		
-		if page_start:
-			page_start = int(page_start)
-			page_length = self.request.query_params.get('page_length', None)
-			if page_length:
-				page_length = int(page_length)
-				p = Paginator(queryset, 1)
-				p_list = p.object_list
-				return p_list[page_start:page_length+page_start]
+		queryset = pagination(self,queryset)
+
+
 
 
 		return queryset
