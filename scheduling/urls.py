@@ -20,7 +20,7 @@ dogs = [
 	path('dog', views.PetCreateAPIView.as_view(), name="dog_crud"),
 	path('dog/<pk>', views.PetModifyRetrieveDestroyAPIView.as_view(), name="dog_retrieve"),
 	path('dogs/<uid>', views.CustomerDogsRetrieveAPIView.as_view(), name="get_customer_dogs"),
-	path('pets', views.PetFilterView.as_view(), name="dog_filter"),
+	path('pets', views.PetFilterView.as_view(), name="dog_filter"), #########
 ]
 
 appointments = [
@@ -32,7 +32,7 @@ scheduling_appointments = [
 	path('schedule/appointment/<pk>', views.AppointmentModifyAPIView.as_view(), name='appointment'),
 	path('schedule/appointments/<pk>', views.AppointmentEmployeeRetrieveAPIView.as_view(), name='appointment'),
 
-	path('schedule/appointments', views.AppointmentFilterListView.as_view(), name='appointment_filter_and_list'),
+	path('schedule/appointments', views.AppointmentFilterListView.as_view(), name='appointment_filter_and_list'), #######
 ]
 
 auth = [
@@ -65,7 +65,7 @@ payrolls = [
 
 customers = [
 	path('scheduling/customer/<pk>', views.CustomerDetailsAPIView.as_view(), name="customer_modify"),
-	path("customers", views.CustomerFilterAPIView.as_view(), name="customer_filter"),
+	path("scheduling/customers", views.CustomerFilterAPIView.as_view(), name="customer_filter"), ########
 ]
 
 branches = [
