@@ -1,5 +1,7 @@
 from datetime import datetime
 
+from django.apps import apps
+
 from scheduling.models import Branch, Appointment
 
 
@@ -30,3 +32,17 @@ def get_free_hours(branch_id,date):
 		datetime.combine(start, datetime.min.time()).replace(hour=hour)
 		for hour in available_hours
 	]
+
+
+def get_employees(branch_id,date):
+	"""
+	:param branch_id: id of the branch
+	:param date: date of the appointment
+	:return: list of employees
+	"""
+	BranchWorkingHour = apps.get_model('scheduling', 'BranchWorkingHour')
+	EmployeeWorkingHour = apps.get_model('scheduling', 'EmployeeWorkingHour')
+	employees = get_branch_by_name(branch_id).employees.all()
+	appointments = Appointment.objects.filter(branch_id=branch_id, start__date=date)
+	employees = employees.exclude(appointments__in=appointments)
+	return employees

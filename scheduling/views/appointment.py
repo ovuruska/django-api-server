@@ -1,18 +1,24 @@
 from datetime import datetime
 
 from django.apps import apps
+from django.contrib.auth.mixins import PermissionRequiredMixin
 from django.core.signing import Signer
 from rest_framework import generics
 from rest_framework.response import Response
 
+from common.permissions.AppointmentPermissions import CanCreateAppointment, CanUpdateAppointment, \
+	CanAppointmentEmployeeRetrieve
+from ..models import Customer
+from ..selectors import get_last_appointment_by_same_customer
 from ..serializers.Appointment import *
 
 
-class AppointmentCreateAPIView(generics.CreateAPIView):
+class AppointmentCreateAPIView(generics.CreateAPIView, PermissionRequiredMixin):
 	"""
 
 	start: Datetime String in ISO 8601 format : https://www.iso.org/iso-8601-date-and-time-format.html
 	"""
+	permission_classes = [CanCreateAppointment]
 	Customer = apps.get_model('scheduling', 'Customer')
 	serializer_class = AppointmentCreateSerializer
 	queryset = Appointment.objects.all()
@@ -59,10 +65,11 @@ class AppointmentCreateAPIView(generics.CreateAPIView):
 		return response
 
 
-class AppointmentModifyAPIView(generics.UpdateAPIView):
+class AppointmentModifyAPIView(generics.UpdateAPIView, PermissionRequiredMixin):
 	"""
 	This view will be used in employee application to update the status of the appointment.
 	"""
+	permission_classes = [CanUpdateAppointment]
 	serializer_class = AppointmentModifySerializer
 	queryset = Appointment.objects.all()
 
@@ -83,7 +90,7 @@ class AppointmentModifyAPIView(generics.UpdateAPIView):
 		return Response(serializer.data)
 
 
-class AppointmentCustomerListRetrieveAPIView(generics.ListAPIView):
+class AppointmentCustomerListRetrieveAPIView(generics.ListAPIView): #Not ready yet
 	serializer_class = AppointmentCustomerRetrieveSerializer
 	queryset = Appointment.objects.all()
 
@@ -91,7 +98,8 @@ class AppointmentCustomerListRetrieveAPIView(generics.ListAPIView):
 		return self.queryset.filter(customer__uid=self.kwargs['uid'])
 
 
-class AppointmentEmployeeRetrieveAPIView(generics.RetrieveAPIView):
+class AppointmentEmployeeRetrieveAPIView(generics.RetrieveAPIView, PermissionRequiredMixin):
+	permission_classes = [CanAppointmentEmployeeRetrieve]
 	serializer_class = AppointmentEmployeeSerializer
 	queryset = Appointment.objects.all()
 

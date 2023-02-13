@@ -1,6 +1,7 @@
 import datetime
 
 import pytz
+from django.contrib.auth.models import User
 from faker import Faker
 from tqdm import tqdm, trange
 
@@ -8,7 +9,15 @@ from scheduling import models
 from .breeds import breeds
 
 
+
+
 class Mock:
+
+	def generate_unique_names(self,generator,number_of_items) -> list:
+		names = set()
+		while len(names) < number_of_items:
+			names.add(generator())
+		return list(names)
 
 	def __init__(self,
 
@@ -60,7 +69,8 @@ class Mock:
 		]
 
 		fake = Faker()
-
+		usernames = self.generate_unique_names(fake.user_name,self.number_of_employees + self.number_of_customers)
+		current = 0
 		for ind in trange(self.number_of_branches, desc="Generating branches"):
 			branch = models.Branch(
 				name=fake.company(),
@@ -72,26 +82,45 @@ class Mock:
 			branches.append(branch)
 
 		for ind in trange(self.number_of_employees, desc="Generating employees"):
+			email = fake.email()
+			password = fake.password()
 			employee = models.Employee(
 				name=fake.name(),
 				branch=branches[fake.random_int(min=0, max=self.number_of_branches - 1)],
 				phone=fake.phone_number(),
-				email=fake.email(),
-				role=
-				models.Employee.Role.choices[fake.random_int(min=0, max=len(models.Employee.Role.choices) - 1)][0],
+				email=email,
+				user = User.objects.create_user(
+					username=usernames[current],
+					password=password,
+					email=email
+				),
 				uid=fake.uuid4()
 			)
+			if ind == self.number_of_employees -1:
+				print(usernames[current],password)
+			current += 1
 			employee.save()
 			employees.append(employee)
 
 		for ind in trange(self.number_of_customers, desc="Generating customers"):
+			email = fake.email()
+			password = fake.password()
 			customer = models.Customer(
 				name=fake.name(),
 				phone=fake.phone_number(),
-				email=fake.email(),
+				email=email,
 				uid=fake.uuid4(),
 				address=fake.address(),
+				user=User.objects.create_user(
+					username=usernames[current],
+					password=password,
+					email=email
+				)
 			)
+			if ind == self.number_of_customers -1:
+				print(usernames[current],password)
+			current += 1
+
 			customer.save()
 			customers.append(customer)
 
