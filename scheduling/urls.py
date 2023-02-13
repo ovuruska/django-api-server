@@ -32,7 +32,7 @@ scheduling_appointments = [
 	path('schedule/appointment/<pk>', views.AppointmentModifyAPIView.as_view(), name='appointment'),
 	path('schedule/appointments/<pk>', views.AppointmentEmployeeRetrieveAPIView.as_view(), name='appointment'),
 
-	path('schedule/appointments', views.AppointmentFilterListView.as_view(), name='appointment_filter_and_list'), #######
+	path('schedule/appointments', views.AppointmentFilterListView.as_view(), name='appointment_filter_and_list'),
 ]
 
 auth = [
@@ -65,7 +65,7 @@ payrolls = [
 
 customers = [
 	path('scheduling/customer/<pk>', views.CustomerDetailsAPIView.as_view(), name="customer_modify"),
-	path("scheduling/customers", views.CustomerFilterAPIView.as_view(), name="customer_filter"), ########
+	path("scheduling/customers", views.CustomerFilterAPIView.as_view(), name="customer_filter"),
 ]
 
 branches = [
