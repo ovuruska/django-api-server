@@ -3,6 +3,7 @@ from rest_framework import generics
 from rest_framework.generics import RetrieveAPIView, ListAPIView
 from rest_framework.response import Response
 
+from common.pagination import pagination
 from ..models import Dog
 from ..models.customer import Customer
 from ..serializers.Customer import CustomerSerializer, CustomerDetailsSerializer
@@ -29,7 +30,11 @@ class CustomerDetailsAPIView(RetrieveAPIView):
 
 
 class CustomerFilterAPIView(generics.ListAPIView):
-	queryset = Customer.objects.all()
 	serializer_class = CustomerSerializer
 	filter_backends = [DjangoFilterBackend]
 	filterset_fields = "__all__"
+
+	def get_queryset(self):
+		queryset = Customer.objects.all()
+		queryset = pagination(self.request, queryset)
+		return queryset

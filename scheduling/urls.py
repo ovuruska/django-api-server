@@ -20,7 +20,7 @@ dogs = [
 	path('dog', views.PetCreateAPIView.as_view(), name="dog_crud"),
 	path('dog/<pk>', views.PetModifyRetrieveDestroyAPIView.as_view(), name="dog_retrieve"),
 	path('dogs/<uid>', views.CustomerDogsRetrieveAPIView.as_view(), name="get_customer_dogs"),
-	path('pets', views.PetFilterView.as_view(), name="dog_filter"),
+	path('pets', views.PetFilterView.as_view(), name="dog_filter"), #########
 ]
 
 appointments = [
@@ -36,9 +36,9 @@ scheduling_appointments = [
 ]
 
 auth = [
-	# path('auth/', include('knox.urls')),
-	path('auth/register', views.RegisterAPIView.as_view(), name='register'),
-	path('auth/login/', LoginAPIView.as_view()),
+	# path('authorization/', include('knox.urls')),
+	path('authorization/register', views.RegisterAPIView.as_view(), name='register'),
+	path('authorization/login/', LoginAPIView.as_view()),
 
 ]
 
@@ -65,7 +65,7 @@ payrolls = [
 
 customers = [
 	path('scheduling/customer/<pk>', views.CustomerDetailsAPIView.as_view(), name="customer_modify"),
-	path("customers", views.CustomerFilterAPIView.as_view(), name="customer_filter"),
+	path("scheduling/customers", views.CustomerFilterAPIView.as_view(), name="customer_filter"),
 ]
 
 branches = [

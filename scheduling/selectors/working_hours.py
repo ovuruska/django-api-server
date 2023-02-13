@@ -10,7 +10,7 @@ def quantize(date: datetime.datetime):
 		date = date.replace(minute=0)
 	else:
 		date = date.replace(minute=30)
-	return date
+	return date.replace(tzinfo=None)
 
 
 def get_branch_working_hours(start, end, branch_id) -> [str]:

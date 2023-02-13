@@ -25,14 +25,9 @@ SECRET_KEY = 'django-insecure-n72^h9zigpr59^p)+n99w*t#yb793s89rboma3hjqjx_z46bk-
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = os.environ.get('DJANGO_DEBUG', '') != 'False'
 
-REST_KNOX = {
-  'SECURE_HASH_ALGORITHM': 'cryptography.hazmat.primitives.hashes.SHA512',
-  'AUTH_TOKEN_CHARACTER_LENGTH': 64,
-  'TOKEN_TTL': timedelta(hours=24),
-  'USER_SERIALIZER': 'scheduling.serializers.AuthUserSerializer',
-  'TOKEN_LIMIT_PER_USER': None,
-  'AUTO_REFRESH': False,
-}
+REST_KNOX = {'SECURE_HASH_ALGORITHM': 'cryptography.hazmat.primitives.hashes.SHA512', 'AUTH_TOKEN_CHARACTER_LENGTH': 64,
+             'TOKEN_TTL': timedelta(days=5), 'USER_SERIALIZER': 'scheduling.serializers.AuthUserSerializer',
+             'MIN_REFRESH_INTERVAL': 3600, 'TOKEN_LIMIT_PER_USER': None, 'AUTO_REFRESH': True, }
 
 ALLOWED_HOSTS = ["*"]
 
@@ -40,11 +35,14 @@ ALLOWED_HOSTS = ["*"]
 
 INSTALLED_APPS = ['django.contrib.admin', 'django.contrib.auth', 'django.contrib.contenttypes',
                   'django.contrib.sessions', 'django.contrib.messages', 'django.contrib.staticfiles', 'rest_framework',
-                  'corsheaders', 'scheduling', 'knox', 'django_filters', ]
+                  'knox',
+
+                  'authorization', 'corsheaders', 'scheduling', 'django_filters', ]
 
 FIREBASE_CONFIG = os.path.join(BASE_DIR, 'firebase-config.json')
 REST_FRAMEWORK = {'DEFAULT_FILTER_BACKENDS': ['django_filters.rest_framework.DjangoFilterBackend'],
-	'DEFAULT_AUTHENTICATION_CLASSES': ('knox.auth.TokenAuthentication',), }
+                  'DEFAULT_PERMISSION_CLASSES': ('rest_framework.permissions.IsAuthenticated',),
+                  'DEFAULT_AUTHENTICATION_CLASSES': ('knox.auth.TokenAuthentication',), }
 CORS_ORIGIN_ALLOW_ALL = True
 
 STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
@@ -74,10 +72,11 @@ DATABASES = {'default': {'ENGINE': 'django.db.backends.sqlite3', 'NAME': BASE_DI
 # Password validation
 # https://docs.djangoproject.com/en/4.0/ref/settings/#auth-password-validators
 
-AUTH_PASSWORD_VALIDATORS = [{'NAME': 'django.contrib.auth.password_validation.UserAttributeSimilarityValidator', },
-                            {'NAME': 'django.contrib.auth.password_validation.MinimumLengthValidator', },
-                            {'NAME': 'django.contrib.auth.password_validation.CommonPasswordValidator', },
-                            {'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator', }, ]
+AUTH_PASSWORD_VALIDATORS = [
+	{'NAME': 'django.contrib.authorization.password_validation.UserAttributeSimilarityValidator', },
+	{'NAME': 'django.contrib.authorization.password_validation.MinimumLengthValidator', },
+	{'NAME': 'django.contrib.authorization.password_validation.CommonPasswordValidator', },
+	{'NAME': 'django.contrib.authorization.password_validation.NumericPasswordValidator', }, ]
 
 # Internationalization
 # https://docs.djangoproject.com/en/4.0/topics/i18n/
