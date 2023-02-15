@@ -37,7 +37,7 @@ class AppointmentCreateAPIView(generics.CreateAPIView, PermissionRequiredMixin):
 
 		request.data["customer"] = customer.id
 
-		last_dog_appointment = get_last_appointment_by_same_dog(request.data["dog"])
+		last_dog_appointment = get_last_appointment_by_same_dog(request.data["dog"], request.data.get("start"))
 		last_customer_appointment = get_last_appointment_by_same_customer(customer.id)
 		if last_dog_appointment is not None:
 			request.data["last_dog_appointment"] = last_dog_appointment.start
@@ -88,14 +88,6 @@ class AppointmentModifyAPIView(generics.UpdateAPIView, PermissionRequiredMixin):
 		self.partial_update(request, *args, **kwargs)
 		serializer = AppointmentEmployeeSerializer(appointment)
 		return Response(serializer.data)
-
-
-class AppointmentCustomerListRetrieveAPIView(generics.ListAPIView): #Not ready yet
-	serializer_class = AppointmentCustomerRetrieveSerializer
-	queryset = Appointment.objects.all()
-
-	def get_queryset(self):
-		return self.queryset.filter(customer__uid=self.kwargs['uid'])
 
 
 class AppointmentEmployeeRetrieveAPIView(generics.RetrieveAPIView, PermissionRequiredMixin):

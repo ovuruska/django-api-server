@@ -20,7 +20,7 @@ dogs = [
 	path('dog', views.PetCreateAPIView.as_view(), name="dog_crud"),
 	path('dog/<pk>', views.PetModifyRetrieveDestroyAPIView.as_view(), name="dog_retrieve"),
 	path('dogs/<uid>', views.CustomerDogsRetrieveAPIView.as_view(), name="get_customer_dogs"),
-	path('pets', views.PetFilterView.as_view(), name="dog_filter"), #########
+	path('pets', views.PetFilterView.as_view(), name="dog_filter"),
 ]
 
 appointments = [
@@ -56,7 +56,6 @@ employees = [
 	path('employee/groomers', views.EmployeeGroomerListRetrieve.as_view(), name='groomers_retrieve'),
 	path('employee/<pk>', views.EmployeeRetrieveModifyDestroyAPIView.as_view(), name='employee_modify'),
 	path('employees', views.EmployeeFilterView.as_view(), name='employee_filter'),
-
 ]
 
 payrolls = [
