@@ -26,6 +26,7 @@ dogs = [
 appointments = [
 	path('appointment', views.AppointmentCreateAPIView.as_view(), name='appointment'),
 	path('appointment/<pk>', views.AppointmentCustomerRetrieve.as_view(), name='appointment_modify'),
+	path('appointment/<uid>', views.AppointmentCustomerListRetrieveAPIView.as_view(), name="appointment-list")
 ]
 
 scheduling_appointments = [

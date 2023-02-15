@@ -90,8 +90,9 @@ class AppointmentModifyAPIView(generics.UpdateAPIView, PermissionRequiredMixin):
 		return Response(serializer.data)
 
 
-class AppointmentCustomerListRetrieveAPIView(generics.ListAPIView): #Not ready yet
+class AppointmentCustomerListRetrieveAPIView(generics.ListAPIView, PermissionRequiredMixin): #Not ready yet
 	serializer_class = AppointmentCustomerRetrieveSerializer
+	permission_classes = [CanUpdateAppointment]
 	queryset = Appointment.objects.all()
 
 	def get_queryset(self):
