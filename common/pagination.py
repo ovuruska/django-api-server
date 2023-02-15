@@ -1,9 +1,8 @@
-from django.core.paginator import Paginator
 
 
 def pagination(request, queryset):
     """
-        It returns a list that contains objects.
+        It returns the page that is given in the URL
         Best way to use the function is to put it after all other filtering operations
     """
     page_start = request.query_params.get('page_start', None)
@@ -12,5 +11,6 @@ def pagination(request, queryset):
         if page_length:
             queryset = queryset[int(page_start):int(page_start) + int(page_length)]
 
-
     return queryset
+
+
