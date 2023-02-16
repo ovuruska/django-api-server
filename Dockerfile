@@ -12,4 +12,4 @@ ENV PORT=80
 ENV DJANGO_DEBUG=False
 
 RUN python3 manage.py collectstatic --noinput
-CMD [ "python", "./manage.py", "runserver", "0.0.0.0:8000", "--settings=scrubbers_backend.settings" ]
+CMD [ "python", "./manage.py", "runserver", "0.0.0.0:$PORT", "--settings=scrubbers_backend.settings" ]

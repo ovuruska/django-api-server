@@ -14,10 +14,9 @@ const RESOURCES = {
 "splash/img/light-1x.png": "6c73ea91e27499371d34ce4df2d6c50d",
 "splash/splash.js": "123c400b58bea74c1305ca3ac966748d",
 "splash/style.css": "8c7bb0cb2dba1e758961823bf8d1814d",
-"index.html": "26dd09ccf7867d8ed3cdb8e764136dab",
-"/": "26dd09ccf7867d8ed3cdb8e764136dab",
-"main.dart.js": "58987f6dff7d54c08f927bbbb74bb44f",
-"flutter.js": "1cfe996e845b3a8a33f57607e8b09ee4",
+"index.html": "fcfc1dc135d9107375977a9a2ddc1085",
+"/": "fcfc1dc135d9107375977a9a2ddc1085",
+"main.dart.js": "9aa45bed3bef375f6d641306c474983c",
 "favicon.png": "2704101cb06ce66e2000356a312be25c",
 "icons/Icon-192.png": "ac9a721a12bbc803b44f645561ecb1e1",
 "icons/Icon-maskable-192.png": "c457ef57daa1d16f64b27b786ec2ea3c",
@@ -41,11 +40,7 @@ const RESOURCES = {
 "assets/assets/lottie_animations/favicon.png": "5dcef449791fa27946b3d35ad8803796",
 "assets/assets/videos/favicon.png": "5dcef449791fa27946b3d35ad8803796",
 "assets/assets/pdfs/favicon.png": "5dcef449791fa27946b3d35ad8803796",
-"assets/assets/fonts/favicon.png": "5dcef449791fa27946b3d35ad8803796",
-"canvaskit/canvaskit.js": "97937cb4c2c2073c968525a3e08c86a3",
-"canvaskit/profiling/canvaskit.js": "c21852696bc1cc82e8894d851c01921a",
-"canvaskit/profiling/canvaskit.wasm": "371bc4e204443b0d5e774d64a046eb99",
-"canvaskit/canvaskit.wasm": "3de12d898ec208a5f31362cc00f09b9e"
+"assets/assets/fonts/favicon.png": "5dcef449791fa27946b3d35ad8803796"
 };
 
 // The application shell files that are downloaded before a service worker can
