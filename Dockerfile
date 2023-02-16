@@ -8,7 +8,7 @@ COPY ./ ./
 
 RUN python3 manage.py makemigrations
 RUN python3 manage.py migrate
-ENV PORT=8000
+ENV PORT=80
 ENV DJANGO_DEBUG=False
 
 RUN python3 manage.py collectstatic --noinput
