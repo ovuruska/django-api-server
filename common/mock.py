@@ -2,7 +2,6 @@ import datetime
 
 import pytz
 from django.contrib.auth.models import User
-from django.core.management import BaseCommand
 from faker import Faker
 from tqdm import tqdm, trange
 
@@ -11,7 +10,7 @@ from .breeds import breeds
 from .roles import Roles
 
 
-class Mock(BaseCommand):
+class Mock:
 
 	def generate_unique_names(self,generator,number_of_items) -> list:
 		names = set()
@@ -26,8 +25,8 @@ class Mock(BaseCommand):
 				 number_of_managers: int = 10,
 				 number_of_accountants: int = 2,
 				 number_of_admin: int = 1,
-	             number_of_dogs: int = 100,
-	             number_of_appointments: int = 500,
+	             number_of_dogs: int = 50,
+	             number_of_appointments: int = 100,
 	             number_of_services: int = 10,
 	             number_of_products: int = 10,
 	             number_of_categories : int = 4
@@ -126,7 +125,7 @@ class Mock(BaseCommand):
 				uid=fake.uuid4()
 			)
 			if ind == self.number_of_managers -1:
-				print("\nManager:" + usernames[current],password)
+				print("\nManager: " + usernames[current],password)
 			current += 1
 			employee.save()
 			managers.append(employee)
@@ -148,7 +147,7 @@ class Mock(BaseCommand):
 				uid=fake.uuid4()
 			)
 			if ind == self.number_of_accountants -1:
-				print("\nAccountant:" + usernames[current],password)
+				print("\nAccountant: " + usernames[current],password)
 			current += 1
 			employee.save()
 			accountants.append(employee)
