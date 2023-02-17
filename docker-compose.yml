@@ -4,4 +4,4 @@ services:
         build: .
         ports:
           - "80:80"
-        entrypoint: ./entrypoint.sh
+        entrypoint: ./backend/entrypoint.sh
