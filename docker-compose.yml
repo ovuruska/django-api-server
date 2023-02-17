@@ -6,6 +6,6 @@ services:
     ports:
       - "80:80"
     volumes:
-      - ./common
+      - ./common:/app/common
     command: >
-      sh -c "python manage.py migrate && python /common/mock.py && python manage.py runserver 0.0.0.0:80"
+      sh -c "python manage.py migrate && python /app/common/mock.py && python manage.py runserver 0.0.0.0:80"
