@@ -4,3 +4,6 @@ services:
         build: .
         ports:
           - "80:80"
+
+        command: >
+          sh -c "python manage.py migrate && python manage.py create_initial_data && python manage.py runserver 0.0.0.0:80"

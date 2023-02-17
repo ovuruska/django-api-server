@@ -2,6 +2,7 @@ import datetime
 
 import pytz
 from django.contrib.auth.models import User
+from django.core.management import BaseCommand
 from faker import Faker
 from tqdm import tqdm, trange
 
@@ -10,7 +11,7 @@ from .breeds import breeds
 from .roles import Roles
 
 
-class Mock:
+class Mock(BaseCommand):
 
 	def generate_unique_names(self,generator,number_of_items) -> list:
 		names = set()
