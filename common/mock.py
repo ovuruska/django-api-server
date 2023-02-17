@@ -102,7 +102,7 @@ class Mock:
 				),
 				uid=fake.uuid4()
 			)
-			if ind == self.number_of_employees :
+			if ind == self.number_of_employees -1:
 				print(usernames[current],password)
 			current += 1
 			employee.save()
@@ -124,7 +124,7 @@ class Mock:
 				),
 				uid=fake.uuid4()
 			)
-			if ind == self.number_of_managers :
+			if ind == self.number_of_managers -1:
 				print(usernames[current],password)
 			current += 1
 			employee.save()
@@ -146,7 +146,7 @@ class Mock:
 				),
 				uid=fake.uuid4()
 			)
-			if ind == self.number_of_accountants:
+			if ind == self.number_of_accountants -1:
 				print(usernames[current],password)
 			current += 1
 			employee.save()
@@ -168,7 +168,7 @@ class Mock:
 				),
 				uid=fake.uuid4()
 			)
-			if ind == self.number_of_admin :
+			if ind == self.number_of_admin -1:
 				print(usernames[current],password)
 			current += 1
 			employee.save()
