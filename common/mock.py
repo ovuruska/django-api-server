@@ -25,8 +25,8 @@ class Mock:
 				 number_of_managers: int = 10,
 				 number_of_accountants: int = 2,
 				 number_of_admin: int = 1,
-	             number_of_dogs: int = 100,
-	             number_of_appointments: int = 500,
+	             number_of_dogs: int = 50,
+	             number_of_appointments: int = 100,
 	             number_of_services: int = 10,
 	             number_of_products: int = 10,
 	             number_of_categories : int = 4
@@ -125,7 +125,7 @@ class Mock:
 				uid=fake.uuid4()
 			)
 			if ind == self.number_of_managers -1:
-				print("\nManager:" + usernames[current],password)
+				print("\nManager: " + usernames[current],password)
 			current += 1
 			employee.save()
 			managers.append(employee)
@@ -147,7 +147,7 @@ class Mock:
 				uid=fake.uuid4()
 			)
 			if ind == self.number_of_accountants -1:
-				print("\nAccountant:" + usernames[current],password)
+				print("\nAccountant: " + usernames[current],password)
 			current += 1
 			employee.save()
 			accountants.append(employee)
