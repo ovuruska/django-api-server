@@ -1,4 +1,5 @@
 from django.contrib.auth.mixins import PermissionRequiredMixin
+from django.core.paginator import Paginator
 from django.utils.decorators import method_decorator
 from django.views.decorators.cache import cache_page
 from django_filters.rest_framework import DjangoFilterBackend
@@ -6,6 +7,7 @@ from rest_framework import generics
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 
+from common.pagination import pagination
 from common.permissions.view_all_appointments import CanViewAllAppointments
 from scheduling.models import Appointment, Branch
 from scheduling.selectors.branch import get_free_hours
@@ -37,6 +39,8 @@ class AppointmentFilterListView(generics.ListAPIView, PermissionRequiredMixin):
 		employee_id = self.request.query_params.get('employee', None)
 		if employee_id:
 			queryset = queryset.filter(employee=employee_id)
+
+		queryset = pagination(self.request,queryset)
 
 		return queryset
 

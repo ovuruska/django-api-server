@@ -3,6 +3,7 @@ from rest_framework import generics
 from rest_framework.generics import RetrieveAPIView, CreateAPIView, DestroyAPIView, UpdateAPIView
 from rest_framework.response import Response
 
+from common.pagination import pagination
 from scheduling.models import Dog, Customer
 from scheduling.serializers.Dog import DogSerializer
 from scheduling.services.dog import is_dog_available
@@ -30,7 +31,12 @@ class PetModifyRetrieveDestroyAPIView(RetrieveAPIView, DestroyAPIView, UpdateAPI
 
 
 class PetFilterView(generics.ListAPIView):
-	queryset = Dog.objects.all()
+
 	serializer_class = DogSerializer
 	filter_backends = [DjangoFilterBackend]
 	filterset_fields = "__all__"
+
+	def get_queryset(self):
+		queryset = Dog.objects.all()
+		queryset = pagination(self.request, queryset)
+		return queryset

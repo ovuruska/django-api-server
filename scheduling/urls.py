@@ -56,7 +56,6 @@ employees = [
 	path('employee/groomers', views.EmployeeGroomerListRetrieve.as_view(), name='groomers_retrieve'),
 	path('employee/<pk>', views.EmployeeRetrieveModifyDestroyAPIView.as_view(), name='employee_modify'),
 	path('employees', views.EmployeeFilterView.as_view(), name='employee_filter'),
-
 ]
 
 payrolls = [
@@ -65,7 +64,7 @@ payrolls = [
 
 customers = [
 	path('scheduling/customer/<pk>', views.CustomerDetailsAPIView.as_view(), name="customer_modify"),
-	path("customers", views.CustomerFilterAPIView.as_view(), name="customer_filter"),
+	path("scheduling/customers", views.CustomerFilterAPIView.as_view(), name="customer_filter"),
 ]
 
 branches = [

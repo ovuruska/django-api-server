@@ -189,6 +189,72 @@ class Mock:
 			employee.save()
 			admin.append(employee)
 
+		for ind in trange(self.number_of_managers, desc="Generating managers"):
+			email = fake.email()
+			password = fake.password()
+			employee = models.Employee(
+				name=fake.name(),
+				branch=branches[fake.random_int(min=0, max=self.number_of_branches - 1)],
+				phone=fake.phone_number(),
+				role = Roles.MANAGER,
+				email=email,
+				user = User.objects.create_user(
+					username=usernames[current],
+					password=password,
+					email=email
+				),
+				uid=fake.uuid4()
+			)
+			if ind == self.number_of_managers -1:
+				print(usernames[current],password)
+			current += 1
+			employee.save()
+			managers.append(employee)
+
+		for ind in trange(self.number_of_accountants, desc="Generating accountants"):
+			email = fake.email()
+			password = fake.password()
+			employee = models.Employee(
+				name=fake.name(),
+				branch=branches[fake.random_int(min=0, max=self.number_of_branches - 1)],
+				phone=fake.phone_number(),
+				role = Roles.ACCOUNTANT,
+				email=email,
+				user = User.objects.create_user(
+					username=usernames[current],
+					password=password,
+					email=email
+				),
+				uid=fake.uuid4()
+			)
+			if ind == self.number_of_accountants -1:
+				print(usernames[current],password)
+			current += 1
+			employee.save()
+			accountants.append(employee)
+
+		for ind in trange(self.number_of_admin, desc="Generating admin"):
+			email = fake.email()
+			password = fake.password()
+			employee = models.Employee(
+				name=fake.name(),
+				branch=branches[fake.random_int(min=0, max=self.number_of_branches - 1)],
+				phone=fake.phone_number(),
+				role = Roles.ADMIN,
+				email=email,
+				user = User.objects.create_user(
+					username=usernames[current],
+					password=password,
+					email=email
+				),
+				uid=fake.uuid4()
+			)
+			if ind == self.number_of_admin -1:
+				print(usernames[current],password)
+			current += 1
+			employee.save()
+			admin.append(employee)
+
 		for ind in trange(self.number_of_customers, desc="Generating customers"):
 			email = fake.email()
 			password = fake.password()
@@ -204,8 +270,10 @@ class Mock:
 					email=email
 				)
 			)
+
 			if ind == self.number_of_customers:
 				print("\nCustomer:" + usernames[current],password)
+
 			current += 1
 
 			customer.save()

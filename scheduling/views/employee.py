@@ -2,7 +2,8 @@ from rest_framework import generics
 
 from scheduling.models import Employee
 from scheduling.selectors.employee import get_groomers
-from scheduling.serializers.Employee import EmployeeUserRetrieveSerializer, EmployeeSerializer, EmployeeModifySerializer
+from scheduling.serializers.Employee import EmployeeUserRetrieveSerializer, EmployeeSerializer, \
+	EmployeeModifySerializer, EmployeeWorkingHoursSerializer
 
 
 class EmployeeGroomerListRetrieve(generics.ListAPIView):
@@ -21,3 +22,6 @@ class EmployeeCreateAPIView(generics.CreateAPIView):
 class EmployeeRetrieveModifyDestroyAPIView(generics.DestroyAPIView, generics.RetrieveAPIView, generics.UpdateAPIView):
 	serializer_class = EmployeeModifySerializer
 	queryset = Employee.objects.all()
+
+class EmployeeGetWorkingHours(generics.ListAPIView): #The name might change
+	serializer_class = EmployeeWorkingHoursSerializer

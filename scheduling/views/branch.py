@@ -16,4 +16,3 @@ class BranchRetrieveModifyAPIView(RetrieveAPIView,ListAPIView,DestroyAPIView,Upd
 class BranchCreateAPIView(CreateAPIView):
 	serializer_class = BranchSerializer
 	queryset = Branch.objects.all()
-
