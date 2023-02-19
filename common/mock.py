@@ -90,18 +90,33 @@ class Mock:
 		for ind in trange(self.number_of_employees, desc="Generating employees"):
 			email = fake.email()
 			password = fake.password()
-			employee = models.Employee(
-				name=fake.name(),
-				branch=branches[fake.random_int(min=0, max=self.number_of_branches - 1)],
-				phone=fake.phone_number(),
-				email=email,
-				user = User.objects.create_user(
-					username=usernames[current],
-					password=password,
-					email=email
-				),
-				uid=fake.uuid4()
-			)
+			if ind < self.number_of_employees/2:
+				employee = models.Employee(
+					name=fake.name(),
+					branch=branches[fake.random_int(min=0, max=self.number_of_branches - 1)],
+					phone=fake.phone_number(),
+					email=email,
+					user = User.objects.create_user(
+						username=usernames[current],
+						password=password,
+						email=email
+					),
+					uid=fake.uuid4()
+				)
+			else:
+				employee = models.Employee(
+					name=fake.name(),
+					branch=branches[fake.random_int(min=0, max=self.number_of_branches - 1)],
+					phone=fake.phone_number(),
+					email=email,
+					role=Roles.EMPLOYEE_FULL_GROOMING,
+					user=User.objects.create_user(
+						username=usernames[current],
+						password=password,
+						email=email
+					),
+					uid=fake.uuid4()
+				)
 			if ind == self.number_of_employees -1:
 				print("\nEmployee: " + usernames[current],password)
 			current += 1

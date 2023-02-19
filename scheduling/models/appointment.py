@@ -23,8 +23,8 @@ class Appointment(BaseModel):
 
 	customer = models.ForeignKey("Customer", on_delete=models.DO_NOTHING, related_name="appointments", blank=False)
 	dog = models.ForeignKey("Dog", on_delete=models.DO_NOTHING, related_name="appointments", blank=False)
-	start = models.DateTimeField(default=timezone.now)
-	end = models.DateTimeField(default=timezone.now)
+	start = models.DateTimeField()
+	end = models.DateTimeField()
 	customer_notes = models.TextField(blank=True, max_length=1000)
 	employee_notes = models.TextField(blank=True, max_length=1000)
 	services = models.ManyToManyField("Service", related_name="appointments", blank=True, default=[])
