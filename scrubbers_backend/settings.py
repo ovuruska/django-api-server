@@ -39,7 +39,7 @@ ALLOWED_HOSTS = ["*"]
 INSTALLED_APPS = ['django.contrib.admin', 'django.contrib.auth', 'django.contrib.contenttypes',
                   'django.contrib.sessions', 'django.contrib.messages', 'django.contrib.staticfiles', 'rest_framework',
                   'knox',
-					'website',
+					
                   'authorization', 'corsheaders', 'scheduling', 'django_filters', ]
 
 FIREBASE_CONFIG = os.path.join(BASE_DIR, 'firebase-config.json')

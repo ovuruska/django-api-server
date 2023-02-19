@@ -21,5 +21,4 @@ urlpatterns = [
 	path('api/', include('scheduling.urls')),
     path('api/analytics', include('analytics.urls')),
 	path('api/auth/', include('authorization.urls')),
-	path('', include('website.urls')),
 ]
