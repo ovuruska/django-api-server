@@ -85,7 +85,7 @@ class Mock:
 		for ind in trange(self.number_of_employees, desc="Generating employees"):
 			email = fake.email()
 			password = fake.password()
-			if ind < self.number_of_employees/2:
+			if ind < self.number_of_employees/2 or self.number_of_employees <= 6:
 				employee = models.Employee(
 					name=fake.name(),
 					branch=branches[fake.random_int(min=0, max=self.number_of_branches - 1)],
@@ -98,8 +98,11 @@ class Mock:
 					),
 					uid=fake.uuid4()
 				)
+				if ind == 1:
+					print("\nEmployee We Wash: " + usernames[current], password)
+
 			else:
-				if ind == self.number_of_employees/2:
+				if ind == self.number_of_employees/2 and self.number_of_employees > 6:
 					employee = models.Employee(
 						name=fake.name(),
 						branch=branches[fake.random_int(min=0, max=self.number_of_branches - 1)],
@@ -113,8 +116,9 @@ class Mock:
 						),
 						uid=fake.uuid4()
 					)
+					print("\nAdmin: " + usernames[current], password)
 
-				elif ind == self.number_of_employees/2 + 1:
+				elif (ind == self.number_of_employees/2 + 1) and self.number_of_employees > 6:
 					employee = models.Employee(
 						name=fake.name(),
 						branch=branches[fake.random_int(min=0, max=self.number_of_branches - 1)],
@@ -128,8 +132,10 @@ class Mock:
 						),
 						uid=fake.uuid4()
 					)
+					print("\nAccountant: " + usernames[current], password)
 
-				elif ind == self.number_of_employees/2 + 2:
+
+				elif ind == self.number_of_employees/2 + 2 and self.number_of_employees > 6:
 					employee = models.Employee(
 						name=fake.name(),
 						branch=branches[fake.random_int(min=0, max=self.number_of_branches - 1)],
@@ -143,7 +149,7 @@ class Mock:
 						),
 						uid=fake.uuid4()
 					)
-
+					print("\nManager: " + usernames[current], password)
 				else:
 					employee = models.Employee(
 						name=fake.name(),
@@ -158,6 +164,8 @@ class Mock:
 						),
 						uid=fake.uuid4()
 					)
+					if ind == self.number_of_employees -1:
+						print("\nEmployee Groomer: " + usernames[current], password)
 
 			current += 1
 			employee.save()
