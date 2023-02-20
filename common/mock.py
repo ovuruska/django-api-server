@@ -334,7 +334,7 @@ class Mock:
 
 			employee = fake.random.choice(employees)
 			branch = employee.branch
-			appointment_type = employee.role
+			appointment_type = Roles.get_role_name(employee.role)
 
 			pet = fake.random.choice(dogs)
 			customer = pet.owner
