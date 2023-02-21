@@ -8,7 +8,7 @@ class DogSerializer(serializers.ModelSerializer):
 	owner = CustomerSerializer()
 	class Meta:
 		model = Dog
-		fields = ('id','name', 'breed', 'age', 'weight','owner')
+		fields = "__all__"
 
 
 class DogCreateSerializer(serializers.ModelSerializer):
@@ -19,4 +19,4 @@ class DogCreateSerializer(serializers.ModelSerializer):
 class DogShallowSerializer(serializers.ModelSerializer):
 	class Meta:
 		model = Dog
-		fields = ('id','name', 'breed', 'age', 'weight','owner')
+		fields = "__all__"
