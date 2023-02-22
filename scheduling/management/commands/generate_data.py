@@ -29,6 +29,7 @@ class Command(BaseCommand):
     def add_arguments(self, parser):
         parser.add_argument('scale', nargs='?', type=int, default=10, help='Number of times to generate data')
 
+
     def handle(self, *args, **options):
         scale = options['scale']
         scale = int(scale)
