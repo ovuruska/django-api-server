@@ -19,18 +19,17 @@ class Mock:
 		return list(names)
 
 	def __init__(self,
-	             number_of_branches: int = 5,
-	             number_of_employees: int = 25,
-	             number_of_customers: int = 50,
-				 number_of_managers: int = 10,
-				 number_of_accountants: int = 2,
-				 number_of_admin: int = 1,
-	             number_of_dogs: int = 50,
-	             number_of_appointments: int = 100,
-	             number_of_services: int = 10,
-	             number_of_products: int = 10,
-	             number_of_categories : int = 4
-	             ):
+
+				 number_of_branches: int = 5,
+				 number_of_employees: int = 25,
+				 number_of_customers: int = 50,
+				 number_of_dogs: int = 100,
+				 number_of_appointments: int = 200,
+				 number_of_services: int = 10,
+				 number_of_products: int = 10,
+				 number_of_categories: int = 4
+
+				 ):
 		self.number_of_branches = number_of_branches
 		self.number_of_employees = number_of_employees
 		self.number_of_customers = number_of_customers
@@ -38,10 +37,6 @@ class Mock:
 		self.number_of_services = number_of_services
 		self.number_of_products = number_of_products
 		self.number_of_appointments = number_of_appointments
-		self.number_of_managers = number_of_managers
-		self.number_of_accountants = number_of_accountants
-		self.number_of_admin = number_of_admin
-
 	def generate(
 			self
 	):
@@ -75,7 +70,8 @@ class Mock:
 		]
 
 		fake = Faker()
-		usernames = self.generate_unique_names(fake.user_name,self.number_of_employees + self.number_of_customers + self.number_of_managers + self.number_of_accountants + self.number_of_admin + 20)
+		usernames = self.generate_unique_names(fake.user_name,self.number_of_employees + self.number_of_customers)
+
 		current = 0
 		for ind in trange(self.number_of_branches, desc="Generating branches"):
 			branch = models.Branch(
@@ -90,7 +86,7 @@ class Mock:
 		for ind in trange(self.number_of_employees, desc="Generating employees"):
 			email = fake.email()
 			password = fake.password()
-			if ind < self.number_of_employees/2:
+			if ind < self.number_of_employees/2 or self.number_of_employees <= 6:
 				employee = models.Employee(
 					name=fake.name(),
 					branch=branches[fake.random_int(min=0, max=self.number_of_branches - 1)],
@@ -103,27 +99,80 @@ class Mock:
 					),
 					uid=fake.uuid4()
 				)
+				if ind == 1:
+					print("\nEmployee We Wash: " + usernames[current], password)
+
 			else:
-				employee = models.Employee(
-					name=fake.name(),
-					branch=branches[fake.random_int(min=0, max=self.number_of_branches - 1)],
-					phone=fake.phone_number(),
-					email=email,
-					role=Roles.EMPLOYEE_FULL_GROOMING,
-					user=User.objects.create_user(
-						username=usernames[current],
-						password=password,
-						email=email
-					),
-					uid=fake.uuid4()
-				)
-			if ind == self.number_of_employees -1:
-				print("\nEmployee: " + usernames[current],password)
+				if ind == self.number_of_employees/2 and self.number_of_employees > 6:
+					employee = models.Employee(
+						name=fake.name(),
+						branch=branches[fake.random_int(min=0, max=self.number_of_branches - 1)],
+						phone=fake.phone_number(),
+						email=email,
+						role=Roles.ADMIN,
+						user=User.objects.create_user(
+							username=usernames[current],
+							password=password,
+							email=email
+						),
+						uid=fake.uuid4()
+					)
+					print("\nAdmin: " + usernames[current], password)
+
+				elif (ind == self.number_of_employees/2 + 1) and self.number_of_employees > 6:
+					employee = models.Employee(
+						name=fake.name(),
+						branch=branches[fake.random_int(min=0, max=self.number_of_branches - 1)],
+						phone=fake.phone_number(),
+						email=email,
+						role=Roles.ACCOUNTANT,
+						user=User.objects.create_user(
+							username=usernames[current],
+							password=password,
+							email=email
+						),
+						uid=fake.uuid4()
+					)
+					print("\nAccountant: " + usernames[current], password)
+
+
+				elif ind == self.number_of_employees/2 + 2 and self.number_of_employees > 6:
+					employee = models.Employee(
+						name=fake.name(),
+						branch=branches[fake.random_int(min=0, max=self.number_of_branches - 1)],
+						phone=fake.phone_number(),
+						email=email,
+						role=Roles.MANAGER,
+						user=User.objects.create_user(
+							username=usernames[current],
+							password=password,
+							email=email
+						),
+						uid=fake.uuid4()
+					)
+					print("\nManager: " + usernames[current], password)
+				else:
+					employee = models.Employee(
+						name=fake.name(),
+						branch=branches[fake.random_int(min=0, max=self.number_of_branches - 1)],
+						phone=fake.phone_number(),
+						email=email,
+						role=Roles.EMPLOYEE_FULL_GROOMING,
+						user=User.objects.create_user(
+							username=usernames[current],
+							password=password,
+							email=email
+						),
+						uid=fake.uuid4()
+					)
+					if ind == self.number_of_employees -1:
+						print("\nEmployee Groomer: " + usernames[current], password)
+
 			current += 1
 			employee.save()
 			employees.append(employee)
 
-		for ind in trange(self.number_of_managers, desc="Generating managers"):
+		"""for ind in trange(self.number_of_managers, desc="Generating managers"):
 			email = fake.email()
 			password = fake.password()
 			employee = models.Employee(
@@ -253,7 +302,7 @@ class Mock:
 				print(usernames[current],password)
 			current += 1
 			employee.save()
-			admin.append(employee)
+			admin.append(employee)"""
 
 		for ind in trange(self.number_of_customers, desc="Generating customers"):
 			email = fake.email()
@@ -270,9 +319,6 @@ class Mock:
 					email=email
 				)
 			)
-
-			if ind == self.number_of_customers:
-				print("\nCustomer:" + usernames[current],password)
 
 			current += 1
 

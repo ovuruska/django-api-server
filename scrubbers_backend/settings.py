@@ -37,9 +37,9 @@ ALLOWED_HOSTS = ["*"]
 # Application definition
 
 INSTALLED_APPS = ['django.contrib.admin', 'django.contrib.auth', 'django.contrib.contenttypes',
-                  'django.contrib.sessions', 'django.contrib.messages', 'django.contrib.staticfiles', 'rest_framework',
+                  'django.contrib.sessions', 'django.contrib.messages', 'rest_framework',
                   'knox',
-					
+
                   'authorization', 'corsheaders', 'scheduling', 'django_filters', ]
 
 FIREBASE_CONFIG = os.path.join(BASE_DIR, 'firebase-config.json')
@@ -48,18 +48,8 @@ REST_FRAMEWORK = {'DEFAULT_FILTER_BACKENDS': ['django_filters.rest_framework.Dja
                   'DEFAULT_AUTHENTICATION_CLASSES': ('knox.auth.TokenAuthentication',), }
 CORS_ORIGIN_ALLOW_ALL = True
 
-STATICFILES_FINDERS = [
-    'django.contrib.staticfiles.finders.FileSystemFinder',
-    'django.contrib.staticfiles.finders.AppDirectoriesFinder',
-]
 
-STATICFILES_DIRS = [
-    os.path.join(BASE_DIR, 'static'),
-]
 
-STATIC_URL = '/static/'
-STATIC_ROOT = BASE_DIR / 'staticfiles'
-STATICFILES_DIRS = [BASE_DIR / 'static',]
 
 MIDDLEWARE = ['django.middleware.security.SecurityMiddleware', 'django.contrib.sessions.middleware.SessionMiddleware',
               'django.middleware.common.CommonMiddleware', 'common.DisableCSRFMiddleware',
