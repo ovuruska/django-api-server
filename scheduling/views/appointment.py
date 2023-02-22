@@ -3,6 +3,7 @@ from datetime import datetime
 from django.apps import apps
 from django.contrib.auth.mixins import PermissionRequiredMixin
 from django.core.signing import Signer
+from django.http import JsonResponse
 from rest_framework import generics
 from rest_framework.response import Response
 
@@ -65,7 +66,7 @@ class AppointmentCreateAPIView(generics.CreateAPIView, PermissionRequiredMixin):
 		return response
 
 
-class AppointmentModifyAPIView(generics.UpdateAPIView, PermissionRequiredMixin):
+class AppointmentModifyAPIView(generics.RetrieveAPIView,generics.UpdateAPIView, PermissionRequiredMixin):
 	"""
 	This view will be used in employee application to update the status of the appointment.
 	"""

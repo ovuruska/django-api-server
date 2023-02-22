@@ -71,6 +71,7 @@ class Mock:
 
 		fake = Faker()
 		usernames = self.generate_unique_names(fake.user_name,self.number_of_employees + self.number_of_customers)
+
 		current = 0
 		for ind in trange(self.number_of_branches, desc="Generating branches"):
 			branch = models.Branch(
@@ -371,15 +372,12 @@ class Mock:
 			end = start + datetime.timedelta(
 				minutes=fake.random.choice([15, 30, 45, 60, 75, 90, 105, 120, 135, 150, 165, 180]))
 
-			if start > datetime.datetime.now(tz=pytz.utc):
-				status = models.Appointment.Status.choices[
-					fake.random_int(min=0, max=len(models.Appointment.Status.choices) - 1)][0]
-			else:
-				status = fake.random.choice([models.Appointment.Status.COMPLETED, models.Appointment.Status.CANCELLED])
+			status = models.Appointment.Status.choices[
+				fake.random_int(min=0, max=len(models.Appointment.Status.choices) - 1)][0]
 
 			employee = fake.random.choice(employees)
 			branch = employee.branch
-			appointment_type = employee.role
+			appointment_type = fake.random.choice(models.Appointment.AppointmentType.choices)[0]
 
 			pet = fake.random.choice(dogs)
 			customer = pet.owner
@@ -402,13 +400,14 @@ class Mock:
 			)
 
 			appointment_services = fake.random.choices(services, k=fake.random_int(min=0, max=4))
-
 			appointment.save()
+
 			for appointment_service in appointment_services:
 				appointment.services.add(appointment_service)
 			appointment_products = fake.random.choices(products, k=fake.random_int(min=0, max=4))
 			for appointment_product in appointment_products:
 				appointment.products.add(appointment_product)
+			appointment.save()
 
 			appointments.append(appointment)
 

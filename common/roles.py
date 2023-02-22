@@ -17,3 +17,20 @@ class Roles:
 		(ADMIN, ADMIN),
 
 	)
+
+	@staticmethod
+	def get_role_name(role):
+		if role == Roles.CUSTOMER:
+			return "Customer"
+		elif role == Roles.EMPLOYEE_WE_WASH:
+			return "Employee We Wash"
+		elif role == Roles.EMPLOYEE_FULL_GROOMING:
+			return "Employee Full Grooming"
+		elif role == Roles.ACCOUNTANT:
+			return "Accountant"
+		elif role == Roles.MANAGER:
+			return "Manager"
+		elif role == Roles.ADMIN:
+			return "Admin"
+		else:
+			return "Anonymous"
