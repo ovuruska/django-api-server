@@ -38,7 +38,7 @@ ALLOWED_HOSTS = ["*"]
 
 INSTALLED_APPS = ['django.contrib.admin', 'django.contrib.auth', 'django.contrib.contenttypes',
                   'django.contrib.sessions', 'django.contrib.messages', 'rest_framework',
-                  'knox',
+                  'knox','django.contrib.staticfiles',
 
                   'authorization', 'corsheaders', 'scheduling', 'django_filters', ]
 
@@ -90,6 +90,10 @@ LANGUAGE_CODE = 'en-us'
 TIME_ZONE = 'UTC'
 
 USE_I18N = True
+
+STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
+
+STATIC_URL = 'static/'
 
 USE_TZ = True
 
