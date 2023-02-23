@@ -23,7 +23,7 @@ class Command(BaseCommand):
                  number_of_services: int = 10,
                  number_of_products: int = 10,
                  number_of_categories: int = 4,
-                 appointment_interval: str = "1y"
+                 appointment_interval: str = "1w"
 
                  ):
         self.number_of_branches = number_of_branches
