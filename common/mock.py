@@ -27,7 +27,8 @@ class Mock:
 				 number_of_appointments: int = 200,
 				 number_of_services: int = 10,
 				 number_of_products: int = 10,
-				 number_of_categories: int = 4
+				 number_of_categories: int = 4,
+				 appointment_interval: str = "1y"
 
 				 ):
 		self.number_of_branches = number_of_branches
@@ -37,6 +38,8 @@ class Mock:
 		self.number_of_services = number_of_services
 		self.number_of_products = number_of_products
 		self.number_of_appointments = number_of_appointments
+		self.appointment_interval = appointment_interval
+
 	def generate(
 			self
 	):
@@ -364,8 +367,11 @@ class Mock:
 			products.append(product)
 
 		for ind in trange(self.number_of_appointments, desc='Generating Appointments'):
+			positive = "+" + self.appointment_interval
+			negative = "-" + self.appointment_interval
 
-			start = fake.date_between(start_date='-1y', end_date='+1y')
+
+			start = fake.date_between(start_date=negative, end_date=positive)
 			start = datetime.datetime.combine(start, datetime.time(fake.random_int(min=8, max=18),
 			                                                       fake.random.choice([0, 15, 30, 45])))
 			start = pytz.utc.localize(start)
