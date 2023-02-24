@@ -4,17 +4,17 @@ from scheduling import models
 
 """
 
-    Description: deletes the given admin
-    Usage: python manage.py delete_admin --username=
-    Example: python manage.py delete_admin quicker-adminşt
+    Description: deletes the given employee
+    Usage: python manage.py delete_employee --username=
+    Example: python manage.py delete_employee quicker-employee
 
 """
 
 class Command(BaseCommand):
-    help = "Deletes an admin model"
+    help = "Deletes an employee model"
 
     def add_arguments(self, parser):
-        parser.add_argument('username', type=str, help='Username of the admin to be deleted')
+        parser.add_argument('username', type=str, help='Username of the employee to be deleted')
 
     def handle(self, *args, **kwargs):
         username = kwargs['username']
@@ -32,3 +32,4 @@ class Command(BaseCommand):
         user.delete()
 
         self.stdout.write(f"User with username '{username}' has been deleted")
+
