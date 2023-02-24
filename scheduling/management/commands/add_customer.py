@@ -4,7 +4,14 @@ from django.contrib.auth.models import User
 
 from common.roles import Roles
 from scheduling import models
+"""
 
+    Description: Add customer model to the database with the input that is taken from CLI
+    Usage: python manage.py add_customer
+    
+    
+    
+"""
 
 class Command(BaseCommand):
     help = "initializes admin model"

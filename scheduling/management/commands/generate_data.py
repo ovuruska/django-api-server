@@ -3,11 +3,11 @@ from django.core.management import BaseCommand
 from common import Mock
 
 """
-    Generate Data command
-    Usage:
-        python manage.py generate_data (scaleInput) --interval=(intervalInput)
-            - scale input must be integer
-            - interval input must be parallel with faker random date function (e.g. 1w)
+
+    Description: Generate data with given scale and appointment interval
+    Usage: python manage.py generate_data --scale= --interval=
+    Example: python manage.py generate_data 10 --interval=1w
+    
 
 """
 class Command(BaseCommand):

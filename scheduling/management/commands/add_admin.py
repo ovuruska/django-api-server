@@ -4,6 +4,12 @@ from django.contrib.auth.models import User
 
 from common.roles import Roles
 from scheduling import models
+"""
+
+    Description: Add an admin model to the database with the input that is taken from CLI
+    Usage: python manage.py add_admin
+    
+"""
 
 
 class Command(BaseCommand):
