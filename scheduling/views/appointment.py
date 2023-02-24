@@ -4,11 +4,13 @@ from django.apps import apps
 from django.contrib.auth.mixins import PermissionRequiredMixin
 from django.core.signing import Signer
 from django.http import JsonResponse
+from django.utils import timezone
 from rest_framework import generics
 from rest_framework.response import Response
 
 from common.permissions.AppointmentPermissions import CanCreateAppointment, CanUpdateAppointment, \
 	CanAppointmentEmployeeRetrieve
+from transactions.models.transaction import Transaction
 from ..models import Customer
 from ..selectors import get_last_appointment_by_same_customer
 from ..serializers.Appointment import *
@@ -88,6 +90,31 @@ class AppointmentModifyAPIView(generics.RetrieveAPIView,generics.UpdateAPIView, 
 			                content_type="application/json")
 		self.partial_update(request, *args, **kwargs)
 		serializer = AppointmentEmployeeSerializer(appointment)
+
+		# create and save a new Transaction
+		transaction = Transaction(
+			appointment=appointment,
+			employee= request.data.get("employee"),
+			date=timezone.now(),
+			action="modified appointment",
+			description=""  # initialize the description
+		)
+
+		# loop through the request data and compare it with the existing appointment
+		changes = []
+		for key, val in request.data.items():
+			# check if the value changed
+			if val != getattr(appointment, key):
+				# add the change to the changes list
+				changes.append("{} changed from {} to {}".format(key, getattr(appointment, key), val))
+
+		# write the changes to the description
+		if changes:
+			transaction.description = "Appointment modified by {}. Changes: {}".format(request.user.username,
+																					   ", ".join(changes))
+
+		transaction.save()
+
 		return Response(serializer.data)
 
 
