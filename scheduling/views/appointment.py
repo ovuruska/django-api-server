@@ -6,12 +6,13 @@ from django.core.signing import Signer
 from django.http import JsonResponse
 from django.utils import timezone
 from rest_framework import generics
+from django.shortcuts import get_object_or_404
 from rest_framework.response import Response
 
 from common.permissions.AppointmentPermissions import CanCreateAppointment, CanUpdateAppointment, \
 	CanAppointmentEmployeeRetrieve
 from transactions.models.transaction import Transaction
-from ..models import Customer
+from ..models import Customer, Employee
 from ..selectors import get_last_appointment_by_same_customer
 from ..serializers.Appointment import *
 
@@ -91,10 +92,14 @@ class AppointmentModifyAPIView(generics.RetrieveAPIView,generics.UpdateAPIView, 
 		self.partial_update(request, *args, **kwargs)
 		serializer = AppointmentEmployeeSerializer(appointment)
 
+		employee = appointment.employee
+
+
+
 		# create and save a new Transaction
 		transaction = Transaction(
 			appointment=appointment,
-			employee= request.data.get("employee"),
+			employee= employee,
 			date=timezone.now(),
 			action="modified appointment",
 			description=""  # initialize the description
@@ -114,7 +119,6 @@ class AppointmentModifyAPIView(generics.RetrieveAPIView,generics.UpdateAPIView, 
 																					   ", ".join(changes))
 
 		transaction.save()
-
 		return Response(serializer.data)
 
 

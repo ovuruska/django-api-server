@@ -1,1 +1,1 @@
-from . import transaction
+from .transaction import Transaction
