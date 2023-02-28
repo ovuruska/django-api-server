@@ -11,6 +11,7 @@ from rest_framework.response import Response
 
 from common.permissions.AppointmentPermissions import CanCreateAppointment, CanUpdateAppointment, \
 	CanAppointmentEmployeeRetrieve
+from common.save_transaction import save_transaction
 from transactions.models.transaction import Transaction
 from ..models import Customer, Employee
 from ..selectors import get_last_appointment_by_same_customer
@@ -80,6 +81,7 @@ class AppointmentModifyAPIView(generics.RetrieveAPIView,generics.UpdateAPIView, 
 	def get_queryset(self):
 		return self.queryset.filter(id=self.kwargs['pk'])
 
+	@save_transaction
 	def patch(self, request, *args, **kwargs):
 		"""
 		Updates the appointment with the given id
@@ -92,33 +94,7 @@ class AppointmentModifyAPIView(generics.RetrieveAPIView,generics.UpdateAPIView, 
 		self.partial_update(request, *args, **kwargs)
 		serializer = AppointmentEmployeeSerializer(appointment)
 
-		employee = appointment.employee
 
-
-
-		# create and save a new Transaction
-		transaction = Transaction(
-			appointment=appointment,
-			employee= employee,
-			date=timezone.now(),
-			action="modified appointment",
-			description=""  # initialize the description
-		)
-
-		# loop through the request data and compare it with the existing appointment
-		changes = []
-		for key, val in request.data.items():
-			# check if the value changed
-			if val != getattr(appointment, key):
-				# add the change to the changes list
-				changes.append("{} changed from {} to {}".format(key, getattr(appointment, key), val))
-
-		# write the changes to the description
-		if changes:
-			transaction.description = "Appointment modified by {}. Changes: {}".format(request.user.username,
-																					   ", ".join(changes))
-
-		transaction.save()
 		return Response(serializer.data)
 
 

@@ -21,11 +21,11 @@ class Mock:
 
 	def __init__(self,
 
-				 number_of_branches: int = 5,
-				 number_of_employees: int = 25,
-				 number_of_customers: int = 50,
-				 number_of_dogs: int = 100,
-				 number_of_appointments: int = 200,
+				 number_of_branches: int = 1,
+				 number_of_employees: int = 5,
+				 number_of_customers: int = 20,
+				 number_of_dogs: int = 50,
+				 number_of_appointments: int = 100,
 				 number_of_services: int = 10,
 				 number_of_products: int = 10,
 				 number_of_categories: int = 4,
