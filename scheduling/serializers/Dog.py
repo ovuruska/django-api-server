@@ -10,6 +10,12 @@ class DogSerializer(serializers.ModelSerializer):
 		model = Dog
 		fields = "__all__"
 
+class DogModifySerializer(serializers.ModelSerializer):
+
+	owner = CustomerSerializer()
+	class Meta:
+		model = Dog
+		fields = "__all__"
 
 class DogCreateSerializer(serializers.ModelSerializer):
 	class Meta:

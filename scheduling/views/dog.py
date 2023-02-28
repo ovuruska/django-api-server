@@ -28,17 +28,33 @@ class PetCreateAPIView(generics.CreateAPIView):
 
 
 class PetModifyRetrieveDestroyAPIView(RetrieveAPIView, DestroyAPIView, UpdateAPIView):
-	serializer_class = DogSerializer
-	queryset = Dog.objects.all()
+    serializer_class = DogSerializer
+    queryset = Dog.objects.all()
+
+    def get_queryset(self):
+        return self.queryset.filter(id=self.kwargs['pk'])
+
+    def patch(self, request, *args, **kwargs):
+        pk = self.kwargs.get("pk")
+        dog = Dog.objects.get(id=pk)
+        if dog.owner == Customer.objects.get(user=request.user):
+            serializer = self.serializer_class(dog, data=request.data, partial=True)
+            if serializer.is_valid():
+                serializer.save()
+                return Response(serializer.data)
+            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+        return Response({"error": "The dog is not registered for this customer."},
+                            status=status.HTTP_400_BAD_REQUEST)
+
 
 
 class PetFilterView(generics.ListAPIView):
+    serializer_class = DogSerializer
+    filter_backends = [DjangoFilterBackend]
+    filterset_fields = "__all__"
 
-	serializer_class = DogSerializer
-	filter_backends = [DjangoFilterBackend]
-	filterset_fields = "__all__"
-
-	def get_queryset(self):
-		queryset = Dog.objects.all()
-		queryset = pagination(self.request, queryset)
-		return queryset
+    def get_queryset(self):
+        queryset = Dog.objects.all()
+        queryset = pagination(self.request, queryset)
+        return queryset
