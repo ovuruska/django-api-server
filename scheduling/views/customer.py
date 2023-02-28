@@ -4,8 +4,9 @@ from rest_framework.generics import RetrieveAPIView, ListAPIView
 from rest_framework.response import Response
 
 from common.pagination import pagination
-from ..models import Dog
+from ..models import Dog, Appointment
 from ..models.customer import Customer
+from ..serializers.Appointment import AppointmentModifySerializer
 from ..serializers.Customer import CustomerSerializer, CustomerDetailsSerializer
 from ..serializers.Dog import DogSerializer
 
@@ -23,10 +24,10 @@ class CustomerDogsRetrieveAPIView(ListAPIView):
 		serializer = DogSerializer(dogs, many=True)
 		return Response(serializer.data)
 
+
 class CustomerDetailsAPIView(RetrieveAPIView):
 	serializer_class = CustomerDetailsSerializer
 	queryset = Customer.objects.all()
-
 
 
 class CustomerFilterAPIView(generics.ListAPIView):

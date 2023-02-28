@@ -137,3 +137,16 @@ class AppointmentCustomerRetrieve(generics.RetrieveAPIView):
 
 	def get_queryset(self):
 		return self.queryset.filter(id=self.kwargs['pk'])
+class CustomerGetAppointmentsAPIView(generics.ListAPIView):
+    serializer_class = AppointmentModifySerializer
+    def get_queryset(self):
+        # Get the authenticated user's customer object
+        try:
+            customer = self.request.user.customer
+        except Customer.DoesNotExist:
+            return Appointment.objects.none()
+
+        # Get the customer's appointments
+        appointments = customer.appointments.all()
+
+        return appointments
