@@ -1,28 +1,30 @@
 from django_filters.rest_framework import DjangoFilterBackend
-from rest_framework import generics
+from rest_framework import generics, status
 from rest_framework.generics import RetrieveAPIView, CreateAPIView, DestroyAPIView, UpdateAPIView
 from rest_framework.response import Response
 
 from common.pagination import pagination
 from scheduling.models import Dog, Customer
-from scheduling.serializers.Dog import DogSerializer
+from scheduling.serializers.Dog import DogSerializer, DogCreateSerializer
 from scheduling.services.dog import is_dog_available
 
 
-class PetCreateAPIView(CreateAPIView):
-	serializer_class = DogSerializer
-	queryset = Dog.objects.all()
+class PetCreateAPIView(generics.CreateAPIView):
+    serializer_class = DogCreateSerializer
 
-	def post(self, request, *args, **kwargs):
-		try:
-			request.data._mutable = True
-		except AttributeError:
-			pass
-		request.data['owner'] = Customer.objects.get(uid=request.data['owner']).id
-		if is_dog_available(request.data["owner"], request.data["name"]):
-			return Response({"message": "Dog already exists"})
-		else:
-			return self.create(request, *args, **kwargs)
+    def create(self, request, *args, **kwargs):
+        # retrieve authenticated customer from request.user and set as owner
+        customer = Customer.objects.get(user=request.user)
+        request.data["owner"] = customer.id
+
+        # check if dog with the same name already exists for the customer
+        dog_name = request.data.get('name')
+        if customer.dogs.filter(name=dog_name).exists():
+            return Response({"error": "Dog with this name already exists for this customer."},
+                            status=status.HTTP_400_BAD_REQUEST)
+
+        # create the dog instance
+        return super().create(request, *args, **kwargs)
 
 
 class PetModifyRetrieveDestroyAPIView(RetrieveAPIView, DestroyAPIView, UpdateAPIView):

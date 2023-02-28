@@ -11,6 +11,7 @@ class Dog(BaseModel):
 		DOUBLE_COATED = 'DoubleCoated', _('Double Coated')
 		DOODLES = 'Doodles', _('Doodles')
 
+
 	name = models.CharField(max_length=32)
 	breed = models.CharField(max_length=128)
 	age = models.IntegerField()
