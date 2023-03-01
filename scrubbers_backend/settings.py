@@ -48,9 +48,7 @@ REST_FRAMEWORK = {'DEFAULT_FILTER_BACKENDS': ['django_filters.rest_framework.Dja
                   'DEFAULT_AUTHENTICATION_CLASSES': ('knox.auth.TokenAuthentication',), }
 CORS_ORIGIN_ALLOW_ALL = True
 
-GRAPHENE = {
-    "SCHEMA": "graph.schema.schema"
-}
+
 
 
 MIDDLEWARE = ['django.middleware.security.SecurityMiddleware', 'django.contrib.sessions.middleware.SessionMiddleware',

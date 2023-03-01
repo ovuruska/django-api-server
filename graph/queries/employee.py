@@ -12,9 +12,9 @@ class EmployeeType(DjangoObjectType):
 		fields = '__all__'
 
 class EmployeeQuery(graphene.ObjectType):
-	employee = graphene.Field(EmployeeType, id=graphene.Int())
+	get_employee = graphene.Field(EmployeeType, id=graphene.Int())
 
-	def resolve_employee(self, info, id):
+	def resolve_get_employee(self, info, id):
 		return Employee.objects.get(id=id)
 
 class EmployeeMutation(graphene.ObjectType):

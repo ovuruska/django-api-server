@@ -11,5 +11,5 @@ firebase-admin
 boto3
 python-dotenv
 tqdm
-graphene-django
 django-rest-knox
+graphene-django>=3
