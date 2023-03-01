@@ -1,12 +1,17 @@
 from rest_framework import generics
 
+from common.pagination import pagination
 from transactions.models.transaction import Transaction
 from transactions.serializers.transaction import TransactionSerializer
 
 
 class GetTransactionsAPIView(generics.ListAPIView):
 	serializer_class = TransactionSerializer
-	queryset = Transaction.objects.all()
+
+	def get_queryset(self):
+		queryset = Transaction.objects.all()
+		queryset = pagination(self.request, queryset)
+		return queryset
 
 
 class GetAppointmentTransactions(generics.ListAPIView):
