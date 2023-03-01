@@ -9,6 +9,7 @@ from rest_framework import generics
 from django.shortcuts import get_object_or_404
 from rest_framework.response import Response
 
+from common.pagination import pagination
 from common.permissions.AppointmentPermissions import CanCreateAppointment, CanUpdateAppointment, \
 	CanAppointmentEmployeeRetrieve
 from common.save_transaction import save_transaction
@@ -113,8 +114,10 @@ class AppointmentCustomerRetrieve(generics.RetrieveAPIView):
 
 	def get_queryset(self):
 		return self.queryset.filter(id=self.kwargs['pk'])
+
 class CustomerGetAppointmentsAPIView(generics.ListAPIView):
     serializer_class = AppointmentModifySerializer
+
     def get_queryset(self):
         # Get the authenticated user's customer object
         try:
@@ -125,4 +128,16 @@ class CustomerGetAppointmentsAPIView(generics.ListAPIView):
         # Get the customer's appointments
         appointments = customer.appointments.all()
 
+        # Apply filters
+        start_date = self.request.query_params.get('start__gt')
+        if start_date:
+
+            appointments = appointments.filter(start__gt=start_date)
+
+        end_date = self.request.query_params.get('start__lt')
+        if end_date:
+
+            appointments = appointments.filter(start__lt=end_date)
+
+        appointments = pagination(self.request,appointments)
         return appointments
