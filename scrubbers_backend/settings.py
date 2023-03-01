@@ -40,7 +40,7 @@ INSTALLED_APPS = ['django.contrib.admin', 'django.contrib.auth', 'django.contrib
                   'django.contrib.sessions', 'django.contrib.messages', 'rest_framework',
                   'knox','django.contrib.staticfiles','transactions',
 
-                  'authorization', 'corsheaders', 'scheduling', 'django_filters', ]
+                  'authorization', 'corsheaders', 'scheduling', 'django_filters','graphene_django' ]
 
 FIREBASE_CONFIG = os.path.join(BASE_DIR, 'firebase-config.json')
 REST_FRAMEWORK = {'DEFAULT_FILTER_BACKENDS': ['django_filters.rest_framework.DjangoFilterBackend'],
@@ -48,7 +48,9 @@ REST_FRAMEWORK = {'DEFAULT_FILTER_BACKENDS': ['django_filters.rest_framework.Dja
                   'DEFAULT_AUTHENTICATION_CLASSES': ('knox.auth.TokenAuthentication',), }
 CORS_ORIGIN_ALLOW_ALL = True
 
-
+GRAPHENE = {
+    "SCHEMA": "graph.schema.schema"
+}
 
 
 MIDDLEWARE = ['django.middleware.security.SecurityMiddleware', 'django.contrib.sessions.middleware.SessionMiddleware',

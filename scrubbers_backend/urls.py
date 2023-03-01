@@ -20,5 +20,6 @@ urlpatterns = [
     path('admin/', admin.site.urls),
 	path('api/', include('scheduling.urls')),
 	path('api/auth/', include('authorization.urls')),
-	path('api/', include('transactions.urls'))
+	path('api/', include('transactions.urls')),
+	path('graphql/', include('graph.urls')),
 ]
