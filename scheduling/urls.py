@@ -65,6 +65,7 @@ payrolls = [
 customers = [
 	path('scheduling/customer/<pk>', views.CustomerDetailsAPIView.as_view(), name="customer_modify"),
 	path("scheduling/customers", views.CustomerFilterAPIView.as_view(), name="customer_filter"),
+	path('me', views.GetCustomerFromTokenAPIView.as_view(), name="get-customer-from-token"),
 ]
 
 branches = [
