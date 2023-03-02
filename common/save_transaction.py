@@ -5,7 +5,6 @@ from django.apps import apps
 
 
 def save_transaction(func):
-	Transaction = apps.get_model("transactions", "Transaction")
 	Appointment = apps.get_model("scheduling", "Appointment")
 	def wrapper(self, request, *args, **kwargs):
 		pk = self.kwargs.get("pk")
@@ -25,26 +24,30 @@ def save_transaction(func):
 			except Exception as e:
 				pass
 
+		fields = ["tip","start","end","status"]
+
 		description = ""
-		for key, value in request.data.items():
-			original_value = getattr(appointment, key, None)
-			if original_value is not None and original_value != value:
-				description += f"{key} changed from {original_value} to {value}."
+		for field in fields:
+			original_value = getattr(appointment, field, None)
+			value = request.data.get(field, None)
+			if original_value is not None and value is not None and str(original_value) != str(value):
+				description += f"{field} changed from {original_value} to {value}."
+
+		if description != "":
 
 
+			transaction = Transaction(
+				appointment=appointment,
+				date=datetime.datetime.now(),
+				action="modified appointment",
+				description=description  # initialize the description
+			)
+			if employee is not None:
+				transaction.employee = employee
+			if customer is not None:
+				transaction.customer = customer
 
-		transaction = Transaction(
-			appointment=appointment,
-			date=datetime.datetime.now(),
-			action="modified appointment",
-			description=description  # initialize the description
-		)
-		if employee is not None:
-			transaction.employee = employee
-		if customer is not None:
-			transaction.customer = customer
-
-		transaction.save()
+			transaction.save()
 		return func(self, request, *args, **kwargs)
 
 	return wrapper

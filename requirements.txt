@@ -12,3 +12,4 @@ boto3
 python-dotenv
 tqdm
 django-rest-knox
+graphene-django>=3
