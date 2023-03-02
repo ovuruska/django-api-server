@@ -1,7 +1,6 @@
-from common import BaseModel
 from django.db import models
 from scheduling.models import Appointment, Employee, Customer
-
+from common import BaseModel
 
 class Transaction(BaseModel):
     appointment = models.ForeignKey(Appointment, on_delete=models.CASCADE, related_name="appointment")
@@ -10,4 +9,3 @@ class Transaction(BaseModel):
     date = models.DateTimeField()
     action = models.CharField(max_length=255)
     description = models.TextField()
-

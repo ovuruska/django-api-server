@@ -12,4 +12,5 @@ ENV PORT=80
 ENV DJANGO_DEBUG=False
 
 RUN python3 manage.py collectstatic --noinput
+#RUN python3 manage.py celery -A scrubbers_backend worker -l info
 CMD [ "python", "./manage.py", "runserver", "0.0.0.0:80", "--settings=scrubbers_backend.settings" ]

@@ -39,3 +39,11 @@ class CustomerFilterAPIView(generics.ListAPIView):
 		queryset = Customer.objects.all()
 		queryset = pagination(self.request, queryset)
 		return queryset
+
+class GetCustomerFromTokenAPIView(generics.ListAPIView):
+
+	def get(self, request, format=None):
+		customer = request.user.customer
+		serializer = CustomerDetailsSerializer(customer)
+		return Response(serializer.data)
+
