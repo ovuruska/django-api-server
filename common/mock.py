@@ -6,7 +6,7 @@ from django.contrib.auth.models import User
 from faker import Faker
 from tqdm import tqdm, trange
 
-#from scheduling import models
+from scheduling import models
 #from transactions.models import Transaction
 
 from .breeds import breeds
