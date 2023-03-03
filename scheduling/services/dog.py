@@ -1,9 +1,9 @@
-from scheduling.models import Customer, Dog
+from django.apps import apps
 
+Dog = apps.get_model('scheduling', 'Dog')
+Customer = apps.get_model('scheduling', 'Customer')
 
-def is_dog_available(owner_id, dog_name):
-    try:
-        _ = Dog.objects.get(name=dog_name, owner=owner_id)
-        return True
-    except Dog.DoesNotExist:
-        return False
+def create_pet_with_name(owner, dog_name):
+	dog = Dog(name=dog_name, owner=owner)
+	dog.save()
+	return dog

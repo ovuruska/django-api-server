@@ -9,6 +9,19 @@ from scheduling.serializers.Employee import EmployeeSerializer, EmployeeShallowS
 from scheduling.serializers.Product import ProductSerializer
 from scheduling.serializers.Service import ServiceSerializer
 
+class AppointmentEmployeeCreateSerializer(serializers.ModelSerializer):
+	dog_name = serializers.CharField(source="dog_name", read_only=True)
+	customer_name = serializers.CharField(source="customer_name", read_only=True)
+	class Meta:
+		model = Appointment
+		fields = [
+			"employee",
+			"start",
+			"end",
+		]
+		extra_kwargs = {"employee": {"required": True, "allow_null": False}}
+
+
 
 class AppointmentCreateSerializer(serializers.ModelSerializer):
 	class Meta:

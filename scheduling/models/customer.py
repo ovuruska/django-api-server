@@ -11,8 +11,8 @@ class Customer(BaseModel):
 	email = models.EmailField()
 	phone = models.CharField(max_length=32)
 	address = models.CharField(max_length=128)
-	user = models.OneToOneField(User, on_delete=models.CASCADE)
+	user = models.OneToOneField(User, on_delete=models.CASCADE, null=True,blank=True)
 	role = models.PositiveSmallIntegerField(choices=Roles.CHOICES,default=Roles.CUSTOMER)
-
+	validated = models.BooleanField(default=True)
 	class Meta:
 		ordering = ["name"]
