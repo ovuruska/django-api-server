@@ -31,20 +31,19 @@ class AppointmentEmployeeCreateAPIView(generics.CreateAPIView, PermissionRequire
 	def post(self,request,*args,**kwargs):
 		c = 3
 		customer_name = request.data.get("customer_name")
-		customer = create_customer_with_name(customer_name)
+		customer_email = request.data.get("customer_email","")
+		customer_phone = request.data.get("customer_phone","")
+		customer = create_customer_with_name(customer_name,email=customer_email,phone=customer_phone)
 
 		dog_name = request.data.get("dog_name")
-		dog = create_pet_with_name(customer, dog_name)
+		dog_breed = request.data.get("dog_breed","")
+		dog = create_pet_with_name(customer, dog_name,breed=dog_breed)
 		# Allow mutations for request.data
 		try:
 			request.data._mutable = True
 		except AttributeError:
 			pass
 
-		request.data["customer"] = customer
-		request.data["dog"] = dog
-		del request.data["customer_name"]
-		del request.data["dog_name"]
 
 		# Create the appointment
 		appointment = Appointment(
