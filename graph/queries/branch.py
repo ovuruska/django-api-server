@@ -17,6 +17,10 @@ class BranchType(DjangoObjectType):
 class BranchQuery(graphene.ObjectType):
 	get_branch = graphene.Field(BranchType, id=graphene.Int())
 	branch_employees = graphene.List(EmployeeType,id=graphene.Int())
+	get_all_branches = graphene.List(BranchType)
+
+	def resolve_get_all_branches(self, info):
+		return Branch.objects.all()
 
 	def resolve_get_branch(self, info, id):
 		return Branch.objects.get(id=id)

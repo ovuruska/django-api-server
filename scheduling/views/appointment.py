@@ -3,17 +3,13 @@ from datetime import datetime
 from django.apps import apps
 from django.contrib.auth.mixins import PermissionRequiredMixin
 from django.core.signing import Signer
-from django.http import JsonResponse
-from django.utils import timezone
 from rest_framework import generics
-from django.shortcuts import get_object_or_404
 from rest_framework.response import Response
 
 from common.pagination import pagination
 from common.permissions.AppointmentPermissions import CanCreateAppointment, CanUpdateAppointment, \
 	CanAppointmentEmployeeRetrieve
 from common.save_transaction import save_transaction
-from transactions.models.transaction import Transaction
 from ..models import Customer, Employee
 from ..selectors import get_last_appointment_by_same_customer
 from ..serializers.Appointment import *
@@ -29,7 +25,6 @@ class AppointmentEmployeeCreateAPIView(generics.CreateAPIView, PermissionRequire
 	serializer_class = AppointmentEmployeeCreateSerializer
 
 	def post(self,request,*args,**kwargs):
-		c = 3
 		customer_name = request.data.get("customer_name")
 		customer_email = request.data.get("customer_email","")
 		customer_phone = request.data.get("customer_phone","")
@@ -45,6 +40,7 @@ class AppointmentEmployeeCreateAPIView(generics.CreateAPIView, PermissionRequire
 			pass
 
 
+
 		# Create the appointment
 		appointment = Appointment(
 			start=request.data["start"],
@@ -53,6 +49,7 @@ class AppointmentEmployeeCreateAPIView(generics.CreateAPIView, PermissionRequire
 			dog=dog,
 			employee_id=request.data["employee_id"],
 			branch_id=request.data["branch_id"],
+			status=Appointment.Status.CONFIRMED
 
 		)
 		appointment.save()
