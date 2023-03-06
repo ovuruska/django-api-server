@@ -6,7 +6,7 @@ from common.roles import Roles
 
 class Customer(BaseModel):
 
-	name = models.CharField(max_length=64)
+	name = models.CharField(max_length=64,db_index=True)
 	uid = models.CharField(max_length=128)
 	email = models.EmailField()
 	phone = models.CharField(max_length=32)

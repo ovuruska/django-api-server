@@ -12,7 +12,7 @@ class Dog(BaseModel):
 		DOODLES = 'Doodles', _('Doodles')
 
 
-	name = models.CharField(max_length=32)
+	name = models.CharField(max_length=32, db_index=True)
 	breed = models.CharField(max_length=128)
 	age = models.IntegerField(blank=True, null=True)
 	weight = models.FloatField(blank=True, null=True)
