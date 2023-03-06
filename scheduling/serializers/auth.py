@@ -14,6 +14,8 @@ class CreateUserSerializer(serializers.ModelSerializer):
                                         validated_data['password'])
         return user
 
+
+
 class UserSerializer(serializers.ModelSerializer):
     class Meta:
         model = User

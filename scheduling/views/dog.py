@@ -1,12 +1,11 @@
 from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework import generics, status
-from rest_framework.generics import RetrieveAPIView, CreateAPIView, DestroyAPIView, UpdateAPIView
+from rest_framework.generics import RetrieveAPIView,  DestroyAPIView, UpdateAPIView
 from rest_framework.response import Response
 
 from common.pagination import pagination
 from scheduling.models import Dog, Customer
 from scheduling.serializers.Dog import DogSerializer, DogCreateSerializer
-from scheduling.services.dog import is_dog_available
 
 
 class PetCreateAPIView(generics.CreateAPIView):

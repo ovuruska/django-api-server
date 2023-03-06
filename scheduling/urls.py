@@ -33,6 +33,8 @@ scheduling_appointments = [
 	path('schedule/appointments/<pk>', views.AppointmentEmployeeRetrieveAPIView.as_view(), name='appointment'),
 	path('customer/appointments', views.CustomerGetAppointmentsAPIView.as_view(), name='customer-appointments'),
 	path('schedule/appointments', views.AppointmentFilterListView.as_view(), name='appointment_filter_and_list'),
+	path('schedule/appointment',views.AppointmentEmployeeCreateAPIView.as_view(), name='appointment_created_by_employee'),
+
 ]
 
 auth = [
@@ -82,6 +84,8 @@ signed_url = [
 	path('confirmation/<token>/cancel', views.SignedUrlCancelAPIView.as_view(), name='signed_url_cancel'),
 	path('confirmation/<token>/reschedule', views.SignedUrlRescheduleAPIView.as_view(), name='signed_url_reschedule'),
 ]
+
+
 
 urlpatterns = urlpatterns + branch_working_hour + products + services + dogs + appointments + employees \
               + employee_working_hour + scheduling_appointments + payrolls + signed_url + branches + customers + auth

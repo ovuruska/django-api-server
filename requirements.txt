@@ -13,3 +13,4 @@ python-dotenv
 tqdm
 django-rest-knox
 graphene-django>=3
+django_crontab

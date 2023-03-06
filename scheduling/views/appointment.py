@@ -3,20 +3,59 @@ from datetime import datetime
 from django.apps import apps
 from django.contrib.auth.mixins import PermissionRequiredMixin
 from django.core.signing import Signer
-from django.http import JsonResponse
-from django.utils import timezone
 from rest_framework import generics
-from django.shortcuts import get_object_or_404
 from rest_framework.response import Response
 
 from common.pagination import pagination
 from common.permissions.AppointmentPermissions import CanCreateAppointment, CanUpdateAppointment, \
 	CanAppointmentEmployeeRetrieve
 from common.save_transaction import save_transaction
-from transactions.models.transaction import Transaction
 from ..models import Customer, Employee
 from ..selectors import get_last_appointment_by_same_customer
 from ..serializers.Appointment import *
+from ..services import create_pet_with_name
+from ..services.customer import create_customer_with_name
+
+
+class AppointmentEmployeeCreateAPIView(generics.CreateAPIView, PermissionRequiredMixin):
+
+	permission_required = [CanCreateAppointment]
+	Customer = apps.get_model('scheduling', 'Customer')
+	Dog = apps.get_model('scheduling', 'Dog')
+	serializer_class = AppointmentEmployeeCreateSerializer
+
+	def post(self,request,*args,**kwargs):
+		customer_name = request.data.get("customer_name")
+		customer_email = request.data.get("customer_email","")
+		customer_phone = request.data.get("customer_phone","")
+		customer = create_customer_with_name(customer_name,email=customer_email,phone=customer_phone)
+
+		dog_name = request.data.get("dog_name")
+		dog_breed = request.data.get("dog_breed","")
+		dog = create_pet_with_name(customer, dog_name,breed=dog_breed)
+		# Allow mutations for request.data
+		try:
+			request.data._mutable = True
+		except AttributeError:
+			pass
+
+
+
+		# Create the appointment
+		appointment = Appointment(
+			start=request.data["start"],
+			end=request.data["end"],
+			customer=customer,
+			dog=dog,
+			employee_id=request.data["employee_id"],
+			branch_id=request.data["branch_id"],
+			status=Appointment.Status.CONFIRMED
+
+		)
+		appointment.save()
+		# Return the appointment as JSON
+		serializer = AppointmentEmployeeSerializer(appointment)
+		return Response(serializer.data)
 
 
 class AppointmentCreateAPIView(generics.CreateAPIView, PermissionRequiredMixin):
