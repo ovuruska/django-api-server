@@ -3,6 +3,8 @@ from datetime import datetime
 from django.apps import apps
 from django.contrib.auth.mixins import PermissionRequiredMixin
 from django.core.signing import Signer
+from django.forms import model_to_dict
+from django.http import JsonResponse
 from rest_framework import generics
 from rest_framework.response import Response
 
@@ -10,7 +12,7 @@ from common.pagination import pagination
 from common.permissions.AppointmentPermissions import CanCreateAppointment, CanUpdateAppointment, \
 	CanAppointmentEmployeeRetrieve
 from common.save_transaction import save_transaction
-from ..models import Customer, Employee
+from ..models import Customer, Employee, Dog, Branch
 from ..selectors import get_last_appointment_by_same_customer
 from ..serializers.Appointment import *
 from ..services import create_pet_with_name
@@ -107,7 +109,19 @@ class AppointmentCreateAPIView(generics.CreateAPIView, PermissionRequiredMixin):
 		# body = approval_email(date, hours,accept_url, cancel_url, reschedule_url)
 		# send_email(to,title,body)
 
-		return response
+		# This is a hack to convert foreign keys to their actual models.
+
+		appointment = Appointment.objects.get(id=appointment["id"])
+		ret_value = model_to_dict(appointment)
+		ret_value["customer"] = model_to_dict(appointment.customer)
+		ret_value["dog"] = model_to_dict(appointment.dog)
+		ret_value["employee"] = model_to_dict(appointment.employee)
+		ret_value["branch"] = model_to_dict(appointment.branch)
+		ret_value["products"] = [model_to_dict(product) for product in appointment.products.all()]
+		ret_value["services"] = [model_to_dict(service) for service in appointment.services.all()]
+
+		return JsonResponse(ret_value)
+
 
 
 class AppointmentModifyAPIView(generics.RetrieveAPIView,generics.UpdateAPIView, PermissionRequiredMixin):
