@@ -15,10 +15,7 @@ class Employee(BaseModel):
 	role = models.PositiveSmallIntegerField(choices=Roles.CHOICES,default=Roles.EMPLOYEE_WE_WASH)
 	branch = models.ForeignKey("scheduling.Branch", on_delete=models.CASCADE, related_name='employees',blank=True,null=True)
 	uid = models.CharField(max_length=64,blank=True)
-	user = models.OneToOneField(User, on_delete=models.CASCADE)
-
-	def is_groomer(self):
-		return self.role == self.Role.FULL_GROOMING
+	user = models.OneToOneField(User, on_delete=models.CASCADE, related_name='employee',blank=True,null=True)
 
 	def __str__(self):
 		return self.name

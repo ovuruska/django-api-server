@@ -1,5 +1,10 @@
+from django.apps import apps
+from django.forms import model_to_dict
 from rest_framework.generics import ListAPIView, CreateAPIView, DestroyAPIView, UpdateAPIView, RetrieveAPIView
+from rest_framework.response import Response
+
 from scheduling.models import Branch
+from scheduling.selectors.working_hours import get_branch_employees
 from scheduling.serializers.Branch import BranchSerializer
 
 
@@ -16,3 +21,17 @@ class BranchRetrieveModifyAPIView(RetrieveAPIView,ListAPIView,DestroyAPIView,Upd
 class BranchCreateAPIView(CreateAPIView):
 	serializer_class = BranchSerializer
 	queryset = Branch.objects.all()
+
+
+class BranchEmployeesAPIView(ListAPIView):
+	EmployeeWorkingHours = apps.get_model('scheduling', 'EmployeeWorkingHour')
+
+	def get(self, request, *args, **kwargs):
+		branch_id = self.kwargs['pk']
+		date = request.query_params.get('date', None)
+
+		if date is None:
+			return Response(status=400)
+		employees = get_branch_employees(branch_id,date)
+
+		return Response(data=employees, status=200)

@@ -20,8 +20,10 @@ class EmployeeCreateAPIView(generics.CreateAPIView):
 
 
 class EmployeeRetrieveModifyDestroyAPIView(generics.DestroyAPIView, generics.RetrieveAPIView, generics.UpdateAPIView):
-	serializer_class = EmployeeModifySerializer
+	serializer_class = EmployeeSerializer
 	queryset = Employee.objects.all()
+
+
 
 class EmployeeGetWorkingHours(generics.ListAPIView): #The name might change
 	serializer_class = EmployeeWorkingHoursSerializer
