@@ -10,7 +10,7 @@ class Employee(BaseModel):
 
 
 	name = models.CharField(max_length=128,blank=True)
-	phone = models.CharField(max_length=16,blank=True)
+	phone = models.CharField(max_length=32,blank=True)
 	email = models.CharField(max_length=64,blank=True)
 	role = models.PositiveSmallIntegerField(choices=Roles.CHOICES,default=Roles.EMPLOYEE_WE_WASH)
 	branch = models.ForeignKey("scheduling.Branch", on_delete=models.CASCADE, related_name='employees',blank=True,null=True)
