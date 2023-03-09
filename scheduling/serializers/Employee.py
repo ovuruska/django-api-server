@@ -37,3 +37,4 @@ class EmployeeWorkingHoursSerializer(serializers.ModelSerializer):
 	class Meta:
 		model = Employee
 		fields = ('date', 'start', 'end', 'branch')
+

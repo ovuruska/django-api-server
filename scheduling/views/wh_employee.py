@@ -35,14 +35,20 @@ class EmployeeWorkingHourRetrieveCreateView(generics.ListAPIView,generics.Create
 		'Employee'
 	)
 	queryset = EmployeeWorkingHour.objects.all()
-	serializer_class = EmployeeWorkingHourSerializer
+	serializer_class = EmployeeWorkingHourSerializer(many=True)
 
 	def post(self, request, *args, **kwargs):
 		employee_id = self.kwargs.get("pk", None)
+		data = request.data
+		if type(data) != list:
+			data = [data]
+		results = []
+		for item in data:
 
-		result = set_employee_working_hours(employee_id, request.data["date"],
-		                                       request.data["start"], request.data["end"], request.data["branch"])
-		return Response(data=result, status=200)
+			result = set_employee_working_hours(employee_id, item["date"],
+			                                       item["start"], item["end"],item["branch"])
+			results.append(result)
+		return Response(data=results, status=200)
 
 	def get(self, request, *args, **kwargs):
 
