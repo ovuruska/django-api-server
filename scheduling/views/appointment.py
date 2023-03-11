@@ -145,9 +145,10 @@ class AppointmentModifyAPIView(generics.RetrieveAPIView,generics.UpdateAPIView, 
 		if not appointment.is_modifiable():
 			return Response({"error": "Cannot modify a completed appointment"}, status=400,
 			                content_type="application/json")
-		self.partial_update(request, *args, **kwargs)
-		serializer = AppointmentEmployeeSerializer(appointment)
 
+		self.partial_update(request, *args, **kwargs)
+		appointment = Appointment.objects.get(id=pk)
+		serializer = AppointmentEmployeeSerializer(appointment)
 
 		return Response(serializer.data)
 
