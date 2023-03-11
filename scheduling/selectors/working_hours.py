@@ -4,6 +4,8 @@ from django.apps import apps
 from django.forms import model_to_dict
 
 from common.datetime_range import datetime_range
+from common.extract_role import get_role, get_role_from_int
+
 
 def quantize(date: datetime.datetime):
 	if(date.minute < 30):
@@ -136,8 +138,9 @@ def get_branch_employees(branch_id,date):
 			employee_dict = {
 				"id": employee.id,
 				"name": employee.name,
-				"work_start": employee.work_start,
-				"work_end": employee.work_end
+				"start": employee.work_start,
+				"end": employee.work_end,
+				"role": get_role_from_int(employee.role),
 
 			}
 			employees.append(employee_dict)
