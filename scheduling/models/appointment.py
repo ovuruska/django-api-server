@@ -32,8 +32,7 @@ class Appointment(BaseModel):
 	cost = models.DecimalField(max_digits=5, decimal_places=2, default=0.00)
 	products = models.ManyToManyField("Product", related_name="products+", blank=True, default=[])
 	branch = models.ForeignKey("Branch", on_delete=models.CASCADE, related_name="appointments", blank=False)
-	employee = models.ForeignKey("Employee", on_delete=models.DO_NOTHING, related_name="appointments", blank=True,
-	                             null=True)
+	employee = models.ForeignKey("Employee", on_delete=models.DO_NOTHING, related_name="appointments", blank=True, null=True)
 	status = models.CharField(max_length=20, choices=Status.choices, default=Status.PENDING)
 
 	appointment_type = models.CharField(max_length=20, choices=AppointmentType.choices, default=AppointmentType.WE_WASH)
