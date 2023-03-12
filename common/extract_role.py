@@ -1,5 +1,24 @@
 from common.roles import Roles
 
+def get_role_from_int(role_int) -> str:
+	if role_int == 0:
+		return "Anonymous"
+	elif role_int == 1:
+		return "Customer"
+	elif role_int == 10:
+		return "We Wash"
+	elif role_int == 15:
+		return "Full Grooming"
+	elif role_int == 20:
+		return "Accountant"
+	elif role_int == 30:
+		return "Manager"
+	elif role_int == 40:
+		return "Admin"
+	else:
+		return "Anonymous"
+
+
 def get_role(request):
 	if getattr(request.user,"employee",None) is not None:
 		return request.user.employee.role
