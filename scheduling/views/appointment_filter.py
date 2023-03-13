@@ -40,6 +40,15 @@ class AppointmentFilterListView(generics.ListAPIView, PermissionRequiredMixin):
 		if employee_id:
 			queryset = queryset.filter(employee=employee_id)
 
+		customer_id = self.request.query_params.get('customer', None)
+		if customer_id:
+			queryset = queryset.filter(customer__id=customer_id)
+
+		dog_id = self.request.query_params.get('dog', None)
+		if dog_id:
+			queryset = queryset.filter(dog__id=dog_id)
+
+
 		queryset = pagination(self.request,queryset)
 
 		return queryset
