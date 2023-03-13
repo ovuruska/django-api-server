@@ -212,7 +212,6 @@ class AppointmentModifyAPIView(generics.RetrieveAPIView, generics.UpdateAPIView,
 
 
 
-
 class AppointmentEmployeeRetrieveAPIView(generics.RetrieveAPIView, PermissionRequiredMixin):
 	permission_classes = [CanAppointmentEmployeeRetrieve]
 	serializer_class = AppointmentEmployeeSerializer
