@@ -22,4 +22,5 @@ urlpatterns = [
 	path('api/auth/', include('authorization.urls')),
 	path('api/', include('transactions.urls')),
 	path('graphql/', include('graph.urls')),
+	path('api/search/', include('search.urls')),
 ]

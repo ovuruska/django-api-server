@@ -32,6 +32,7 @@ REST_KNOX = {'SECURE_HASH_ALGORITHM': 'cryptography.hazmat.primitives.hashes.SHA
              'TOKEN_TTL': timedelta(days=5), 'USER_SERIALIZER': 'scheduling.serializers.auth.UserSerializer',
              'MIN_REFRESH_INTERVAL': 3600, 'TOKEN_LIMIT_PER_USER': None, 'AUTO_REFRESH': True, }
 
+
 ALLOWED_HOSTS = ["*"]
 
 # Application definition
@@ -40,7 +41,7 @@ INSTALLED_APPS = ['django.contrib.admin', 'django.contrib.auth', 'django.contrib
                   'django.contrib.sessions', 'django.contrib.messages', 'rest_framework',
                   'knox','django.contrib.staticfiles','transactions','django_crontab',
 
-                  'authorization', 'corsheaders', 'scheduling', 'django_filters','graphene_django' ]
+                  'authorization', 'corsheaders', 'scheduling', 'django_filters','graphene_django','search' ]
 
 FIREBASE_CONFIG = os.path.join(BASE_DIR, 'firebase-config.json')
 REST_FRAMEWORK = {'DEFAULT_FILTER_BACKENDS': ['django_filters.rest_framework.DjangoFilterBackend'],

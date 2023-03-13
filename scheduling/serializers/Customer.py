@@ -2,7 +2,7 @@ from rest_framework import serializers
 
 from scheduling.models.customer import Customer
 from scheduling.selectors.customer import get_customer_dogs, get_customer_lifetime_tips, \
-	get_customer_lifetime_product_invoice, get_customer_lifetime_service_invoice
+	get_customer_lifetime_product_invoice, get_customer_lifetime_service_invoice, get_customer_last_appointment_date
 
 
 class CustomerSerializer(serializers.ModelSerializer):
@@ -16,7 +16,7 @@ class CustomerDetailsSerializer(serializers.ModelSerializer):
 	lifetime_product_sales = serializers.SerializerMethodField()
 	lifetime_service_sales = serializers.SerializerMethodField()
 	dogs = serializers.SerializerMethodField()
-
+	last_appointment_date = serializers.SerializerMethodField()
 	def get_dogs(self, obj):
 		from scheduling.serializers.Dog import DogShallowSerializer
 
@@ -35,6 +35,10 @@ class CustomerDetailsSerializer(serializers.ModelSerializer):
 	def get_lifetime_service_sales(self, obj):
 		total_service_sales = get_customer_lifetime_service_invoice(obj.id)
 		return round(total_service_sales["services__cost__sum"] or 0,2)
+
+	def get_last_appointment_date(self, obj):
+		last_appointment_date = get_customer_last_appointment_date(obj.id)
+		return last_appointment_date
 
 	class Meta:
 		model = Customer
