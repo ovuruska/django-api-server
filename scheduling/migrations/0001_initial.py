@@ -166,17 +166,15 @@ class Migration(migrations.Migration):
             name='EmployeeWorkingHour',
             fields=[
                 ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('date', models.DateField()),
                 ('week_day', models.IntegerField(default=0, validators=[django.core.validators.MinValueValidator(0), django.core.validators.MaxValueValidator(6)])),
-                ('working_hours', models.CharField(default='000000000000000000000000', max_length=24, validators=[django.core.validators.MinLengthValidator(24)])),
                 ('start', models.DateTimeField(null=True)),
                 ('end', models.DateTimeField(null=True)),
                 ('branch', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='scheduling.branch')),
                 ('employee', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='scheduling.employee')),
             ],
             options={
-                'ordering': ('-date',),
-                'unique_together': {('employee', 'date')},
+                'ordering': ('-start',),
+                'unique_together': {('employee', 'start')},
             },
         ),
         migrations.CreateModel(

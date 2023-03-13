@@ -17,13 +17,10 @@ class EmployeeWorkingHour(models.Model):
 	6	Sunday
 	"""
 	employee = models.ForeignKey('scheduling.Employee', on_delete=models.CASCADE)
-	date = models.DateField()
-
 	week_day = models.IntegerField(default=0, validators=[MinValueValidator(0), MaxValueValidator(6)])
 	branch = models.ForeignKey('scheduling.Branch', on_delete=models.CASCADE)
-	working_hours = models.CharField(max_length=24, validators=[MinLengthValidator(24)], default=24 * "0")
 	start = models.DateTimeField(null=True)
 	end = models.DateTimeField(null=True)
 	class Meta:
-		unique_together = ('employee', 'date')
-		ordering = ('-date',)
+		unique_together = ('employee', 'start')
+		ordering = ('-start',)

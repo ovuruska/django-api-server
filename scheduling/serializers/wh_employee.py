@@ -17,13 +17,12 @@ class EmployeeWorkingHourSerializer(serializers.ModelSerializer):
 		Metaclass for EmployeeWorkingHourSerializer
 		"""
 		model = EmployeeWorkingHour
-		fields = ["employee", "date",  "branch", "start", "end"]
+		fields = ["employee",  "branch", "start", "end"]
 
 
 class WorkingDaySerializer(serializers.Serializer):
-	working_hours = serializers.CharField(max_length=24,validators=[MinLengthValidator(24)])
 	branch = BranchSerializer(allow_null=True,many=False)
-	date = serializers.DateField()
+	start = serializers.DateField()
 	class Meta:
 		fields = ["working_hours","branch","date"]
 		depth = 1

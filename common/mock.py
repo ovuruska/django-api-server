@@ -1,5 +1,5 @@
 import datetime
-from random import random
+import random
 
 import pytz
 from django.contrib.auth.models import User
@@ -107,6 +107,32 @@ class Mock:
                     ),
                     uid=fake.uuid4()
                 )
+                #Generate employee working hours
+
+                positive = "+" + self.appointment_interval
+                negative = "-" + self.appointment_interval
+
+                date = fake.date_between(start_date=negative, end_date=positive)
+
+                # Generate a random start time for an hour between 9am and 5pm
+                hour = random.randint(9, 16)
+                start_time = datetime.datetime(year=date.year, month=date.month, day=date.day, hour=hour, minute=0)
+                # Calculate the end time by adding 8 hours to the start time
+                end_time = start_time + datetime.timedelta(hours=8)
+
+                weekday = start_time.weekday()
+                branch = branches[random.randint(0, self.number_of_branches - 1)]
+                weekday = date.weekday()
+                branch = branches[fake.random_int(min=0, max=self.number_of_branches - 1)]
+                employee_wh = models.EmployeeWorkingHour(
+                    start=start_time,
+                    week_day=weekday,
+                    employee=employee,
+                    branch=branch,
+                    end=end_time
+                )
+
+
 
             else:
                 if ind == self.number_of_employees / 2 and self.number_of_employees > 6:
@@ -169,7 +195,27 @@ class Mock:
                         uid=fake.uuid4()
                     )
 
+                    # Generate employee working hours
+                    hour = random.randint(9, 16)
+                    start_time = datetime.datetime(year=date.year, month=date.month, day=date.day, hour=hour, minute=0)
+
+                    # Calculate the end time by adding 8 hours to the start time
+                    end_time = start_time + datetime.timedelta(hours=8)
+
+                    weekday = start_time.weekday()
+                    branch = branches[random.randint(0, self.number_of_branches - 1)]
+                    weekday = date.weekday()
+                    branch = branches[fake.random_int(min=0, max=self.number_of_branches - 1)]
+                    employee_wh = models.EmployeeWorkingHour(
+                        start=start_time,
+                        week_day=weekday,
+                        employee=employee,
+                        branch=branch,
+                        end=end_time
+                    )
+
             employee.save()
+            employee_wh.save()
             employees.append(employee)
 
         for ind in trange(self.number_of_customers, desc="Generating customers"):

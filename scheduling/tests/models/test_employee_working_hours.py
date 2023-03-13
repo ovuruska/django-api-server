@@ -20,7 +20,7 @@ class EmployeeWorkingHoursTestCase(MockTestCase):
 		body = {
 			"employee": employee_id,
 			"branch": branch_id,
-			"date":self.date_str,
+			"start":self.date_str,
 			"working_hours": self.first
 		}
 
