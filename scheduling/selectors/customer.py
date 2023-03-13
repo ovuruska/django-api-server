@@ -3,7 +3,16 @@
 from django.apps import apps
 from django.db.models import Sum
 
+def get_customer_last_appointment_date(customer_id):
+	"""
+	:param customer_id: The id of the customer
+	:return: The last appointment of the customer
+	"""
+	Appointment = apps.get_model('scheduling', 'Appointment')
 
+	last_appointment = Appointment.objects.filter(customer__id=customer_id).order_by('-start').first()
+	last_appointment_date = last_appointment.start if last_appointment else None
+	return last_appointment_date
 def get_customer_lifetime_product_invoice(customer_id):
 	"""
 	:param customer_id: The id of the customer

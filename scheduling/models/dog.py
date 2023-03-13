@@ -6,10 +6,10 @@ from common import BaseModel
 
 class Dog(BaseModel):
 	class CoatType(models.TextChoices):
-		SMOOTH_SHORT = 'SmoothShort', _('Smooth (Short)')
-		SMOOTH_LONG = 'SmoothLong', _('Smooth (Long)')
-		DOUBLE_COATED = 'DoubleCoated', _('Double Coated')
-		DOODLES = 'Doodles', _('Doodles')
+		SMOOTH_SHORT = 'SmoothShort'
+		SMOOTH_LONG = 'SmoothLong'
+		DOUBLE_COATED = 'DoubleCoated'
+		DOODLES = 'Doodles'
 
 
 	name = models.CharField(max_length=32, db_index=True)
