@@ -41,7 +41,7 @@ INSTALLED_APPS = ['django.contrib.admin', 'django.contrib.auth', 'django.contrib
                   'django.contrib.sessions', 'django.contrib.messages', 'rest_framework',
                   'knox','django.contrib.staticfiles','transactions','django_crontab',
 
-                  'authorization', 'corsheaders', 'scheduling', 'django_filters','graphene_django','search' ]
+                  'authorization', 'corsheaders', 'scheduling', 'django_filters','graphene_django','search','analytics' ]
 
 FIREBASE_CONFIG = os.path.join(BASE_DIR, 'firebase-config.json')
 REST_FRAMEWORK = {'DEFAULT_FILTER_BACKENDS': ['django_filters.rest_framework.DjangoFilterBackend'],
