@@ -21,6 +21,7 @@ urlpatterns = [
 	path('api/', include('scheduling.urls')),
 	path('api/auth/', include('authorization.urls')),
 	path('api/', include('transactions.urls')),
+	path('api/analytics/', include('analytics.urls')),
 	path('graphql/', include('graph.urls')),
 	path('api/search/', include('search.urls')),
 ]
