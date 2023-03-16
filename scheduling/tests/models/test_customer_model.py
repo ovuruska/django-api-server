@@ -49,3 +49,7 @@ class CustomerModelTestCase(TestCase):
         customers = Customer.objects.all()
         self.assertEqual(customers[0], customer2)
         self.assertEqual(customers[1], self.customer)
+
+    def test_customer_deletion(self):
+        self.customer.delete()
+        self.assertEqual(Customer.objects.count(), 0)

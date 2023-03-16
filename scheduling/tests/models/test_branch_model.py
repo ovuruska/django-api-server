@@ -29,3 +29,7 @@ class BranchModelTestCase(TestCase):
 		self.assertEqual(self.branch.phone, '123-456-7890')
 		self.assertEqual(self.branch.email, 'main.branch@example.com')
 		self.assertEqual(self.branch.tubs, 5)
+
+	def test_branch_deletion(self):
+		self.branch.delete()
+		self.assertEqual(Branch.objects.count(), 0)
