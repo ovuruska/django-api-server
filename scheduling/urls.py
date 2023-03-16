@@ -28,7 +28,7 @@ dogs = [
 ]
 
 appointments = [
-	path('appointment', views.AppointmentCreateAPIView.as_view(), name='appointment'),
+	path('appointment', views.AppointmentCreateAPIView.as_view(), name='appointment_create'),
 	path('appointment/<pk>', views.AppointmentCustomerRetrieve.as_view(), name='appointment_modify'),
 ]
 
@@ -38,7 +38,7 @@ scheduling_appointments = [
 	path('customer/appointments', views.CustomerGetAppointmentsAPIView.as_view(), name='customer-appointments'),
 	path('schedule/appointments', views.AppointmentFilterListView.as_view(), name='appointment_filter_and_list'),
 	path('schedule/appointment', views.AppointmentEmployeeCreateAPIView.as_view(),
-	     name='appointment_created_by_employee'),
+	     name='appointment_employee_create_api_view'),
 
 ]
 
