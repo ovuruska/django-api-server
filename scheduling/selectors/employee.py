@@ -1,5 +1,7 @@
 from django.apps import apps
 
+from common.roles import Roles
+
 
 def get_groomers(branch_name=None):
 	"""
@@ -10,7 +12,7 @@ def get_groomers(branch_name=None):
 	Employee = apps.get_model('scheduling', 'Employee')
 
 	if branch_name is None:
-		return Employee.objects.filter(role=Employee.Role.FULL_GROOMING)
+		return Employee.objects.filter(role=Roles.EMPLOYEE_FULL_GROOMING)
 
 	else:
-		return Employee.objects.filter(role=Employee.Role.FULL_GROOMING, branch__name=branch_name)
+		return Employee.objects.filter(role=Roles.EMPLOYEE_FULL_GROOMING, branch__name=branch_name)
