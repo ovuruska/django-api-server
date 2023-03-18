@@ -1,8 +1,5 @@
-
-
-from django.utils import timezone
-
 from django.test import TestCase
+from django.utils import timezone
 from django.contrib.auth.models import User
 from faker import Faker
 from knox.models import AuthToken
@@ -43,14 +40,13 @@ class AuthTestCase(TestCase):
         self.appointment.products.add(self.product)
         self.appointment.save()
 
+class TestGetCustomerAppointmentsAPIView(AuthTestCase):
 
-class TestAppointmentEmployeeRetrieveAPIView(AuthTestCase):
-
-        def test_appointment_employee_retrieve_view(self):
+        def test_get_customer_appointments_view(self):
 
             # Retrieve
             response = self.client.get(
-                f'/api/schedule/appointments/{self.appointment.employee.id}',
+                f'/api/customer/appointments',
                 **self.headers
             )
             self.assertEqual(response.status_code, 200)
