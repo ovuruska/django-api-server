@@ -52,7 +52,7 @@ class GetAppointmentNoShowRateView(RetrieveAPIView):
 		})
 
 
-#@method_decorator(cache_page(60 * 60 * 24), name='dispatch')
+@method_decorator(cache_page(60 * 60 * 24), name='dispatch')
 class GetYearlyAppointmentSummaryView(RetrieveAPIView):
 
 	def get(self, request, *args, **kwargs):

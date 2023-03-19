@@ -4,11 +4,13 @@ from django.utils.decorators import method_decorator
 from django.views.decorators.cache import cache_page
 from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework import generics
+from rest_framework.pagination import LimitOffsetPagination
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 
 from common.pagination import pagination
 from common.permissions.view_all_appointments import CanViewAllAppointments
+from common.search_pagination import SearchPagination
 from scheduling.models import Appointment, Branch
 from scheduling.selectors.branch import get_free_hours
 from scheduling.serializers.Appointment import AppointmentEmployeeSerializer
@@ -21,13 +23,11 @@ class AppointmentFilterListView(generics.ListAPIView, PermissionRequiredMixin):
 	filter_backends = (DjangoFilterBackend,)
 
 	filterset_fields = ["start", "branch", "status", "employee", "dog"]
-
-	# @method_decorator(cache_page(60 * 60 * 2))
 	def get(self, request, *args, **kwargs):
 		return self.list(request, *args, **kwargs)
 
 	def get_queryset(self):
-		queryset = Appointment.objects.all()
+		queryset = Appointment.objects.order_by('start').all()
 		start_date = self.request.query_params.get('start__gt', None)
 		if start_date is not None:
 			queryset = queryset.filter(start__gt=start_date)
@@ -53,6 +53,13 @@ class AppointmentFilterListView(generics.ListAPIView, PermissionRequiredMixin):
 
 		return queryset
 
+class AppointmentFilterListViewV2(AppointmentFilterListView):
+	pagination_class = SearchPagination
+
+
+class AppointmentFilterListViewV2_1(AppointmentFilterListView):
+	pagination_class = LimitOffsetPagination
+
 
 class AppointmentAvailableHoursView(generics.RetrieveAPIView, PermissionRequiredMixin):
 	permission_classes = [CanViewAllAppointments]
@@ -68,3 +75,5 @@ class AppointmentAvailableHoursView(generics.RetrieveAPIView, PermissionRequired
 
 		free_hours = get_free_hours(branch_id, date)
 		return Response(data={"free_hours": free_hours}, status=200, headers={"Content-Type": "application/json"})
+
+
