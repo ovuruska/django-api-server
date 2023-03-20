@@ -30,15 +30,6 @@ class CustomerDetailsAPIView(RetrieveAPIView):
 	queryset = Customer.objects.all()
 
 
-class CustomerFilterAPIView(generics.ListAPIView):
-	serializer_class = CustomerSerializer
-	filter_backends = [DjangoFilterBackend]
-	filterset_fields = "__all__"
-
-	def get_queryset(self):
-		queryset = Customer.objects.all()
-		queryset = pagination(self.request, queryset)
-		return queryset
 
 class GetCustomerFromTokenAPIView(generics.ListAPIView):
 
