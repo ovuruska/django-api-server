@@ -43,9 +43,6 @@ class GetAppointmentNoShowRateView(RetrieveAPIView):
 	def get(self, request, *args, **kwargs):
 		customer_id = self.kwargs.get("pk")
 		appointment_no_show_rate = customer.get_appointment_no_show_rate(customer_id)
-		response = {
-			'rate': appointment_no_show_rate
-		}
 
 		return JsonResponse({
 			'rate': appointment_no_show_rate * 100
