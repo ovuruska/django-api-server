@@ -28,20 +28,21 @@ class AuthTestCase(TestCase):
         self.employee.user = self.user
         self.employee.save()
         # Login
-        self.token_instance, self.token = AuthToken.objects.create(self.customer.user)
+        self.token_instance, self.token = AuthToken.objects.create(self.customer_user)
         self.headers = {'HTTP_AUTHORIZATION': f'Token {self.token}'}
 
 class TestPetModifyDestroyAPIView(AuthTestCase):
     def test_pet_modify_destroy_view(self):
         data = {
             "name": "Buddy",
+            "breed": "Golden Retriever"
         }
         # Create a dog
-        response = self.client.post('/api/dog', data, format='json', **self.headers)
+        response = self.client.post('/api/dog', data, format='json', content_type="application/json", **self.headers)
         self.assertEqual(response.status_code, 201)
         # Modify a dog
-        response = self.client.put(f'/api/dog/{response.data["id"]}', data, format='json', **self.headers)
+        response = self.client.patch(f'/api/dog/{response.data["id"]}', data, format='json', content_type="application/json", **self.headers)
         self.assertEqual(response.status_code, 200)
         # Destroy a dog
-        response = self.client.delete(f'/api/dog/{response.data["id"]}', **self.headers)
+        response = self.client.delete(f'/api/dog/{response.data["id"]}', content_type="application/json", **self.headers)
         self.assertEqual(response.status_code, 204)

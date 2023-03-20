@@ -28,7 +28,7 @@ class AuthTestCase(TestCase):
         self.employee.user = self.user
         self.employee.save()
         # Login
-        self.token_instance, self.token = AuthToken.objects.create(self.customer.user)
+        self.token_instance, self.token = AuthToken.objects.create(self.customer_user)
         self.headers = {'HTTP_AUTHORIZATION': f'Token {self.token}'}
 
 
@@ -37,18 +37,10 @@ class TestPetCreateAPIView(AuthTestCase):
 
         data = {
             "name": "Buddy",
-            "breed": "Golden Retriever",
-            "age": "3",
-            "weight": "70",
-            "description": "Friendly and playful",
-            "rabies_vaccination": "2023-12-01",
-            "employee_notes": "Likes to play with toys",
-            "customer_notes": "Likes to be petted",
-            "special_handling": "False",
-            "coat_type": "SmoothShort",
-            "owner": f'{self.customer.id}',
+            "breed": "Golden Retriever"
         }
         # Create a dog
-        response = self.client.post('/api/dog', data, format='json', **self.headers)
+        response = self.client.post('/api/dog', data, format='json', content_type="application/json", **self.headers)
         self.assertEqual(response.status_code, 201)
+
 

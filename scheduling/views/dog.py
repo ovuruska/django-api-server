@@ -11,7 +11,7 @@ from scheduling.serializers.Dog import DogSerializer, DogCreateSerializer
 class PetCreateAPIView(generics.CreateAPIView):
     serializer_class = DogCreateSerializer
 
-    def create(self, request, *args, **kwargs):
+    def post(self, request, *args, **kwargs):
         # retrieve authenticated customer from request.user and set as owner
         customer = Customer.objects.get(user=request.user)
         request.data["owner"] = customer.id

@@ -46,7 +46,7 @@ class TestAppointmentAvailableHoursAPIView(AuthTestCase):
     def test_appointment_available_hours_view(self):
         # Retrieve
         response = self.client.get(
-            f'/branch/{self.branch.id}/free_hours',
+            f'/api/branch/{self.branch.id}/free_hours',
             **self.headers
         )
         self.assertEqual(response.status_code, 200)

@@ -44,5 +44,5 @@ class AuthTestCase(TestCase):
 class TestAppointmentFilterAPIView(AuthTestCase):
 
     def test_appointment_filter_view(self):
-        response = self.client.get('/api/scheduling/appointments?start__lt=2025-12-28', **self.headers)
+        response = self.client.get('/api/schedule/appointments?start__gt=2025-12-28', **self.headers)
         self.assertEqual(response.status_code, 200)
