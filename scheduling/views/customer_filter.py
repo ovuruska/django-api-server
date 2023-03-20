@@ -5,6 +5,7 @@ from rest_framework.generics import ListAPIView
 
 from common.search_pagination import SearchPagination
 from scheduling.serializers.Customer import CustomerSerializer
+from scheduling.serializers.Dog import DogSerializer
 
 
 class CustomerFilterAPIView(ListAPIView):
@@ -33,3 +34,14 @@ class CustomerFilterAPIView2(CustomerFilterAPIView):
 
 		return queryset
 
+class CustomerPetsListAPIView(ListAPIView):
+	Pet = apps.get_model('scheduling', 'Dog')
+	serializer_class = DogSerializer
+	filter_backends = [DjangoFilterBackend]
+
+	def get_queryset(self):
+		# Get query params
+		pk = self.kwargs['pk']
+
+		queryset = self.Pet.objects.all().filter(owner=pk)
+		return queryset

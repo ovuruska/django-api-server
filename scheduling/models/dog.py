@@ -6,9 +6,9 @@ from common import BaseModel
 
 class Dog(BaseModel):
 	class CoatType(models.TextChoices):
-		SMOOTH_SHORT = 'SmoothShort'
-		SMOOTH_LONG = 'SmoothLong'
-		DOUBLE_COATED = 'DoubleCoated'
+		SMOOTH_SHORT = 'Smooth - Short'
+		SMOOTH_LONG = 'Smooth - Long'
+		DOUBLE_COATED = 'Double - Coated'
 		DOODLES = 'Doodles'
 
 

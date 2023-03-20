@@ -11,18 +11,6 @@ from ..serializers.Customer import CustomerSerializer, CustomerDetailsSerializer
 from ..serializers.Dog import DogSerializer
 
 
-class CustomerDogsRetrieveAPIView(ListAPIView):
-	serializer_class = CustomerSerializer
-
-	def get_queryset(self):
-		uid = self.kwargs['uid']
-		return Customer.objects.filter(uid=uid)
-
-	def list(self, request, *args, **kwargs):
-		queryset = self.get_queryset()
-		dogs = Dog.objects.filter(owner=queryset[0].id)
-		serializer = DogSerializer(dogs, many=True)
-		return Response(serializer.data)
 
 
 class CustomerDetailsAPIView(RetrieveAPIView):

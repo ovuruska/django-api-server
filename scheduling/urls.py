@@ -23,7 +23,6 @@ services = [
 dogs = [
 	path('dog', views.PetCreateAPIView.as_view(), name="dog_crud"),
 	path('dog/<pk>', views.PetModifyRetrieveDestroyAPIView.as_view(), name="dog_retrieve"),
-	path('dogs/<uid>', views.CustomerDogsRetrieveAPIView.as_view(), name="get_customer_dogs"),
 	path('pets', views.PetFilterView.as_view(), name="dog_filter"),
 ]
 
@@ -76,6 +75,7 @@ customers = [
 	path('scheduling/customers', views.CustomerFilterAPIView.as_view(), name="customer_filter"),
 	path('v2/scheduling/customers', views.CustomerFilterAPIView2.as_view(), name="customer_filter_v2"),
 	path('me', views.GetCustomerFromTokenAPIView.as_view(), name="get-customer-from-token"),
+	path('scheduling/customer/<pk>/pets', views.CustomerPetsListAPIView.as_view(), name="get_customer_dogs"),
 ]
 
 branches = [
@@ -86,6 +86,8 @@ urlpatterns = [
 	path('branch/<pk>', scheduling.views.branch.BranchRetrieveModifyAPIView.as_view(), name="admin_branch_modify"),
 	path('branch/<pk>/free_hours', views.AppointmentAvailableHoursView.as_view(), name="get_available_hours")
 ]
+
+
 
 signed_url = [
 	path('confirmation/<token>/approve', views.SignedUrlApproveAPIView.as_view(), name='signed_url_approve'),
