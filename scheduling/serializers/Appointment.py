@@ -71,3 +71,9 @@ class AppointmentCustomerRetrieveSerializer(serializers.ModelSerializer):
 		model = Appointment
 		fields = ['id', 'start', 'dog', 'end', 'customer_notes', 'services', 'products', 'tip', 'cost', 'branch',
 		          'customer', 'employee', 'status']
+
+
+class GroomerEmptySlotSerializer(serializers.ModelSerializer):
+	class Meta:
+		model = Appointment
+		fields = ['start', 'end']

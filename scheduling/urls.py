@@ -27,7 +27,7 @@ dogs = [
 ]
 
 appointments = [
-	path('appointment', views.AppointmentCreateAPIView.as_view(), name='appointment'),
+	path('appointment', views.AppointmentCreateAPIView.as_view(), name='appointment_create'),
 	path('appointment/<pk>', views.AppointmentCustomerRetrieve.as_view(), name='appointment_modify'),
 ]
 
@@ -36,10 +36,12 @@ scheduling_appointments = [
 	path('schedule/appointments/<pk>', views.AppointmentEmployeeRetrieveAPIView.as_view(), name='appointment'),
 	path('customer/appointments', views.CustomerGetAppointmentsAPIView.as_view(), name='customer-appointments'),
 	path('schedule/appointments', views.AppointmentFilterListView.as_view(), name='appointment_filter_and_list'),
-	path('v2/schedule/appointments', views.AppointmentFilterListViewV2.as_view(), name='appointment_filter_and_list_v2'),
-	path('v2.1/schedule/appointments', views.AppointmentFilterListViewV2_1.as_view(), name='appointment_filter_and_list_v2_1'),
+	path('v2/schedule/appointments', views.AppointmentFilterListViewV2.as_view(),
+	     name='appointment_filter_and_list_v2'),
+	path('v2.1/schedule/appointments', views.AppointmentFilterListViewV2_1.as_view(),
+	     name='appointment_filter_and_list_v2_1'),
 	path('schedule/appointment', views.EmployeeCreateAppointmentView.as_view(),
-	     name='appointment_created_by_employee'),
+	     name='appointment_employee_create_api_view'),
 
 ]
 
@@ -50,13 +52,18 @@ auth = [
 
 ]
 
+appointment_slots = [
+	path('schedule/slots', views.EmployeeFreeTimesView.as_view(), name='appointment_slot_filter_and_list'),
+]
+
 branch_working_hour = [
 	path('scheduling/hours/branch/<pk>', views.BranchWorkingHourView.as_view(), name='scheduling-hours-create'),
 ]
 
 employee_working_hour = [
 	path('scheduling/hours/employee', views.EmployeeWorkingHourCreateAPIView.as_view(), name='scheduling-hours-create'),
-	path('scheduling/hours/employee/<pk>', views.EmployeeWorkingHourRetrieveAPIView.as_view(), name='scheduling-hours-list'),
+	path('scheduling/hours/employee/<pk>', views.EmployeeWorkingHourRetrieveAPIView.as_view(),
+	     name='scheduling-hours-list'),
 ]
 
 employees = [
@@ -87,8 +94,6 @@ urlpatterns = [
 	path('branch/<pk>/free_hours', views.AppointmentAvailableHoursView.as_view(), name="get_available_hours")
 ]
 
-
-
 signed_url = [
 	path('confirmation/<token>/approve', views.SignedUrlApproveAPIView.as_view(), name='signed_url_approve'),
 	path('confirmation/<token>/cancel', views.SignedUrlCancelAPIView.as_view(), name='signed_url_cancel'),
@@ -96,4 +101,4 @@ signed_url = [
 ]
 
 urlpatterns = urlpatterns + branch_working_hour + products + services + dogs + appointments + employees \
-              + employee_working_hour + scheduling_appointments + payrolls + signed_url + branches + customers + auth + branch_employees
+              + employee_working_hour + scheduling_appointments + payrolls + signed_url + branches + customers + auth + branch_employees + appointment_slots

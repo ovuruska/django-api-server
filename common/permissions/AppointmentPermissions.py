@@ -8,7 +8,7 @@ class CanCreateAppointment(BasePermission):
 
     @extract_role
     def has_permission(self, request, view):
-        return request.user.role >= Roles.CUSTOMER # >= olmayacak mı?
+        return request.user.role >= Roles.CUSTOMER
 
 
 class CanUpdateAppointment(BasePermission):

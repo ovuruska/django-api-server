@@ -6,6 +6,7 @@ from dateutil.relativedelta import relativedelta
 
 import pytz
 from django.contrib.auth.models import User
+from django.utils import timezone
 from faker import Faker
 from tqdm import tqdm, trange
 
@@ -216,7 +217,7 @@ class Mock:
             # Generate a random start time for an hour between 9am and 5pm
             for date in date_list:
                 hour = random.randint(8, 19)
-                start_time = datetime.datetime(year=date.year, month=date.month, day=date.day, hour=hour, minute=0)
+                start_time = timezone.make_aware(datetime.datetime(year=date.year, month=date.month, day=date.day, hour=hour, minute=0))
                 # Calculate the end time by adding 8 hours to the start time
                 end_time = start_time + datetime.timedelta(hours=random.randint(1, 8))
 

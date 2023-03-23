@@ -23,9 +23,9 @@ class Roles:
 		if role == Roles.CUSTOMER:
 			return "Customer"
 		elif role == Roles.EMPLOYEE_WE_WASH:
-			return "Employee We Wash"
+			return "We Wash"
 		elif role == Roles.EMPLOYEE_FULL_GROOMING:
-			return "Employee Full Grooming"
+			return "Full Grooming"
 		elif role == Roles.ACCOUNTANT:
 			return "Accountant"
 		elif role == Roles.MANAGER:
@@ -34,3 +34,21 @@ class Roles:
 			return "Admin"
 		else:
 			return "Anonymous"
+
+
+	@staticmethod
+	def get_role_choices(role:str):
+		if role == "Customer":
+			return Roles.CUSTOMER
+		elif role == "We Wash":
+			return Roles.EMPLOYEE_WE_WASH
+		elif role == "Full Grooming":
+			return Roles.EMPLOYEE_FULL_GROOMING
+		elif role == "Accountant":
+			return Roles.ACCOUNTANT
+		elif role == "Manager":
+			return Roles.MANAGER
+		elif role == "Admin":
+			return Roles.ADMIN
+		else:
+			return Roles.ANONYMOUS
