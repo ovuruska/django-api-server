@@ -1,5 +1,6 @@
 from .appointment import *
 from .appointment_filter import *
+from .appointment_rebook import *
 from .auth import *
 from .branch import *
 from .customer import *

@@ -38,7 +38,7 @@ scheduling_appointments = [
 	path('schedule/appointments', views.AppointmentFilterListView.as_view(), name='appointment_filter_and_list'),
 	path('v2/schedule/appointments', views.AppointmentFilterListViewV2.as_view(), name='appointment_filter_and_list_v2'),
 	path('v2.1/schedule/appointments', views.AppointmentFilterListViewV2_1.as_view(), name='appointment_filter_and_list_v2_1'),
-	path('schedule/appointment', views.AppointmentEmployeeCreateAPIView.as_view(),
+	path('schedule/appointment', views.EmployeeCreateAppointmentView.as_view(),
 	     name='appointment_created_by_employee'),
 
 ]
