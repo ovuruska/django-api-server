@@ -12,6 +12,7 @@ products = [
 
 branch_employees = [
 	path('branch/<pk>/employees', views.BranchEmployeesAPIView.as_view(), name="branch_employees"),
+	path('branch/free_times', views.EmployeeFreeTimesView.as_view(), name="employee_free_times"),
 ]
 
 services = [
