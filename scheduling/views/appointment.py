@@ -6,7 +6,7 @@ from django.apps import apps
 from django.contrib.auth.mixins import PermissionRequiredMixin
 from django.core.signing import Signer
 from rest_framework import generics
-from rest_framework.permissions import AllowAny
+from rest_framework.permissions import AllowAny, IsAuthenticated
 from rest_framework.response import Response
 
 from common.pagination import pagination
@@ -247,11 +247,10 @@ class CustomerGetAppointmentsAPIView(generics.ListAPIView):
         return appointments
 
 
-class EmployeeFreeTimesView(generics.CreateAPIView):
+class EmployeeFreeTimesAPIView(generics.CreateAPIView, PermissionRequiredMixin):
     permission_classes = [AllowAny]
 
     def post(self, request, *args, **kwargs):
-        branches = request.data.get("branches")
         branches = request.data.get("branches")
         date_str = request.data.get("date")
         date = datetime.strptime(date_str, "%Y-%m-%dT%H:%M:%S.%f%z")
@@ -261,27 +260,31 @@ class EmployeeFreeTimesView(generics.CreateAPIView):
             employees = Employee.objects.filter(branch=branch)
             employee_free_times = {}
             for employee in employees:
-                working_hours = EmployeeWorkingHour.objects.filter(employee=employee, start=date.date).first()
+                working_hours = EmployeeWorkingHour.objects.filter(
+                    employee=employee,
+                    start__date=date.date()
+                ).first()
                 if not working_hours:
                     continue
 
-                start_time = working_hours.start
-                end_time = working_hours.end
+                start_time = working_hours.start.time()
+                end_time = working_hours.end.time()
 
                 employee_appointments = Appointment.objects.filter(
-                    employee=employee, start__date=date, end__date=date
+                    employee=employee, start__date=date.date()
                 ).order_by("start")
-
+                free_times = []
                 for appointment in employee_appointments:
                     if start_time < appointment.start.time():
-                        free_time = {"start": start_time.isoformat(), "end": appointment.start.time().isoformat()}
-                        employee_free_times.setdefault(employee.id, []).append(free_time)
+                        free_time = {"start": start_time.strftime("%H:%M:%S"),
+                                     "end": appointment.start.time().strftime("%H:%M:%S")}
+                        free_times.append(free_time)
                     start_time = appointment.end.time()
 
                 if end_time > start_time:
-                    free_time = {"start": start_time.isoformat(), "end": end_time.isoformat()}
-                    employee_free_times.setdefault(employee.id, []).append(free_time)
-
+                    free_time = {"start": start_time.strftime("%H:%M:%S"), "end": end_time.strftime("%H:%M:%S")}
+                    free_times.append(free_time)
+                employee_free_times[employee.id] = free_times
             branch_free_times[branch] = employee_free_times
 
         return Response(branch_free_times)

@@ -12,7 +12,7 @@ products = [
 
 branch_employees = [
 	path('branch/<pk>/employees', views.BranchEmployeesAPIView.as_view(), name="branch_employees"),
-	path('branch/free_times', views.EmployeeFreeTimesView.as_view(), name="employee_free_times"),
+	path('schedule/slots', views.EmployeeFreeTimesAPIView.as_view(), name="employee_free_times"),
 ]
 
 services = [
@@ -42,7 +42,6 @@ scheduling_appointments = [
 	path('v2.1/schedule/appointments', views.AppointmentFilterListViewV2_1.as_view(), name='appointment_filter_and_list_v2_1'),
 	path('schedule/appointment', views.AppointmentEmployeeCreateAPIView.as_view(),
 	     name='appointment_employee_create_api_view'),
-
 ]
 
 auth = [
