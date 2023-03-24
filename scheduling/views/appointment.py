@@ -12,6 +12,7 @@ from rest_framework.response import Response
 from common.pagination import pagination
 from common.permissions.AppointmentPermissions import CanCreateAppointment, CanUpdateAppointment, \
     CanAppointmentEmployeeRetrieve
+from common.roles import Roles
 from common.save_transaction import save_transaction
 from ..models import Customer, Service, Product, EmployeeWorkingHour, Employee
 from ..selectors import get_last_appointment_by_same_customer
@@ -254,10 +255,17 @@ class EmployeeFreeTimesAPIView(generics.CreateAPIView, PermissionRequiredMixin):
         branches = request.data.get("branches")
         date_str = request.data.get("date")
         date = datetime.strptime(date_str, "%Y-%m-%dT%H:%M:%S.%f%z")
+        duration = request.data.get("duration")
+        service_type = request.data.get("service_type")
+        role = Roles.CUSTOMER
+        if service_type == "FULL GROOMING":
+            role = Roles.EMPLOYEE_FULL_GROOMING
+        elif service_type == "WEWASH":
+            role = Roles.EMPLOYEE_WE_WASH
 
         branch_free_times = {}
         for branch in branches:
-            employees = Employee.objects.filter(branch=branch)
+            employees = Employee.objects.filter(branch=branch, role=role)
             employee_free_times = {}
             for employee in employees:
                 working_hours = EmployeeWorkingHour.objects.filter(
@@ -276,14 +284,22 @@ class EmployeeFreeTimesAPIView(generics.CreateAPIView, PermissionRequiredMixin):
                 free_times = []
                 for appointment in employee_appointments:
                     if start_time < appointment.start.time():
-                        free_time = {"start": start_time.strftime("%H:%M:%S"),
-                                     "end": appointment.start.time().strftime("%H:%M:%S")}
-                        free_times.append(free_time)
+                        end_time = appointment.start.time()
+                        while start_time < end_time:
+                            time_slot = {"start": start_time.strftime("%H:%M:%S"),
+                                         "end": (start_time + datetime.datetime.timedelta(minutes=15)).strftime("%H:%M:%S")}
+                            print[time_slot["end"]]
+                            free_times.append(time_slot)
+                            start_time += datetime.datetime.timedelta(minutes=15)
                     start_time = appointment.end.time()
 
-                if end_time > start_time:
-                    free_time = {"start": start_time.strftime("%H:%M:%S"), "end": end_time.strftime("%H:%M:%S")}
-                    free_times.append(free_time)
+                # If there is any remaining free time after the last appointment
+                if start_time < end_time:
+                    while start_time < end_time:
+                        time_slot = {"start": start_time.strftime("%H:%M:%S"),
+                                     "end": (start_time + datetime.datetime.timedelta(minutes=15)).strftime("%H:%M:%S")}
+                        free_times.append(time_slot)
+                        start_time += datetime.datetime.timedelta(minutes=15)
                 employee_free_times[employee.id] = free_times
             branch_free_times[branch] = employee_free_times
 
