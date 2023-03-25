@@ -11,18 +11,6 @@ from ..serializers.Customer import CustomerSerializer, CustomerDetailsSerializer
 from ..serializers.Dog import DogSerializer
 
 
-class CustomerDogsRetrieveAPIView(ListAPIView):
-	serializer_class = CustomerSerializer
-
-	def get_queryset(self):
-		uid = self.kwargs['uid']
-		return Customer.objects.filter(uid=uid)
-
-	def list(self, request, *args, **kwargs):
-		queryset = self.get_queryset()
-		dogs = Dog.objects.filter(owner=queryset[0].id)
-		serializer = DogSerializer(dogs, many=True)
-		return Response(serializer.data)
 
 
 class CustomerDetailsAPIView(RetrieveAPIView):
@@ -30,15 +18,6 @@ class CustomerDetailsAPIView(RetrieveAPIView):
 	queryset = Customer.objects.all()
 
 
-class CustomerFilterAPIView(generics.ListAPIView):
-	serializer_class = CustomerSerializer
-	filter_backends = [DjangoFilterBackend]
-	filterset_fields = "__all__"
-
-	def get_queryset(self):
-		queryset = Customer.objects.all()
-		queryset = pagination(self.request, queryset)
-		return queryset
 
 class GetCustomerFromTokenAPIView(generics.ListAPIView):
 

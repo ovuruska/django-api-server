@@ -5,6 +5,7 @@ from dateutil.parser import parser
 from django.apps import apps
 from django.contrib.auth.mixins import PermissionRequiredMixin
 from django.core.signing import Signer
+from django.http import JsonResponse
 from rest_framework import generics
 from rest_framework.permissions import AllowAny, IsAuthenticated
 from rest_framework.response import Response
@@ -16,65 +17,61 @@ from common.roles import Roles
 from common.save_transaction import save_transaction
 from ..models import Customer, Service, Product, EmployeeWorkingHour, Employee
 from ..selectors import get_last_appointment_by_same_customer
+from ..selectors.appointment_slots import get_available_appointment_slots
 from ..serializers.Appointment import *
 from ..services import create_pet_with_name
 from ..services.customer import create_customer_with_name
 
 
 class AppointmentEmployeeCreateAPIView(generics.CreateAPIView, PermissionRequiredMixin):
-    permission_required = [CanCreateAppointment]
-    Customer = apps.get_model('scheduling', 'Customer')
-    Dog = apps.get_model('scheduling', 'Dog')
-    serializer_class = AppointmentEmployeeCreateSerializer
 
-    def post(self, request, *args, **kwargs):
-        customer_name = request.data.get("customer_name")
-        customer_email = request.data.get("customer_email", "")
-        customer_phone = request.data.get("customer_phone", "")
-        customer = create_customer_with_name(customer_name, email=customer_email, phone=customer_phone)
+	permission_required = [CanCreateAppointment]
+	Customer = apps.get_model('scheduling', 'Customer')
+	Dog = apps.get_model('scheduling', 'Dog')
+	serializer_class = AppointmentEmployeeCreateSerializer
 
-        dog_name = request.data.get("dog_name")
-        dog_breed = request.data.get("dog_breed", "")
-        dog = create_pet_with_name(customer, dog_name, breed=dog_breed)
+	def post(self, request, *args, **kwargs):
+		customer_name = request.data.get("customer_name")
+		customer_email = request.data.get("customer_email", "")
+		customer_phone = request.data.get("customer_phone", "")
+		customer = create_customer_with_name(customer_name, email=customer_email, phone=customer_phone)
 
-        cost = Decimal('0.00')
-        products = request.data.get('products', [])
-        for product_id in products:
-            product = Product.objects.get(id=product_id)
-            cost += product.cost
+		dog_name = request.data.get("dog_name")
+		dog_breed = request.data.get("dog_breed", "")
+		dog = create_pet_with_name(customer, dog_name, breed=dog_breed)
 
-        services = request.data.get('services', [])
-        for service_id in services:
-            service = Service.objects.get(id=service_id)
-            cost += service.cost
+		cost = Decimal('0.00')
+		products = request.data.get('products', [])
+		for product_id in products:
+			product = Product.objects.get(id=product_id)
+			cost += product.cost
 
-        tip = Decimal(request.data.get('tip', 0))
-        cost += tip
+		services = request.data.get('services', [])
+		for service_id in services:
+			service = Service.objects.get(id=service_id)
+			cost += service.cost
 
-        # Allow mutations for request.data
-        try:
-            request.data._mutable = True
-        except AttributeError:
-            pass
+		tip = Decimal(request.data.get('tip', 0))
+		cost += tip
 
-        try:
+		# Allow mutations for request.data
+		try:
+			request.data._mutable = True
+		except AttributeError:
+			pass
 
-            appointment = Appointment(
-                start=request.data["start"],
-                end=request.data["end"],
-                customer=customer,
-                dog=dog,
-                employee_id=request.data["employee_id"],
-                branch_id=request.data["branch_id"],
-                status=Appointment.Status.CONFIRMED,
-                cost=cost
-            )
-            appointment.save()
-            # Return the appointment as JSON
-            serializer = AppointmentEmployeeSerializer(appointment)
-            return Response(serializer.data)
-        except KeyError as e:
-            return Response({"error": str(e)}, status=400)
+		try:
+
+			appointment = Appointment(start=request.data["start"], end=request.data["end"], customer=customer, dog=dog,
+				employee_id=request.data["employee_id"], branch_id=request.data["branch_id"],
+				status=Appointment.Status.CONFIRMED, cost=cost)
+			appointment.save()
+			# Return the appointment as JSON
+			serializer = AppointmentEmployeeSerializer(appointment)
+			return Response(serializer.data)
+		except KeyError as e:
+			return Response({"error": str(e)}, status=400)
+
 
 
 class AppointmentCreateAPIView(generics.CreateAPIView, PermissionRequiredMixin):
@@ -248,6 +245,7 @@ class CustomerGetAppointmentsAPIView(generics.ListAPIView):
         return appointments
 
 
+
 class EmployeeFreeTimesAPIView(generics.CreateAPIView, PermissionRequiredMixin):
     permission_classes = [AllowAny]
 
@@ -304,3 +302,4 @@ class EmployeeFreeTimesAPIView(generics.CreateAPIView, PermissionRequiredMixin):
             branch_free_times[branch] = employee_free_times
 
         return Response(branch_free_times)
+
