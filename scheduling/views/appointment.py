@@ -1,10 +1,11 @@
-from datetime import datetime
+from datetime import datetime, timedelta,time
 from decimal import *
 
 from dateutil.parser import parser
 from django.apps import apps
 from django.contrib.auth.mixins import PermissionRequiredMixin
 from django.core.signing import Signer
+from django.db.models import Q
 from django.http import JsonResponse
 from rest_framework import generics
 from rest_framework.permissions import AllowAny, IsAuthenticated
@@ -15,7 +16,7 @@ from common.permissions.AppointmentPermissions import CanCreateAppointment, CanU
     CanAppointmentEmployeeRetrieve
 from common.roles import Roles
 from common.save_transaction import save_transaction
-from ..models import Customer, Service, Product, EmployeeWorkingHour, Employee
+from ..models import Customer, Service, Product, EmployeeWorkingHour, Employee, Branch
 from ..selectors import get_last_appointment_by_same_customer
 from ..selectors.appointment_slots import get_available_appointment_slots
 from ..serializers.Appointment import *
@@ -245,7 +246,6 @@ class CustomerGetAppointmentsAPIView(generics.ListAPIView):
         return appointments
 
 
-
 class EmployeeFreeTimesAPIView(generics.CreateAPIView, PermissionRequiredMixin):
     permission_classes = [AllowAny]
 
@@ -256,50 +256,84 @@ class EmployeeFreeTimesAPIView(generics.CreateAPIView, PermissionRequiredMixin):
         duration = request.data.get("duration")
         service_type = request.data.get("service_type")
         role = Roles.CUSTOMER
-        if service_type == "FULL GROOMING":
+
+        if service_type == "Full Grooming":
             role = Roles.EMPLOYEE_FULL_GROOMING
-        elif service_type == "WEWASH":
+        elif service_type == "We Wash":
             role = Roles.EMPLOYEE_WE_WASH
 
-        branch_free_times = {}
-        for branch in branches:
-            employees = Employee.objects.filter(branch=branch, role=role)
-            employee_free_times = {}
-            for employee in employees:
-                working_hours = EmployeeWorkingHour.objects.filter(
-                    employee=employee,
-                    start__date=date.date()
-                ).first()
-                if not working_hours:
-                    continue
+        if not branches is False :
+            branches = Branch.objects.all()
+        else:
+            temp = []
+            for branch in branches:
+                temp.append(Branch.objects.get(id=branch))
+            branches = temp
 
-                start_time = working_hours.start.time()
-                end_time = working_hours.end.time()
+        free_times = []
+        slot_num = 40 #it can be changed after. This number will determine the number of free times that will be displayed
+        while len(free_times) != slot_num:
+            for branch in branches:
+                employees = request.data.get("employees")
+                if employees:
+                    temp = []
+                    for employee in employees:
+                        temp.append(Employee.objects.get(id=employee))
+                    employees = temp
+                else:
+                    employees = Employee.objects.filter(branch=branch, role=role)
 
-                employee_appointments = Appointment.objects.filter(
-                    employee=employee, start__date=date.date()
-                ).order_by("start")
-                free_times = []
-                for appointment in employee_appointments:
-                    if start_time < appointment.start.time():
-                        end_time = appointment.start.time()
+                for employee in employees:
+                    working_hours = EmployeeWorkingHour.objects.filter(
+                        employee=employee,
+                        start__date=date.date()
+                    ).first()
+                    if not working_hours:
+                        continue
+
+                    start_time = datetime.combine(date.date(), working_hours.start.time())
+                    end_time = datetime.combine(date.date(), working_hours.end.time())
+
+                    employee_appointments = Appointment.objects.filter(
+                        employee=employee, start__date=date.date()
+                    ).order_by("start")
+                    for appointment in employee_appointments:
+                        if start_time.time() < appointment.start.time():
+                            end_time = datetime.combine(date.date(), appointment.start.time())
+                            while start_time < end_time:
+                                time_slot = {"branch": BranchSerializer(branch).data,
+                                             "employee": EmployeeSerializer(employee).data,
+                                             "start": start_time.strftime("%H:%M:%S"),
+                                             "end": (start_time + timedelta(minutes=duration)).strftime("%H:%M:%S"),
+                                             "date": date
+                                             }
+                                free_times.append(time_slot)
+                                if len(free_times) == slot_num:
+                                    return Response(free_times)
+                                start_time += timedelta(minutes=duration)
+                        start_time = datetime.combine(date.date(), appointment.end.time())
+
+                    # If there is any remaining free time after the last appointment
+                    if start_time.time() < end_time.time():
                         while start_time < end_time:
-                            time_slot = {"start": start_time.strftime("%H:%M:%S"),
-                                         "end": (start_time + datetime.datetime.timedelta(minutes=15)).strftime("%H:%M:%S")}
-                            print[time_slot["end"]]
+                            time_slot = {"branch": BranchSerializer(branch).data,
+                                         "employee": EmployeeSerializer(employee).data,
+                                         "start": start_time.strftime("%H:%M:%S"),
+                                         "end": (start_time + timedelta(minutes=duration)).strftime("%H:%M:%S"),
+                                         "date": date
+                                         }
                             free_times.append(time_slot)
-                            start_time += datetime.datetime.timedelta(minutes=15)
-                    start_time = appointment.end.time()
+                            if len(free_times) == slot_num:
+                                return Response(free_times)
+                            start_time += timedelta(minutes=duration)
+            new_date = date + timedelta(days=1)
+            date = new_date  # assign the new datetime object back to date
 
-                # If there is any remaining free time after the last appointment
-                if start_time < end_time:
-                    while start_time < end_time:
-                        time_slot = {"start": start_time.strftime("%H:%M:%S"),
-                                     "end": (start_time + datetime.datetime.timedelta(minutes=15)).strftime("%H:%M:%S")}
-                        free_times.append(time_slot)
-                        start_time += datetime.datetime.timedelta(minutes=15)
-                employee_free_times[employee.id] = free_times
-            branch_free_times[branch] = employee_free_times
+        return Response(free_times)
 
-        return Response(branch_free_times)
+
+
+
+
+
 
