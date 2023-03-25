@@ -53,9 +53,6 @@ auth = [
 
 ]
 
-appointment_slots = [
-	path('schedule/slots', views.EmployeeFreeTimesView.as_view(), name='appointment_slot_filter_and_list'),
-]
 
 branch_working_hour = [
 	path('scheduling/hours/branch/<pk>', views.BranchWorkingHourView.as_view(), name='scheduling-hours-create'),
@@ -102,4 +99,4 @@ signed_url = [
 ]
 
 urlpatterns = urlpatterns + branch_working_hour + products + services + dogs + appointments + employees \
-              + employee_working_hour + scheduling_appointments + payrolls + signed_url + branches + customers + auth + branch_employees + appointment_slots
+              + employee_working_hour + scheduling_appointments + payrolls + signed_url + branches + customers + auth + branch_employees

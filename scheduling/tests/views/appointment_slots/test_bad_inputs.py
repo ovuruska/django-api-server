@@ -95,6 +95,9 @@ class AppointmentSlotTestBaseCase(CustomerAuthTestCase):
 
 
 	def test_previous_time(self):
+
+		# Now or newer :)
+
 		payload = {
 			"employees":[],
 			"branches":[],
