@@ -103,6 +103,4 @@ class AppointmentSlotTestBaseCase(CustomerAuthTestCase):
 			"start_date":self.format_time(datetime.datetime(0,0, 0, 0, 0, 0, 0))
 		}
 		response = self.client.post(self.url, **self.customer_headers, data=payload, format='json')
-		self.assertEqual(response.status_code, 200)
-		#
-		self.assertEqual(len(response.data), 0)
+		self.assertEqual(response.status_code, 400)
