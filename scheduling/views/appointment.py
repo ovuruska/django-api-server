@@ -25,7 +25,6 @@ from ..services.customer import create_customer_with_name
 
 
 class AppointmentEmployeeCreateAPIView(generics.CreateAPIView, PermissionRequiredMixin):
-
 	permission_required = [CanCreateAppointment]
 	Customer = apps.get_model('scheduling', 'Customer')
 	Dog = apps.get_model('scheduling', 'Dog')
@@ -262,27 +261,24 @@ class EmployeeFreeTimesAPIView(generics.CreateAPIView, PermissionRequiredMixin):
         elif service_type == "We Wash":
             role = Roles.EMPLOYEE_WE_WASH
 
-        if not branches is False :
+        if not branches:
             branches = Branch.objects.all()
         else:
-            temp = []
-            for branch in branches:
-                temp.append(Branch.objects.get(id=branch))
-            branches = temp
+            branches = Branch.objects.filter(id__in=branches)
+
+        employees_param = request.data.get("employees")
+        employees = []
+        if employees_param:
+            # retrieve employees based on the provided employee IDs
+            employees = Employee.objects.filter(id__in=employees_param, role=role)
+        else:
+            # retrieve all employees for the specified branches
+            employees = Employee.objects.filter(branch__in=branches, role=role)
 
         free_times = []
-        slot_num = 40 #it can be changed after. This number will determine the number of free times that will be displayed
+        slot_num = 40  # it can be changed after. This number will determine the number of free times that will be displayed
         while len(free_times) != slot_num:
             for branch in branches:
-                employees = request.data.get("employees")
-                if employees:
-                    temp = []
-                    for employee in employees:
-                        temp.append(Employee.objects.get(id=employee))
-                    employees = temp
-                else:
-                    employees = Employee.objects.filter(branch=branch, role=role)
-
                 for employee in employees:
                     working_hours = EmployeeWorkingHour.objects.filter(
                         employee=employee,
