@@ -251,7 +251,7 @@ class EmployeeFreeTimesAPIView(generics.CreateAPIView, PermissionRequiredMixin):
     def post(self, request, *args, **kwargs):
         branches = request.data.get("branches")
         date_str = request.data.get("date")
-        date = datetime.strptime(date_str, "%Y-%m-%dT%H:%M:%S.%f%z")
+        date = datetime.strptime(date_str, "%Y-%m-%d")
         duration = request.data.get("duration")
         service_type = request.data.get("service_type")
         role = Roles.CUSTOMER
@@ -275,6 +275,7 @@ class EmployeeFreeTimesAPIView(generics.CreateAPIView, PermissionRequiredMixin):
             # retrieve all employees for the specified branches
             employees = Employee.objects.filter(branch__in=branches, role=role)
 
+
         free_times = []
         slot_num = 40  # it can be changed after. This number will determine the number of free times that will be displayed
         while len(free_times) != slot_num:
@@ -282,7 +283,8 @@ class EmployeeFreeTimesAPIView(generics.CreateAPIView, PermissionRequiredMixin):
                 for employee in employees:
                     working_hours = EmployeeWorkingHour.objects.filter(
                         employee=employee,
-                        start__date=date.date()
+                        week_day = date.date().day,
+                        branch=branch
                     ).first()
                     if not working_hours:
                         continue

@@ -8,7 +8,7 @@ from scheduling.models import Branch, Employee, EmployeeWorkingHour
 from scheduling.tests.views.appointment_slots.scenario import ScenarioTestCase
 
 
-class AppointmentSlotTestBaseCase(ScenarioTestCase):
+class AppointmentSlotTestCase2(ScenarioTestCase):
 	url = reverse("employee_free_times")
 
 	def check(self,employees,item,duration ):
@@ -27,7 +27,7 @@ class AppointmentSlotTestBaseCase(ScenarioTestCase):
 			"branches": [],
 			"duration": duration,
 			"service_type": "Full Grooming",
-			"start_date": self.get_now()
+			"date": self.get_now()
 		}
 		response = self.client.post(self.url, **self.customer_headers, data=payload, format='json')
 		self.assertEqual(response.status_code, 200)
@@ -48,7 +48,7 @@ class AppointmentSlotTestBaseCase(ScenarioTestCase):
 			"branches": [],
 			"duration": duration,
 			"service_type": "We Wash",
-			"start_date": self.get_now()
+			"date": self.get_now()
 		}
 		response = self.client.post(self.url, **self.customer_headers, data=payload, format='json')
 		self.assertEqual(response.status_code, 200)

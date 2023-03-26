@@ -221,8 +221,6 @@ class Mock:
                 # Calculate the end time by adding 8 hours to the start time
                 end_time = start_time + datetime.timedelta(hours=random.randint(1, 8))
 
-                weekday = start_time.weekday()
-                branch = branches[random.randint(0, self.number_of_branches - 1)]
                 weekday = date.weekday()
                 branch = branches[fake.random_int(min=0, max=self.number_of_branches - 1)]
                 employee_wh = models.EmployeeWorkingHour(

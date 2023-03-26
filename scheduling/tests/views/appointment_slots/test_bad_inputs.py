@@ -7,7 +7,7 @@ from common.roles import Roles
 from scheduling.models import Branch, Employee
 
 
-class AppointmentSlotTestBaseCase(CustomerAuthTestCase):
+class AppointmentSlotTestBadInputsCase(CustomerAuthTestCase):
 
 	url = reverse("employee_free_times")
 
@@ -72,7 +72,7 @@ class AppointmentSlotTestBaseCase(CustomerAuthTestCase):
 			"branches":[],
 			"duration":60,
 			"service_type":"We Wash",
-			"start_date":self.get_now()
+			"date":self.get_now()
 		}
 		response = self.client.post(self.url, **self.customer_headers, data=payload, format='json')
 		self.assertEqual(response.status_code, 200)
@@ -86,7 +86,7 @@ class AppointmentSlotTestBaseCase(CustomerAuthTestCase):
 			"branches":[],
 			"duration":60,
 			"service_type":"Full Grooming",
-			"start_date":self.get_now()
+			"date":self.get_now()
 		}
 		response = self.client.post(self.url, **self.customer_headers, data=payload, format='json')
 		self.assertEqual(response.status_code, 200)
@@ -103,7 +103,7 @@ class AppointmentSlotTestBaseCase(CustomerAuthTestCase):
 			"branches":[],
 			"duration":60,
 			"service_type":"Full Grooming",
-			"start_date":self.format_time(datetime.datetime(0,0, 0, 0, 0, 0, 0))
+			"date":self.format_time(datetime.datetime(1,0, 0, 0, 0, 0, 0))
 		}
 		response = self.client.post(self.url, **self.customer_headers, data=payload, format='json')
 		self.assertEqual(response.status_code, 400)

@@ -22,5 +22,5 @@ class EmployeeWorkingHour(models.Model):
 	start = models.DateTimeField(null=True)
 	end = models.DateTimeField(null=True)
 	class Meta:
-		unique_together = ('employee', 'start')
+		unique_together = ('employee', 'week_day')
 		ordering = ('-start',)

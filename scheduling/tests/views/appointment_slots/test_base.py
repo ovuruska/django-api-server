@@ -18,7 +18,7 @@ class AppointmentSlotTestBaseCase(ScenarioTestCase):
 			"branches":[],
 			"duration":60,
 			"service_type":"Full Grooming",
-			"start_date":self.format_time(datetime.datetime(0,0, 0, 0, 0, 0, 0))
+			"date":self.get_now()
 		}
 		response = self.client.post(self.url, **self.customer_headers, data=payload, format='json')
 		self.assertEqual(response.status_code, 200)
@@ -34,7 +34,7 @@ class AppointmentSlotTestBaseCase(ScenarioTestCase):
 			"branches":[],
 			"duration":60,
 			"service_type":"Full Grooming",
-			"start_date":self.format_time(datetime.datetime(0,0, 0, 0, 0, 0, 0))
+			"date":self.get_now()
 		}
 		response = self.client.post(self.url, **self.customer_headers, data=payload, format='json')
 		self.assertEqual(response.status_code, 200)
