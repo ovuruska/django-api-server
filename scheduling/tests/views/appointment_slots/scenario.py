@@ -41,8 +41,8 @@ class ScenarioTestCase(CustomerAuthTestCase):
             branch=self.branch_1,
             role=Roles.EMPLOYEE_FULL_GROOMING,
         )
-        start = datetime.datetime.now().replace(hour=8)
-        end = start.replace(20)
+        start = datetime.datetime.now().replace(hour=8,minute =0,second=0,microsecond=0)
+        end = start.replace(hour = 20)
         
         for i in range(5):
             
@@ -124,11 +124,11 @@ class ScenarioTestCase(CustomerAuthTestCase):
                 dog=self.pet,
                 start=datetime.datetime.combine(
                     datetime.date.today() + datetime.timedelta(days=ind),
-                    datetime.time(8, 0, 0)
+                    datetime.time(10, 0, 0)
                 ),
                 end=datetime.datetime.combine(
                     datetime.date.today() + datetime.timedelta(days=ind),
-                    datetime.time(16, 0, 0)
+                    datetime.time(12, 0, 0)
                 ),
                 appointment_type="Full Grooming",
             )

@@ -52,7 +52,6 @@ class BaseTestCase(APITestCase):
 			cost=Decimal('25.00'),
 			duration=fake.time_delta()
 		)
-		self.url = reverse('appointment_employee_create_api_view')  # Replace with the actual URL name
 
 		self.client.force_authenticate(user=self.user)
 

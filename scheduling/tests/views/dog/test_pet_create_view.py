@@ -1,6 +1,5 @@
 from django.test import TestCase
 from django.contrib.auth.models import User
-from docutils.nodes import status
 from knox.models import AuthToken
 
 from common.roles import Roles

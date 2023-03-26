@@ -11,7 +11,7 @@ from scheduling.tests.views.appointment.base import BaseTestCase
 
 
 class AppointmentEmployeeCreateAPIViewTestCase(BaseTestCase):
-
+	url = reverse('appointment_employee_create_api_view')
 	def test_create_appointment(self):
 		data = {
 			"customer_name": "John Doe",
@@ -27,7 +27,8 @@ class AppointmentEmployeeCreateAPIViewTestCase(BaseTestCase):
 			"services": [self.service.id],
 			"tip": "5.00",
 		}
-		response = self.client.post(self.url, data, format='json')
+		print(self.url)
+		response = self.client.post(self.url, data, format='json', follow=True)
 		self.assertEqual(response.status_code, status.HTTP_200_OK)
 		self.assertEqual(Appointment.objects.count(), 1)
 		appointment = Appointment.objects.first()
