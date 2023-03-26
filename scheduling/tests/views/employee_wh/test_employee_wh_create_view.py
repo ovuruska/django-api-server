@@ -36,10 +36,11 @@ class AuthTestCase(TestCase):
 class TestEmployeeWHCreateView(AuthTestCase):
     def test_employee_wh_create_view(self):
         data = {
+	        'date': '2023-03-13',
             "branch": f"{self.branch.id}",
             "employee": f"{self.employee.id}",
-            "start": "2023-03-13T17:59:53.160831Z",
-            "end": "2023-03-13T18:59:53.160831Z"
+            "start": "2023-03-13T17:00",
+            "end": "2023-03-13T18:00"
         }
-        response = self.client.post('/api/scheduling/hours/employee',data, format='json', **self.headers)
+        response = self.client.post(f"/api/scheduling/hours/employee/{self.employee.id}",data, format='json', **self.headers)
         self.assertEqual(response.status_code, 201)

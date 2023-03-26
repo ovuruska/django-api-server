@@ -61,19 +61,4 @@ class AppointmentFilterListViewV2_1(AppointmentFilterListView):
 	pagination_class = LimitOffsetPagination
 
 
-class AppointmentAvailableHoursView(generics.RetrieveAPIView, PermissionRequiredMixin):
-	permission_classes = [CanViewAllAppointments]
-	queryset = Appointment.objects.all()
-	serializer_class = FreeHoursSerializer
-
-	def get(self, request, *args, **kwargs):
-		branch_id = self.kwargs.get("pk")
-		# Check if branch exists
-		_ = Branch.objects.get(id=branch_id)
-
-		date = request.GET.get("date")
-
-		free_hours = get_free_hours(branch_id, date)
-		return Response(data={"free_hours": free_hours}, status=200, headers={"Content-Type": "application/json"})
-
 

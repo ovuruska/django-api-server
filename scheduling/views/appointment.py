@@ -251,7 +251,7 @@ class EmployeeFreeTimesAPIView(generics.CreateAPIView, PermissionRequiredMixin):
 		try:
 			date = datetime.strptime(date_str, "%Y-%m-%d")
 
-			if date < datetime.now():
+			if date < datetime.now() - timedelta(days=1):
 				return Response({"error": "Cannot schedule an appointment in the past"}, status=400,
 				                content_type="application/json")
 		except ValueError:
@@ -302,8 +302,8 @@ class EmployeeFreeTimesAPIView(generics.CreateAPIView, PermissionRequiredMixin):
 					if not working_hours:
 						continue
 
-					start_time = datetime.combine(date.date(), working_hours.start.time())
-					end_time = datetime.combine(date.date(), working_hours.end.time())
+					start_time = datetime.combine(date.date(), working_hours.start)
+					end_time = datetime.combine(date.date(), working_hours.end)
 
 					employee_appointments = Appointment.objects.filter(
 						employee=employee, start__date=date.date()
