@@ -24,17 +24,32 @@ class EmployeeWorkingHourRetrieveAPIView(generics.RetrieveAPIView, generics.Crea
 			end_date = datetime.strptime(end_date, "%Y-%m-%d")
 			current = start_date
 
-			while current <= end_date:
+			while current < end_date:
 				week_day = current.weekday()
-				data = EmployeeWorkingHour.objects.get(
-					employee_id=employee_id,
-					week_day=week_day,
-				)
+				try:
+					data = queryset.get(week_day=week_day)
+					data = {
+						"employee": data.employee_id,
+						"week_day": data.week_day,
+						"start": data.start,
+						"end": data.end,
+						"branch": data.branch_id,
+
+					}
+				except EmployeeWorkingHour.DoesNotExist:
+					data = {
+							"employee": employee_id,
+							"week_day": week_day,
+							"start": None,
+							"end": None,
+							"branch": None,
+						}
+				data['date'] = current.strftime("%Y-%m-%d")
+
 				response.append(data)
 				current += timedelta(days=1)
 
-		serializer = self.serializer_class(response, many=True)
-		return Response(serializer.data, status=status.HTTP_200_OK)
+		return Response(response, status=status.HTTP_200_OK)
 
 	def post(self, request, *args, **kwargs):
 		data = request.data or []
@@ -45,17 +60,29 @@ class EmployeeWorkingHourRetrieveAPIView(generics.RetrieveAPIView, generics.Crea
 
 
 		for item in data:
-			item = item.dict()
+			if isinstance(item, QueryDict):
+				item = item.dict()
+
 			date = item['date']
 			date = datetime.strptime(date, "%Y-%m-%d")
 
-			start = item['start']
-			start = datetime.strptime(start, "%Y-%m-%dT%H:%M")
-
-			end = item['end']
-			end = datetime.strptime(end, "%Y-%m-%dT%H:%M")
-
+			start = item.get('start', None)
+			end = item.get('end', None)
 			week_day = date.weekday()
+
+			if start is None or end is None:
+				EmployeeWorkingHour.objects.filter(employee_id=int(item['employee']), week_day=week_day).delete()
+				return Response(status=status.HTTP_201_CREATED)
+			try :
+				start = datetime.strptime(start, "%Y-%m-%dT%H:%M")
+				end = datetime.strptime(end, "%Y-%m-%dT%H:%M")
+			except ValueError:
+				start = datetime.strptime(start, "%Y-%m-%d %H:%M")
+				end = datetime.strptime(end, "%Y-%m-%d %H:%M")
+
+
+
+
 			if item['branch'] is None:
 				# Delete if exists
 				EmployeeWorkingHour.objects.filter(employee_id=int(item['employee']), week_day=week_day).delete()

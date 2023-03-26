@@ -259,7 +259,7 @@ class EmployeeFreeTimesAPIView(generics.CreateAPIView, PermissionRequiredMixin):
 			                content_type="application/json")
 
 		duration = int(request.data.get("duration"))
-		service_type = request.data.get("service_type")
+		service_type = request.data.get("service")
 		role = Roles.CUSTOMER
 
 		if service_type == "Full Grooming":
@@ -278,7 +278,7 @@ class EmployeeFreeTimesAPIView(generics.CreateAPIView, PermissionRequiredMixin):
 			employees = Employee.objects.filter(id__in=employees_param, role=role)
 		else:
 			# retrieve all employees for the specified branches
-			employees = Employee.objects.filter(branch__in=branches, role=role)
+			employees = Employee.objects.filter( role=role)
 
 		all_working_hours = EmployeeWorkingHour.objects.filter(
 			employee__in=employees,
