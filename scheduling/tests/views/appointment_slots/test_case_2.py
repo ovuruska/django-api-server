@@ -26,7 +26,7 @@ class AppointmentSlotTestCase2(ScenarioTestCase):
 			"employees": employees,
 			"branches": [],
 			"duration": duration,
-			"service_type": "Full Grooming",
+			"service": "Full Grooming",
 			"date": self.get_now()
 		}
 		response = self.client.post(self.url, **self.customer_headers, data=payload, format='json')
@@ -47,7 +47,7 @@ class AppointmentSlotTestCase2(ScenarioTestCase):
 			"employees": employees,
 			"branches": [],
 			"duration": duration,
-			"service_type": "We Wash",
+			"service": "We Wash",
 			"date": self.get_now()
 		}
 		response = self.client.post(self.url, **self.customer_headers, data=payload, format='json')

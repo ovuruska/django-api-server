@@ -4,6 +4,8 @@ from decimal import *
 from django.apps import apps
 from django.contrib.auth.mixins import PermissionRequiredMixin
 from django.core.signing import Signer
+from django.db.models import Q
+from django.http import QueryDict
 from rest_framework import generics
 from rest_framework.permissions import AllowAny
 from rest_framework.response import Response
@@ -245,7 +247,13 @@ class EmployeeFreeTimesAPIView(generics.CreateAPIView, PermissionRequiredMixin):
 	permission_classes = [AllowAny]
 
 	def post(self, request, *args, **kwargs):
-		branches = request.data.get("branches",[])
+		if not request.data:
+			return Response({"error": "No data provided"}, status=400,
+			                content_type="application/json")
+
+
+
+		branches = [int(val) for val in request.data.getlist("branches",[])]
 		date_str = request.data.get("date")
 
 		try:
@@ -260,29 +268,33 @@ class EmployeeFreeTimesAPIView(generics.CreateAPIView, PermissionRequiredMixin):
 
 		duration = int(request.data.get("duration"))
 		service_type = request.data.get("service")
-		role = Roles.CUSTOMER
+		role = Roles.ANONYMOUS
 
 		if service_type == "Full Grooming":
 			role = Roles.EMPLOYEE_FULL_GROOMING
 		elif service_type == "We Wash":
 			role = Roles.EMPLOYEE_WE_WASH
 
-		if not branches:
+		employees_param = [int(val) for val in request.data.getlist("employees",[])]
+
+
+		if not branches and  not employees_param:
+			employees = Employee.objects.filter(role=role)
 			branches = Branch.objects.all()
 		else:
-			branches = Branch.objects.filter(id__in=branches)
+			if employees_param:
+				employees = Employee.objects.filter(id__in=employees_param, role=role)
+			else:
+				employees = Employee.objects.none()
 
-		employees_param = request.data.get("employees",[])
-		if employees_param:
-			# retrieve employees based on the provided employee IDs
-			employees = Employee.objects.filter(id__in=employees_param, role=role)
-		else:
-			# retrieve all employees for the specified branches
-			employees = Employee.objects.filter( role=role)
+			if branches:
+				branches = Branch.objects.filter(id__in=branches)
+			else:
+				branches = Branch.objects.none()
+
 
 		all_working_hours = EmployeeWorkingHour.objects.filter(
-			employee__in=employees,
-			branch__in=branches,
+			Q(employee_id__in=employees) | Q(branch_id__in=branches)
 		)
 
 		if not all_working_hours:
@@ -292,40 +304,39 @@ class EmployeeFreeTimesAPIView(generics.CreateAPIView, PermissionRequiredMixin):
 		free_times = []
 		slot_num = 40  # it can be changed after. This number will determine the number of free times that will be displayed
 		while len(free_times) != slot_num:
-			for branch in branches:
-				for employee in employees:
-					working_hours = EmployeeWorkingHour.objects.filter(
-						employee=employee,
-						week_day=date.date().weekday(),
-						branch=branch
-					).first()
-					if not working_hours:
-						continue
 
-					start_time = datetime.combine(date.date(), working_hours.start)
-					end_time = datetime.combine(date.date(), working_hours.end)
+			working_hours = all_working_hours.filter(
+				week_day=date.date().weekday(),
+			)
+			for working_interval in working_hours:
+				employee = working_interval.employee
+				branch = working_interval.branch
 
-					employee_appointments = Appointment.objects.filter(
-						employee=employee, start__date=date.date()
-					).order_by("start")
-					hours = [
-						start_time,
-						end_time
-					]
-					employee_appointments_times = [(appointment.start,appointment.end) for appointment in employee_appointments]
-					slots = get_slots(hours, employee_appointments_times, duration)
-					for slot_start,slot_end in slots:
 
-						time_slot = {"branch": BranchSerializer(branch).data,
-						             "employee": EmployeeSerializer(employee).data,
-						             "start": slot_start.strftime("%Y-%m-%dT%H:%M:%S"),
-						             "end": slot_end.strftime("%Y-%m-%dT%H:%M:%S"),
-						             "date": date
-						             }
-						free_times.append(time_slot)
-						if len(free_times) == slot_num:
-							free_times.sort(key=lambda x: x["start"])
-							return Response(free_times)
+				start_time = datetime.combine(date.date(), working_interval.start)
+				end_time = datetime.combine(date.date(), working_interval.end)
+
+				employee_appointments = Appointment.objects.filter(
+					employee=employee, start__date=date.date()
+				).order_by("start")
+				hours = [
+					start_time,
+					end_time
+				]
+				employee_appointments_times = [(appointment.start,appointment.end) for appointment in employee_appointments]
+				slots = get_slots(hours, employee_appointments_times, duration)
+				for slot_start,slot_end in slots:
+
+					time_slot = {"branch": BranchSerializer(branch).data,
+					             "employee": EmployeeSerializer(employee).data,
+					             "start": slot_start.strftime("%Y-%m-%dT%H:%M:%S"),
+					             "end": slot_end.strftime("%Y-%m-%dT%H:%M:%S"),
+					             "date": date
+					             }
+					free_times.append(time_slot)
+					if len(free_times) == slot_num:
+						free_times.sort(key=lambda x: x["start"])
+						return Response(free_times)
 
 
 			new_date = date + timedelta(days=1)

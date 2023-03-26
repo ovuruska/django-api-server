@@ -122,26 +122,28 @@ def set_employee_working_hours(employee_id, start, end, branch_id):
 	else:
 		return None
 
-def get_branch_employees(branch_id,date):
+def get_branch_employees(branch_id:int,date : datetime.datetime):
 	branch_id = int(branch_id)
-	Employee = apps.get_model('scheduling', 'Employee')
-	employees = []
-	for employee in Employee.objects.all():
-		start = datetime.datetime.strptime(date, "%Y-%m-%d")
-		end = start + datetime.timedelta(days=1)
-		working_hours = get_employee_working_hours(start, end, employee.id)
-		working_hours = working_hours[0]
-		if working_hours["branch"] is not None and working_hours["branch"]["id"] == branch_id and working_hours["start"] is not None and working_hours["end"] is not None:
-			employee.work_start = working_hours["start"]
-			employee.work_end = working_hours["end"]
-			employee_dict = {
-				"id": employee.id,
-				"name": employee.name,
-				"start": employee.work_start,
-				"end": employee.work_end,
-				"role": get_role_from_int(employee.role),
+	EmployeeWorkingHour = apps.get_model('scheduling', 'EmployeeWorkingHour')
 
-			}
-			employees.append(employee_dict)
-	return employees
+	week_day = date.weekday()
+	working_hours = EmployeeWorkingHour.objects.filter(branch_id=branch_id,week_day=week_day)
+
+	results = []
+
+	for working_interval in working_hours:
+		employee = working_interval.employee
+		start = working_interval.start
+		end = working_interval.end
+		employee_dict = {
+			"id": employee.id,
+			"name": employee.name,
+			"start": start,
+			"end": end,
+			"role": get_role_from_int(employee.role),
+
+		}
+		results.append(employee_dict)
+
+	return results
 

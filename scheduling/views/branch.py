@@ -1,3 +1,5 @@
+from datetime import datetime
+
 from django.apps import apps
 from django.forms import model_to_dict
 from rest_framework.generics import ListAPIView, CreateAPIView, DestroyAPIView, UpdateAPIView, RetrieveAPIView
@@ -32,6 +34,8 @@ class BranchEmployeesAPIView(ListAPIView):
 
 		if date is None:
 			return Response(status=400)
+
+		date = datetime.strptime(date, "%Y-%m-%d")
 		employees = get_branch_employees(branch_id,date)
 
 		return Response(data=employees, status=200)
