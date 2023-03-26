@@ -245,14 +245,18 @@ class EmployeeFreeTimesAPIView(generics.CreateAPIView, PermissionRequiredMixin):
 	permission_classes = [AllowAny]
 
 	def post(self, request, *args, **kwargs):
-		branches = request.data.get("branches")
+		branches = request.data.get("branches",[])
 		date_str = request.data.get("date")
 
-		if date_str < datetime.now().strftime("%Y-%m-%d"):
-			return Response({"error": "Cannot schedule an appointment in the past"}, status=400,
-			                content_type="application/json")
-		date = datetime.strptime(date_str, "%Y-%m-%d")
+		try:
+			date = datetime.strptime(date_str, "%Y-%m-%d")
 
+			if date < datetime.now():
+				return Response({"error": "Cannot schedule an appointment in the past"}, status=400,
+				                content_type="application/json")
+		except ValueError:
+			return Response({"error": "Invalid date format"}, status=400,
+			                content_type="application/json")
 
 		duration = int(request.data.get("duration"))
 		service_type = request.data.get("service_type")
@@ -268,8 +272,7 @@ class EmployeeFreeTimesAPIView(generics.CreateAPIView, PermissionRequiredMixin):
 		else:
 			branches = Branch.objects.filter(id__in=branches)
 
-		employees_param = request.data.get("employees")
-		employees = []
+		employees_param = request.data.get("employees",[])
 		if employees_param:
 			# retrieve employees based on the provided employee IDs
 			employees = Employee.objects.filter(id__in=employees_param, role=role)

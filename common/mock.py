@@ -11,7 +11,6 @@ from faker import Faker
 from tqdm import tqdm, trange
 
 from scheduling import models
-#from transactions.models import Transaction
 
 from .breeds import breeds
 from .roles import Roles
@@ -223,15 +222,13 @@ class Mock:
 
                 weekday = date.weekday()
                 branch = branches[fake.random_int(min=0, max=self.number_of_branches - 1)]
-                employee_wh = models.EmployeeWorkingHour(
-                    start=start_time,
-                    week_day=weekday,
-                    employee=employee,
-                    branch=branch,
-                    end=end_time
-                )
-                employee_wh.save()
-
+                models.EmployeeWorkingHour.objects.update_or_create(
+					defaults={
+						'start': start_time,
+						'end': end_time,
+						'branch_id': branch.id,
+					},
+					employee_id = employee.id,week_day = weekday )
 
 
 

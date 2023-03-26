@@ -3,8 +3,10 @@ import datetime
 from django.core.validators import MinLengthValidator, MinValueValidator, MaxValueValidator
 from django.db import models
 
+from common import BaseModel
 
-class EmployeeWorkingHour(models.Model):
+
+class EmployeeWorkingHour(BaseModel):
 	"""
 	EmployeeWorkingHour model
 
@@ -19,8 +21,8 @@ class EmployeeWorkingHour(models.Model):
 	employee = models.ForeignKey('scheduling.Employee', on_delete=models.CASCADE)
 	week_day = models.IntegerField(default=0, validators=[MinValueValidator(0), MaxValueValidator(6)])
 	branch = models.ForeignKey('scheduling.Branch', on_delete=models.CASCADE)
-	start = models.DateTimeField(null=True)
-	end = models.DateTimeField(null=True)
+	start = models.TimeField(null=True)
+	end = models.TimeField(null=True)
 	class Meta:
 		unique_together = ('employee', 'week_day')
 		ordering = ('-start',)
