@@ -20,4 +20,13 @@ class Employee(BaseModel):
 	def __str__(self):
 		return self.name
 
+	def to_dict(self):
+		return {
+			"id": self.id,
+			"name": self.name,
+			"phone": self.phone,
+			"email": self.email,
+			"role": self.role,
+			"uid": self.uid,
+		}
 

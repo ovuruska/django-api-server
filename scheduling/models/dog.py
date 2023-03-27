@@ -24,3 +24,19 @@ class Dog(BaseModel):
 	special_handling = models.BooleanField(default=False)
 
 	coat_type = models.CharField(max_length=20, choices=CoatType.choices, default=CoatType.SMOOTH_LONG)
+
+	def to_dict(self):
+		return {
+			"id": self.id,
+			"name": self.name,
+			"breed": self.breed,
+			"age": self.age,
+			"weight": self.weight,
+			"description": self.description,
+			"owner": self.owner.to_dict(),
+			"rabies_vaccination": self.rabies_vaccination,
+			"employee_notes": self.employee_notes,
+			"customer_notes": self.customer_notes,
+			"special_handling": self.special_handling,
+			"coat_type": self.coat_type,
+		}

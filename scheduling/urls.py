@@ -13,7 +13,7 @@ products = [
 branch_employees = [
 	path('branch/<pk>/employees', views.BranchEmployeesAPIView.as_view(), name="branch_employees"),
 	path('schedule/slots', views.EmployeeFreeTimesAPIView.as_view(), name="employee_free_times"),
-
+	path('branch/<pk>/daily', views.BranchDailyInformationAPIView.as_view(), name="branch_daily_information"),
 ]
 
 services = [

@@ -10,3 +10,12 @@ class Product(BaseModel):
 	category = models.CharField(max_length=50, default="Other")
 	def __str__(self):
 		return f"{self.name} - {self.description}"
+
+	def to_dict(self):
+		return {
+			"id": self.id,
+			"name": self.name,
+			"description": self.description,
+			"cost": self.cost,
+			"category": self.category,
+		}

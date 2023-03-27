@@ -252,8 +252,15 @@ class EmployeeFreeTimesAPIView(generics.CreateAPIView, PermissionRequiredMixin):
 			                content_type="application/json")
 
 
+		if isinstance(request.data, QueryDict):
+			branches = [int(val) for val in request.data.getlist("branches",[])]
+			employees_param = [int(val) for val in request.data.getlist("employees", [])]
 
-		branches = [int(val) for val in request.data.getlist("branches",[])]
+		else:
+			branches = request.data.get("branches",[])
+			employees_param = request.data.get("employees",[])
+
+
 		date_str = request.data.get("date")
 
 		try:
@@ -275,7 +282,6 @@ class EmployeeFreeTimesAPIView(generics.CreateAPIView, PermissionRequiredMixin):
 		elif service_type == "We Wash":
 			role = Roles.EMPLOYEE_WE_WASH
 
-		employees_param = [int(val) for val in request.data.getlist("employees",[])]
 
 
 		if not branches and  not employees_param:

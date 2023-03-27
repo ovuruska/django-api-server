@@ -13,3 +13,14 @@ class Branch(BaseModel):
 
 	class Meta:
 		...
+
+	def to_dict(self):
+		return {
+			"id": self.id,
+			"name": self.name,
+			"address": self.address,
+			"description": self.description,
+			"phone": self.phone,
+			"email": self.email,
+			"tubs": self.tubs,
+		}

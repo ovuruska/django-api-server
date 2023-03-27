@@ -16,3 +16,15 @@ class Customer(BaseModel):
 	validated = models.BooleanField(default=True)
 	class Meta:
 		ordering = ["name"]
+
+	def to_dict(self):
+		return {
+			"id": self.id,
+			"name": self.name,
+			"uid": self.uid,
+			"email": self.email,
+			"phone": self.phone,
+			"address": self.address,
+			"role": self.role,
+			"validated": self.validated,
+		}

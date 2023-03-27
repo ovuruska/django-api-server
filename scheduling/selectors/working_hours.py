@@ -122,6 +122,23 @@ def set_employee_working_hours(employee_id, start, end, branch_id):
 	else:
 		return None
 
+def get_branch_daily_information(branch_id:int, date:datetime.datetime):
+
+	employees = get_branch_employees(branch_id,date)
+	appointments = get_branch_appointments(branch_id, date)
+	return {
+		"employees": employees,
+		"appointments": appointments
+	}
+def get_branch_appointments(branch_id:int, date:datetime.datetime):
+	Appointment = apps.get_model('scheduling', 'Appointment')
+	start_range = datetime.datetime(date.year, date.month, date.day, 0, 0, 0)
+	end_range = datetime.datetime(date.year, date.month, date.day, 23, 59, 59)
+
+	appointments = Appointment.objects.filter(branch_id=branch_id, start__range=(start_range, end_range))
+
+	return [appointment.to_dict() for appointment in appointments]
+
 def get_branch_employees(branch_id:int,date : datetime.datetime):
 	branch_id = int(branch_id)
 	EmployeeWorkingHour = apps.get_model('scheduling', 'EmployeeWorkingHour')

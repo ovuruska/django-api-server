@@ -54,3 +54,28 @@ class Appointment(BaseModel):
 
 	class Meta:
 		ordering = ['-start']
+
+	def to_dict(self):
+		return {
+			'id': self.id,
+			'customer': self.customer.to_dict(),
+			'dog': self.dog.to_dict(),
+			'start': self.start.isoformat(),
+			'end': self.end.isoformat(),
+			'customer_notes': self.customer_notes,
+			'employee_notes': self.employee_notes,
+			'services': [service.to_dict() for service in self.services.all()],
+			'tip': float(self.tip),
+			'cost': float(self.cost),
+			'products': [product.to_dict() for product in self.products.all()],
+			'branch': self.branch.to_dict(),
+			'employee': self.employee.to_dict() if self.employee else None,
+			'status': self.status,
+			'appointment_type': self.appointment_type,
+			'reminder_sent': self.reminder_sent.isoformat() if self.reminder_sent else None,
+			'check_in': self.check_in.isoformat() if self.check_in else None,
+			'pick_up': self.pick_up.isoformat() if self.pick_up else None,
+			'confirmed_on': self.confirmed_on.isoformat() if self.confirmed_on else None,
+			'checkout_time': self.checkout_time.isoformat() if self.checkout_time else None,
+			'checkout_status': self.checkout_status
+		}
