@@ -1,6 +1,7 @@
 import datetime
 
 from django.apps import apps
+from django.db.models import Q
 from django.forms import model_to_dict
 
 from common.datetime_range import datetime_range
@@ -123,19 +124,22 @@ def set_employee_working_hours(employee_id, start, end, branch_id):
 		return None
 
 def get_branch_daily_information(branch_id:int, date:datetime.datetime):
-
+	branch_id = int(branch_id)
 	employees = get_branch_employees(branch_id,date)
-	appointments = get_branch_appointments(branch_id, date)
+	appointments = get_branch_appointments(branch_id, date,list(map(lambda x:x["id"],employees)))
 	return {
 		"employees": employees,
 		"appointments": appointments
 	}
-def get_branch_appointments(branch_id:int, date:datetime.datetime):
+def get_branch_appointments(branch_id:int, date:datetime.datetime,employees):
 	Appointment = apps.get_model('scheduling', 'Appointment')
 	start_range = datetime.datetime(date.year, date.month, date.day, 0, 0, 0)
-	end_range = datetime.datetime(date.year, date.month, date.day, 23, 59, 59)
-
-	appointments = Appointment.objects.filter(branch_id=branch_id, start__range=(start_range, end_range))
+	end_range = start_range + datetime.timedelta(days=1)
+	# 2023-03-19
+	start = start_range.strftime("%Y-%m-%d")
+	end = end_range.strftime("%Y-%m-%d")
+	appointments = Appointment.objects.filter(
+		Q(branch=branch_id, start__lt = end, start__gt = start) | Q(employee__in = employees, start__lt = end, start__gt = start))
 
 	return [appointment.to_dict() for appointment in appointments]
 
