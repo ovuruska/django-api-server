@@ -152,6 +152,15 @@ class AppointmentModifyAPIView(generics.RetrieveAPIView, generics.UpdateAPIView,
 	def get_queryset(self):
 		return self.queryset.filter(id=self.kwargs['pk'])
 
+	def get(self, request, *args, **kwargs):
+		"""
+		Returns the appointment with the given id
+		"""
+		pk = self.kwargs.get("pk")
+		appointment = Appointment.objects.get(id=pk)
+		serializer = AppointmentEmployeeSerializer(appointment)
+		return Response(serializer.data)
+
 	@save_transaction
 	def patch(self, request, *args, **kwargs):
 		"""
