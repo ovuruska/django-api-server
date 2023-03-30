@@ -27,15 +27,15 @@ class Mock:
 
     def __init__(self,
 
-                 number_of_branches: int = 1,
-                 number_of_employees: int = 5,
-                 number_of_customers: int = 20,
-                 number_of_dogs: int = 50,
-                 number_of_appointments: int = 100,
+                 number_of_branches: int = 3,
+                 number_of_employees: int = 65,
+                 number_of_customers: int = 1000,
+                 number_of_dogs: int = 3000,
+                 number_of_appointments: int = 25000,
                  number_of_services: int = 10,
                  number_of_products: int = 10,
                  number_of_categories: int = 4,
-                 appointment_interval: str = "1w",
+                 appointment_interval: str = "1y",
                  number_of_transactions: int = 100
 
                  ):
@@ -85,8 +85,7 @@ class Mock:
 
         current = 0
 
-
-        #Create the interval of working hours
+        # Create the interval of working hours
         positive = "+" + self.appointment_interval
         negative = "-" + self.appointment_interval
         unit_map = {
@@ -132,12 +131,27 @@ class Mock:
         for ind in trange(self.number_of_employees, desc="Generating employees"):
             email = fake.email()
             password = fake.password()
-            if ind < self.number_of_employees / 2 or self.number_of_employees <= 6:
+            if ind < 25:
                 employee = models.Employee(
                     name=fake.name(),
                     branch=branches[fake.random_int(min=0, max=self.number_of_branches - 1)],
                     phone=fake.phone_number(),
                     email=email,
+                    role=Roles.EMPLOYEE_FULL_GROOMING,
+                    user=User.objects.create_user(
+                        username=usernames.pop(),
+                        password=password,
+                        email=email
+                    ),
+                    uid=fake.uuid4()
+                )
+            elif 25 <= ind < 65:
+                employee = models.Employee(
+                    name=fake.name(),
+                    branch=branches[fake.random_int(min=0, max=self.number_of_branches - 1)],
+                    phone=fake.phone_number(),
+                    email=email,
+                    role=Roles.EMPLOYEE_WE_WASH,
                     user=User.objects.create_user(
                         username=usernames.pop(),
                         password=password,
@@ -146,92 +160,26 @@ class Mock:
                     uid=fake.uuid4()
                 )
 
-
-
-
-            else:
-                if ind == self.number_of_employees / 2 and self.number_of_employees > 6:
-                    employee = models.Employee(
-                        name=fake.name(),
-                        branch=branches[fake.random_int(min=0, max=self.number_of_branches - 1)],
-                        phone=fake.phone_number(),
-                        email=email,
-                        role=Roles.ADMIN,
-                        user=User.objects.create_user(
-                            username=usernames.pop(),
-                            password=password,
-                            email=email
-                        ),
-                        uid=fake.uuid4()
-                    )
-
-                elif (ind == self.number_of_employees / 2 + 1) and self.number_of_employees > 6:
-                    employee = models.Employee(
-                        name=fake.name(),
-                        branch=branches[fake.random_int(min=0, max=self.number_of_branches - 1)],
-                        phone=fake.phone_number(),
-                        email=email,
-                        role=Roles.ACCOUNTANT,
-                        user=User.objects.create_user(
-                            username=usernames.pop(),
-                            password=password,
-                            email=email
-                        ),
-                        uid=fake.uuid4()
-                    )
-
-
-                elif ind == self.number_of_employees / 2 + 2 and self.number_of_employees > 6:
-                    employee = models.Employee(
-                        name=fake.name(),
-                        branch=branches[fake.random_int(min=0, max=self.number_of_branches - 1)],
-                        phone=fake.phone_number(),
-                        email=email,
-                        role=Roles.MANAGER,
-                        user=User.objects.create_user(
-                            username=usernames.pop(),
-                            password=password,
-                            email=email
-                        ),
-                        uid=fake.uuid4()
-                    )
-                else:
-                    employee = models.Employee(
-                        name=fake.name(),
-                        branch=branches[fake.random_int(min=0, max=self.number_of_branches - 1)],
-                        phone=fake.phone_number(),
-                        email=email,
-                        role=Roles.EMPLOYEE_FULL_GROOMING,
-                        user=User.objects.create_user(
-                            username=usernames.pop(),
-                            password=password,
-                            email=email
-                        ),
-                        uid=fake.uuid4()
-                    )
-
-            employee.save() # Save the employee to the database
-            employees.append(employee) # Add the employee to the list of employees
+            employee.save()  # Save the employee to the database
+            employees.append(employee)  # Add the employee to the list of employees
 
             # Generate a random start time for an hour between 9am and 5pm
             for date in date_list:
                 hour = random.randint(8, 19)
-                start_time = timezone.make_aware(datetime.datetime(year=date.year, month=date.month, day=date.day, hour=hour, minute=0))
+                start_time = timezone.make_aware(
+                    datetime.datetime(year=date.year, month=date.month, day=date.day, hour=hour, minute=0))
                 # Calculate the end time by adding 8 hours to the start time
                 end_time = start_time + datetime.timedelta(hours=random.randint(1, 8))
 
                 weekday = date.weekday()
                 branch = branches[fake.random_int(min=0, max=self.number_of_branches - 1)]
                 models.EmployeeWorkingHour.objects.update_or_create(
-					defaults={
-						'start': start_time,
-						'end': end_time,
-						'branch_id': branch.id,
-					},
-					employee_id = employee.id,week_day = weekday )
-
-
-
+                    defaults={
+                        'start': start_time,
+                        'end': end_time,
+                        'branch_id': branch.id,
+                    },
+                    employee_id=employee.id, week_day=weekday)
 
         for ind in trange(self.number_of_customers, desc="Generating customers"):
             email = fake.email()
@@ -248,13 +196,32 @@ class Mock:
                     email=email
                 )
             )
+            dog_num = random.randint(1, 4)
+            for dog_ind in range(dog_num):
+                dog = models.Dog(
+                    name=fake.name(),
+                    owner=customer,
+                    breed=fake.random.choice(breeds),
+                    weight=fake.random.normalvariate(80, 20),
+                    employee_notes=fake.text(),
+                    customer_notes=fake.text(),
+                    special_handling=fake.random.choice(5 * [True] + 95 * [False]),
+                    rabies_vaccination=fake.date_time_between(start_date="-3m", end_date="+2y", tzinfo=pytz.utc),
+                    age=fake.random_int(min=1, max=20),
+                    coat_type=fake.random.choice(models.Dog.CoatType.choices),
+                )
+                dog.save()
+                dogs.append(
+                    dog
+                )
 
             current += 1
 
             customer.save()
             customers.append(customer)
 
-        for ind in trange(self.number_of_dogs, desc="Generating dogs"):
+        """for ind in trange(self.number_of_dogs, desc="Generating dogs"):
+
             dog = models.Dog(
                 name=fake.name(),
                 owner=customers[fake.random_int(min=0, max=self.number_of_customers - 1)],
@@ -270,7 +237,7 @@ class Mock:
             dog.save()
             dogs.append(
                 dog
-            )
+            )"""
 
         for ind in trange(self.number_of_services, desc="Generating services"):
             service = models.Service(
@@ -303,8 +270,12 @@ class Mock:
             end = start + datetime.timedelta(
                 minutes=fake.random.choice([15, 30, 45, 60, 75, 90, 105, 120, 135, 150, 165, 180]))
 
-            status = models.Appointment.Status.choices[
-                fake.random_int(min=0, max=len(models.Appointment.Status.choices) - 1)][0]
+            continuing_appointment_status = [ models.Appointment.Status.PENDING, models.Appointment.Status.RESCHEDULED, models.Appointment.Status.CANCELLED]
+            finished_appointment_status = [models.Appointment.Status.CANCELED, models.Appointment.Status.COMPLETED, models.Appointment.Status.NO_SHOW, models.Appointment.Status.UNPAID]
+            if start < timezone.now():
+                status = fake.random.choice(finished_appointment_status)
+            else:
+                status = fake.random.choice(continuing_appointment_status)
 
             employee = fake.random.choice(employees)
             branch = employee.branch
