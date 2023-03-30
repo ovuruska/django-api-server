@@ -126,7 +126,8 @@ def set_employee_working_hours(employee_id, start, end, branch_id):
 def get_branch_daily_information(branch_id:int, date:datetime.datetime):
 	branch_id = int(branch_id)
 	employees = get_branch_employees(branch_id,date)
-	appointments = get_branch_appointments(branch_id, date,list(map(lambda x:x["id"],employees)))
+	employee_ids = list(map(lambda x:x["id"],employees))
+	appointments = get_branch_appointments(branch_id, date,employee_ids)
 	return {
 		"employees": employees,
 		"appointments": appointments
@@ -139,7 +140,7 @@ def get_branch_appointments(branch_id:int, date:datetime.datetime,employees):
 	start = start_range.strftime("%Y-%m-%d")
 	end = end_range.strftime("%Y-%m-%d")
 	appointments = Appointment.objects.filter(
-		Q(branch=branch_id, start__lt = end, start__gt = start) | Q(employee__in = employees, start__lt = end, start__gt = start))
+		Q(branch_id=branch_id, start__lt = end, start__gt = start) | Q(employee__in = employees, start__lt = end, start__gt = start))
 
 	return [appointment.to_dict() for appointment in appointments]
 
