@@ -1,11 +1,3 @@
-Model: GPT-4
-
-> 2 / 2
-> 
-> Generate a documentation for Monthly Capacity API: 1- POST /api/schedule/capacity/monthly 2- Employees are list of integers. Default \[\] 3- Branches are list of integers. Default \[\] 4- Service is a string. It is a required. 5- Date is a string. It is a required. It is in form mm/YYYY. 6- Example response: \[{"date":"01/02/2023","morning\_capacity":0.5,"afternoon\_capacity":0.9"},...\]
-
-1 / 1
-
 Monthly Capacity API Documentation
 ==================================
 
