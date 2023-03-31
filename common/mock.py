@@ -259,9 +259,19 @@ class Mock:
             product.save()
             products.append(product)
 
+
+        used_employees=[]
+        current_list = 0
         for ind in trange(self.number_of_appointments, desc='Generating Appointments'):
             positive = "+" + self.appointment_interval
             negative = "-" + self.appointment_interval
+            employee_list = employees
+            if current_list == 0 and len(employee_list) < 0:
+                employee_list = used_employees
+                current_list = 1
+            elif current_list == 1 and len(employee_list) < 0:
+                employee_list = employees
+                current_list = 0
 
             start = fake.date_between(start_date=negative, end_date=positive)
             start = datetime.datetime.combine(start, datetime.time(fake.random_int(min=8, max=18),
@@ -277,7 +287,9 @@ class Mock:
             else:
                 status = fake.random.choice(continuing_appointment_status)
 
-            employee = fake.random.choice(employees)
+            employee = fake.random.choice(employee_list)
+            used_employees.append(employee)
+            employees.remove(employee)
             branch = employee.branch
             appointment_type = fake.random.choice(models.Appointment.AppointmentType.choices)[0]
 
