@@ -1,11 +1,3 @@
-Model: GPT-4
-
-> 2 / 2
-> 
-> Generate a documentation for Monthly Capacity API: 1- POST /api/schedule/capacity/monthly 2- Employees are list of integers. Default \[\] 3- Branches are list of integers. Default \[\] 4- Service is a string. It is a required. 5- Date is a string. It is a required. It is in form mm/YYYY. 6- Example response: \[{"date":"01/02/2023","morning\_capacity":0.5,"afternoon\_capacity":0.9"},...\]
-
-1 / 1
-
 Monthly Capacity API Documentation
 ==================================
 
@@ -44,7 +36,7 @@ json
 Response
 --------
 
-The API returns a JSON array containing the capacity details for each day of the specified month. Each day includes the date (in `dd/mm/YYYY` format), morning capacity, and afternoon capacity.
+The API returns a JSON array containing the capacity details for each day of the specified month. Each day includes the date (in `YYYY-mm-dd` format), morning capacity, and afternoon capacity.
 
 ### Example Response
 
@@ -53,18 +45,20 @@ json
 ```json
 [
   {
-    "date": "01/04/2023",
+    "date": "2023-04-01",
     "morning_capacity": 0.5,
     "afternoon_capacity": 0.9
   },
   {
-    "date": "02/04/2023",
+    "date": "2023-04-02",
     "morning_capacity": 0.6,
     "afternoon_capacity": 0.8
-  },
-  ...
+  }
 ]
 ```
+
+If capacity information is 1, then it means that the day is fully booked. If capacity information is 0, then it means that the day is fully available. Capacity calculation
+is made based on available appointments and working hours of employees and branches.
 
 Errors
 ------
