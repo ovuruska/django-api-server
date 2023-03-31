@@ -34,19 +34,11 @@ These instructions will help you set up the project on your local machine for de
 bash
 
 ```bash
-git clone https://github.com/your-repo-url/django-project.git
-cd django-project
+git clone https://github.com/make-quicker/backend.git
+cd backend
 ```
 
-2.  Install dependencies:
-
-bash
-
-```bash
-pip install -r requirements.txt
-```
-
-3.  Build and run Docker containers:
+2.  Build and run Docker containers:
 
 bash
 
