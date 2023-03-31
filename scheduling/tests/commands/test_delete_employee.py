@@ -4,7 +4,7 @@ from django.test import TestCase
 from scheduling.models import Employee
 
 """
-This test suite contains three test cases:
+This tests suite contains three tests cases:
 
 test_delete_employee_success: Tests whether the command successfully deletes both the User and the Employee instances for a given username.
 test_delete_employee_user_does_not_exist: Tests whether the command raises a User.DoesNotExist exception when trying to delete a non-existing user.
