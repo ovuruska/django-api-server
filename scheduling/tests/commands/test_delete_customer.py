@@ -4,12 +4,12 @@ from django.test import TestCase
 from scheduling.models import Customer
 
 """
-This test suite contains three test cases:
+This tests suite contains three tests cases:
 
 test_delete_customer_success: Tests whether the command successfully deletes both the User and the Customer instances for a given username.
 test_delete_customer_user_does_not_exist: Tests whether the command raises a User.DoesNotExist exception when trying to delete a non-existing user.
 test_delete_customer_no_customer_model: Tests whether the command successfully deletes the User instance even when there is no associated Customer instance.
-To run the tests, simply use the python manage.py test command along with the path to your test file, like this:
+To run the tests, simply use the python manage.py tests command along with the path to your tests file, like this:
 """
 class DeleteCustomerCommandTestCase(TestCase):
 
