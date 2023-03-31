@@ -5,7 +5,7 @@ from faker import Faker
 from scheduling.models import Appointment, Customer, Dog, Branch, Employee, Service, Product
 
 """
-This test suite contains three test cases:
+This tests suite contains three tests cases:
 
 test_appointment_creation: Tests whether the Appointment instance is created correctly with the given data.
 test_appointment_is_modifiable: Tests the is_modifiable method of the Appointment model.

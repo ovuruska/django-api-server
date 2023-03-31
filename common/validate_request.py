@@ -13,6 +13,6 @@ def validate_request(serializer: Type[Serializer]) -> Callable:
 			if serializer_instance.is_valid():
 				return func(*args, **kwargs)
 			else:
-				return Response(serializer.errors, status=HTTP_400_BAD_REQUEST)
+				return Response(serializer_instance.error_messages, status=HTTP_400_BAD_REQUEST)
 		return wrapper
 	return decorator

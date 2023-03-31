@@ -3,7 +3,7 @@ from django.test import TestCase
 from scheduling.models import Branch
 
 """
-This test suite contains a single test case:
+This tests suite contains a single tests case:
 
 test_branch_creation: Tests whether the Branch instance is created correctly with the given data.
 

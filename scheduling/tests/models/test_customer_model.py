@@ -4,7 +4,7 @@ from common.roles import Roles
 from scheduling.models import Customer
 
 """
-This test suite contains two test cases:
+This tests suite contains two tests cases:
 
 test_customer_creation: Tests whether the Customer instance is created correctly with the given data.
 test_customer_ordering: Tests the ordering of the Customer instances based on the name field.

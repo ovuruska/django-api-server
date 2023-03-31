@@ -2,7 +2,7 @@ from django.test import TestCase
 from scheduling.models import Dog, Customer
 
 """
-This test suite contains two test cases:
+This tests suite contains two tests cases:
 
 test_dog_creation: Tests whether the Dog instance is created correctly with the given data.
 test_dog_related_name: Tests the related name of the owner field in the Dog model.
