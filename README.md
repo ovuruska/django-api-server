@@ -43,7 +43,7 @@ cd backend
 bash
 
 ```bash
-docker-compose up --build
+docker-compose -f dev.docker-compose.yml up --build
 ```
 
 The application should now be running at `http://localhost:8000/`.
