@@ -28,7 +28,7 @@ json
 {
   "employees": [1, 2, 3],
   "branches": [101, 102],
-  "service": "haircut",
+  "service": "Full Grooming",
   "date": "04/2023"
 }
 ```
