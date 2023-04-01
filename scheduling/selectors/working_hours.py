@@ -27,12 +27,8 @@ def get_branch_working_hours(start, end, branch_id) -> [str]:
 	for date in datetime_range(start, end):
 		week_day = date.weekday()
 
-		closest = branch_working_hours.filter(week_day=week_day).order_by('date').first()
-		start = None
-		end = None
-		if closest is not None:
-			start = quantize(closest.start)
-			end = quantize(closest.end)
+		closest = branch_working_hours.filter(week_day=week_day)
+
 
 		working_hours.append({
 			"date": date,
