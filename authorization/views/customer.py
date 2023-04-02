@@ -7,7 +7,16 @@ from rest_framework.response import Response
 
 from scheduling.models import Customer
 from scheduling.serializers.auth import UserSerializer, LoginUserSerializer, CreateUserSerializer
+from rest_framework.views import APIView
+from rest_framework.permissions import IsAuthenticated
+from rest_framework.response import Response
+from rest_framework import status
 
+class VerifyTokenView(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def get(self, request):
+        return Response(status=status.HTTP_200_OK)
 
 class CustomerRegisterAPIView(GenericAPIView, PermissionRequiredMixin):
 	serializer_class = CreateUserSerializer
