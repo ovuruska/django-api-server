@@ -38,7 +38,7 @@ class GetDailyCapacityView(APIView):
 
 
 		date = datetime.strptime(date, '%Y-%m-%d')
-		daily_capacities = get_daily_capacity_list(date, list(employee_branches))
+		daily_capacities = get_daily_capacity_list(date, list(employee_branches),employees)
 		serializer = DailyCapacityResponseSerializer(data=daily_capacities, many=True)
 		serializer.is_valid(raise_exception=True)
 		return JsonResponse(serializer.data, status=status.HTTP_200_OK, safe=False)

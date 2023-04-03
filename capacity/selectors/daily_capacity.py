@@ -26,13 +26,13 @@ class CapacityResult:
 			'afternoon_capacity': self.afternoon_capacity
 		}
 
-def get_daily_capacity_list(date, branches,N = 40):
+def get_daily_capacity_list(date, branches, requested_employees,N = 40):
 
 	return_value = []
 	EmployeeWorkingHour = apps.get_model('scheduling', 'EmployeeWorkingHour')
 	Appointment = apps.get_model('scheduling', 'Appointment')
 	working_hours = EmployeeWorkingHour.objects.filter(
-		Q(branch_id__in=branches))
+		Q(branch_id__in=branches) & Q(employee_id__in=requested_employees))
 
 	# Use lambda functions to cache in a function context. This is a hacky way to do it, but it works.
 
