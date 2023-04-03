@@ -1,7 +1,14 @@
+from datetime import datetime
+
+from django.db.models import Q
+from django.http import JsonResponse
+from rest_framework import status
 from rest_framework.views import APIView
 
+from capacity.selectors.daily_capacity import get_daily_capacity_list
 from capacity.selectors.utils import get_daily_capacity
 from capacity.serializers.requests.daily_capacity import DailyCapacityRequestSerializer
+from capacity.serializers.responses.daily_capacity import DailyCapacityResponseSerializer
 from common.roles import Roles
 from common.validate_request import validate_request
 from scheduling.models import Employee, EmployeeWorkingHour
@@ -31,10 +38,9 @@ class GetDailyCapacityView(APIView):
 			employees = list(set(employees).union(set(branch_employees)) )
 
 
-		date = datetime.strptime(date, '%m/%Y')
 
-
-		daily_capacities = get_daily_capacity(date, employees)
-		serializer = MonthlyCapacityResponseSerializer(data=monthly_capacity, many=True)
+		date = datetime.strptime(date, '%Y-%m-%d')
+		daily_capacities = get_daily_capacity_list(date, employees)
+		serializer = DailyCapacityResponseSerializer(data=daily_capacities, many=True)
 		serializer.is_valid(raise_exception=True)
-		return JsonResponse(serializer.data, status=HTTP_200_OK, safe=False)
+		return JsonResponse(serializer._validated_data, status=status.HTTP_200_OK, safe=False)

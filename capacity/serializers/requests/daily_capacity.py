@@ -16,6 +16,7 @@ def validate_date_format(value):
 		raise ValidationError('Invalid date format. Use "YYYY-MM-DD".')
 
 
+
 class DailyCapacityRequestSerializer(MonthlyCapacityRequestSerializer):
 	date = serializers.CharField(required=True, validators=[validate_date_format])
 

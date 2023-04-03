@@ -6,7 +6,7 @@ from capacity.selectors.common import CapacityCalculationParams
 from capacity.selectors.utils import get_work_intervals, get_tasks, get_capacity_between_interval
 
 
-def get_daily_capacities(date, branches,N = 40):
+def get_daily_capacity_list(date, branches,N = 40):
 
 	return_value = []
 	EmployeeWorkingHour = apps.get_model('scheduling', 'EmployeeWorkingHour')
