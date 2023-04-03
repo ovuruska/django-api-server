@@ -4,8 +4,8 @@ import pytz
 from django.apps import apps
 from django.test import TestCase
 
-from capacity.selectors.monthly_capacity import  get_work_intervals, WorkInterval
-
+from capacity.selectors.utils import get_work_intervals
+from capacity.selectors.common import WorkInterval
 
 EmployeeWorkingHour = apps.get_model('scheduling', 'EmployeeWorkingHour')
 

@@ -4,8 +4,8 @@ import pytz
 from django.apps import apps
 from django.test import TestCase
 
-from capacity.selectors.monthly_capacity import get_tasks, CapacityTask
-
+from capacity.selectors.utils import get_tasks
+from capacity.selectors.common import CapacityTask
 
 Appointment = apps.get_model('scheduling', 'Appointment')
 

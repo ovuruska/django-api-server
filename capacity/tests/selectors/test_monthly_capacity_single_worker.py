@@ -1,8 +1,8 @@
 from datetime import datetime
 from django.test import TestCase
 
-from capacity.selectors.monthly_capacity import WorkInterval, CapacityTask, CapacityCalculationParams, \
-	get_capacity_between_interval
+from capacity.selectors.utils import get_capacity_between_interval
+from capacity.selectors.common import CapacityTask, WorkInterval, CapacityCalculationParams
 
 
 class MonthlyCapacityTestSingleWorker(TestCase):
