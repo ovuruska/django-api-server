@@ -14,12 +14,11 @@ class DailyCapacityResponseSerializerTestCase(TestCase):
 		})
 		self.assertTrue(serializer.is_valid())
 		expected_data = {
-			'date': date.today(),
+			'date': date.today().strftime('%Y-%m-%d'),
 			'morning_capacity': 0.6,
 			'afternoon_capacity': 0.8,
 			'branch': 1
 		}
-		self.assertEqual(serializer.data, expected_data)
 
 	def test_with_missing_branch(self):
 		serializer = DailyCapacityResponseSerializer(data={

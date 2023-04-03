@@ -33,6 +33,11 @@ def get_daily_capacity_list(date, branches,N = 40):
 			params = CapacityCalculationParams(date, end_date, work_intervals, tasks)
 
 			results = get_capacity_between_interval(params)
-			return_value.append(results)
+			results = [{
+				'branch': branch,
+				**result
+			}for result in results if result['morning_capacity'] < 0.8 and result['afternoon_capacity'] < 0.8]
+
+			return_value.extend(results)
 		date += relativedelta(days=1)
-		return return_value
+	return return_value[:N]
