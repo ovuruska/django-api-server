@@ -17,7 +17,7 @@ from scheduling.models import EmployeeWorkingHour
 Employee = apps.get_model('scheduling', 'Employee')
 Branch = apps.get_model('scheduling', 'Branch')
 
-class GetMonthlyCapacity(APIView):
+class GetMonthlyCapacityView(APIView):
 	permission_classes = (IsAuthenticated,)
 	@validate_request(MonthlyCapacityRequestSerializer)
 	def post(self, request, *args, **kwargs):

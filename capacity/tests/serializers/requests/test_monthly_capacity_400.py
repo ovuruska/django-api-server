@@ -1,13 +1,17 @@
 from django.test import TestCase
 from capacity.serializers.requests.monthly_capacity import MonthlyCapacityRequestSerializer
 
-class MonthlyCapacityTestCase(TestCase):
+class MonthlyCapacityRequestSerializerTestCase(TestCase):
 
 	def test_with_invalid_service_name(self):
 		data = {'employees': [1, 2], 'branches': [1, 2], 'service': 'service', 'date': '2023-04-01', }
 		serializer = MonthlyCapacityRequestSerializer(data=data)
 		self.assertFalse(serializer.is_valid())
 
+	def test_invalid_date_format(self):
+		data = {'employees': [1, 2], 'branches': [1, 2], 'service': 'Full Grooming', 'date': '2023/04/01', }
+		serializer = MonthlyCapacityRequestSerializer(data=data)
+		self.assertFalse(serializer.is_valid())
 
 
 	def test_with_empty_service_should_fail(self):
@@ -76,3 +80,8 @@ class MonthlyCapacityTestCase(TestCase):
 		self.assertEqual(serializer.validated_data['service'], 'Full Grooming')
 		self.assertEqual(serializer.validated_data['date'], '04/2023')
 
+
+	def test_invalid_with_extra_fields(self):
+		data = {'employees': [1, 2], 'branches': [1, 2], 'service': 'Full Grooming', 'date': '04/2023', 'extra': 'extra'}
+		serializer = MonthlyCapacityRequestSerializer(data=data)
+		self.assertFalse(serializer.is_valid())

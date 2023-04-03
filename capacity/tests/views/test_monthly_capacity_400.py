@@ -3,17 +3,6 @@ from django.urls import reverse
 
 from common.auth_test_case import EmployeeAuthTestCase
 
-"""
-from rest_framework import serializers
-
-
-class MonthlyCapacityRequestSerializer(serializers.Serializer):
-    employees = serializers.ListField(child=serializers.IntegerField(), required=False, default=[])
-    branches = serializers.ListField(child=serializers.IntegerField(), required=False, default=[])
-    service = serializers.CharField(required=True)
-    date = serializers.CharField(required=True)
-"""
-
 class GetMonthlyCapacity400TestCase(EmployeeAuthTestCase):
 	url = reverse("get_monthly_capacity")
 

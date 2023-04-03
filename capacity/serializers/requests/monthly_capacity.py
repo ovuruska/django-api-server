@@ -1,6 +1,8 @@
 from django.core.exceptions import ValidationError
 from rest_framework import serializers
 
+from capacity.serializers.requests.base import BaseRequestSerializer
+
 
 def validate_date_format(value):
 	try:
@@ -22,27 +24,5 @@ def validate_date_format(value):
 	return value
 
 
-class MonthlyCapacityRequestSerializer(serializers.Serializer):
-	SERVICE_CHOICES = [("Full Grooming", "Full Grooming"), ("We Wash", "We Wash")]
-
-	employees = serializers.ListField(child=serializers.IntegerField(), required=False, default=[])
-	branches = serializers.ListField(child=serializers.IntegerField(), required=False, default=[])
-	service = serializers.ChoiceField(choices=SERVICE_CHOICES, required=True)
+class MonthlyCapacityRequestSerializer(BaseRequestSerializer):
 	date = serializers.CharField(required=True, validators=[validate_date_format])
-
-	def __init__(self, *args, **kwargs):
-		super().__init__(*args, **kwargs)
-
-		# Get the keys of the incoming data
-		incoming_keys = set(self.initial_data.keys())
-
-		# Get the keys of the allowed fields
-		allowed_keys = set(self.fields.keys())
-
-		# Check for extra fields
-		extra_fields = incoming_keys - allowed_keys
-		if extra_fields:
-			# Raise a validation error with an appropriate message
-			raise serializers.ValidationError(
-				f"The following fields are not allowed: {', '.join(extra_fields)}"
-			)
