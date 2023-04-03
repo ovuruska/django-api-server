@@ -11,7 +11,7 @@ API Endpoint
 
 
 ```bash
-POST /api/v1/daily_capacity
+POST /api/capacity/daily
 ```
 
 Request Parameters
