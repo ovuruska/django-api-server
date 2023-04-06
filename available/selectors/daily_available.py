@@ -33,6 +33,10 @@ def get_slots(working_interval: IntervalEntity, appointments: [IntervalEntity], 
 		(working_interval.end, working_interval.end)])
 	for start, end in ((slots[i][1], slots[i + 1][0]) for i in range(len(slots) - 1)):
 		while start + duration <= end:
+			if start.minute == 15 or start.minute == 45:
+				start += datetime.timedelta(minutes=15)
+				continue
+
 			available_slots.append((start, start + duration))
 			start += step
 

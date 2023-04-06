@@ -2,7 +2,7 @@ from django.apps import apps
 from rest_framework import serializers
 
 from scheduling.serializers.Branch import BranchSerializer
-from scheduling.serializers.Employee import EmployeeSerializer
+from scheduling.serializers.Employee import EmployeeShallowSerializer
 
 
 class BranchNameSerializer(serializers.ModelSerializer):
@@ -21,7 +21,7 @@ class DailyViewResponseSerializer(serializers.Serializer):
 
 	start = serializers.DateTimeField()
 	end = serializers.DateTimeField()
-	employee = EmployeeSerializer()
+	employee = EmployeeShallowSerializer()
 	branch = BranchSerializer()
 
 	# Invalidate the serializer if the start date is after the end date
