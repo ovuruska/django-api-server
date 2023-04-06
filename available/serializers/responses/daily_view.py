@@ -1,14 +1,28 @@
-
-
+from django.apps import apps
 from rest_framework import serializers
 
+from scheduling.serializers.Branch import BranchSerializer
+from scheduling.serializers.Employee import EmployeeSerializer
+
+
+class BranchNameSerializer(serializers.ModelSerializer):
+	id = serializers.IntegerField()
+	class Meta:
+		model = apps.get_model('scheduling', 'Branch')
+		fields = ('id','name')
+
+class EmployeeNameSerializer(serializers.ModelSerializer):
+	id = serializers.IntegerField()
+	class Meta:
+		model = apps.get_model('scheduling', 'Employee')
+		fields = ('id','name')
 
 class DailyViewResponseSerializer(serializers.Serializer):
 
 	start = serializers.DateTimeField()
 	end = serializers.DateTimeField()
-	employee = serializers.IntegerField()
-	branch = serializers.IntegerField()
+	employee = EmployeeSerializer()
+	branch = BranchSerializer()
 
 	# Invalidate the serializer if the start date is after the end date
 	# Invalidate if extra fields are passed.
@@ -18,10 +32,7 @@ class DailyViewResponseSerializer(serializers.Serializer):
 	def validate(self, data):
 		if data['start'] > data['end']:
 			raise serializers.ValidationError('The start date must be before the end date.')
-		if data['employee'] < 1:
-			raise serializers.ValidationError('The employee must be a positive integer.')
-		if data['branch'] < 1:
-			raise serializers.ValidationError('The branch must be a positive integer.')
+
 		if set(data.keys()) != {'start', 'end', 'employee', 'branch'}:
 			raise serializers.ValidationError('The serializer must only have the start, end, employee, and branch fields.')
 		return data

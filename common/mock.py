@@ -29,9 +29,9 @@ class Mock:
 
 	def __init__(self,
 
-	             number_of_branches: int = 2, number_of_employees: int = 20, number_of_customers: int = 20,
-	             number_of_dogs: int = 50, number_of_appointments: int = 100, number_of_services: int = 10,
-	             number_of_products: int = 10, appointment_interval: str = "1y",
+	             number_of_branches: int = 2, number_of_employees: int = 50, number_of_customers: int = 100,
+	             number_of_dogs: int = 200, number_of_appointments: int = 1000, number_of_services: int = 10,
+	             number_of_products: int = 30, appointment_interval: str = "1y",
 
 	             ):
 		self.number_of_branches = number_of_branches
@@ -110,44 +110,50 @@ class Mock:
 		for ind in trange(self.number_of_employees, desc="Generating employees"):
 			email = fake.email()
 			password = fake.password()
-			if ind < self.number_of_employees / 2 or self.number_of_employees <= 6:
+			if ind < 30:
 				employee = models.Employee(name=fake.name(),
 					branch=branches[fake.random_int(min=0, max=self.number_of_branches - 1)], phone=fake.phone_number(),
 					email=email,
 					user=User.objects.create_user(username=usernames.pop(), password=password, email=email),
 					uid=fake.uuid4())
+			elif ind < 40:
+				employee = models.Employee(name=fake.name(),
+				                           branch=branches[fake.random_int(min=0, max=self.number_of_branches - 1)],
+				                           phone=fake.phone_number(),
+				                           email=email,
+				                           role = Roles.EMPLOYEE_FULL_GROOMING,
+				                           user=User.objects.create_user(username=usernames.pop(), password=password,
+				                                                         email=email),
+				                           uid=fake.uuid4())
 
+			elif ind < 45:
+				employee = models.Employee(name=fake.name(),
+				                           branch=branches[fake.random_int(min=0, max=self.number_of_branches - 1)],
+				                           phone=fake.phone_number(),
+				                           email=email,
+				                           role=Roles.MANAGER,
+				                           user=User.objects.create_user(username=usernames.pop(), password=password,
+				                                                         email=email),
+				                           uid=fake.uuid4())
+			elif ind < 49:
+				employee = models.Employee(name=fake.name(),
+				                           branch=branches[fake.random_int(min=0, max=self.number_of_branches - 1)],
+				                           phone=fake.phone_number(),
+				                           email=email,
+				                           role=Roles.ACCOUNTANT,
+				                           user=User.objects.create_user(username=usernames.pop(), password=password,
+				                                                         email=email),
+				                           uid=fake.uuid4())
 
-
-
-			else:
-				if ind == self.number_of_employees / 2 and self.number_of_employees > 6:
-					employee = models.Employee(name=fake.name(),
-						branch=branches[fake.random_int(min=0, max=self.number_of_branches - 1)],
-						phone=fake.phone_number(), email=email, role=Roles.ADMIN,
-						user=User.objects.create_user(username=usernames.pop(), password=password, email=email),
-						uid=fake.uuid4())
-
-				elif (ind == self.number_of_employees / 2 + 1) and self.number_of_employees > 6:
-					employee = models.Employee(name=fake.name(),
-						branch=branches[fake.random_int(min=0, max=self.number_of_branches - 1)],
-						phone=fake.phone_number(), email=email, role=Roles.ACCOUNTANT,
-						user=User.objects.create_user(username=usernames.pop(), password=password, email=email),
-						uid=fake.uuid4())
-
-
-				elif ind == self.number_of_employees / 2 + 2 and self.number_of_employees > 6:
-					employee = models.Employee(name=fake.name(),
-						branch=branches[fake.random_int(min=0, max=self.number_of_branches - 1)],
-						phone=fake.phone_number(), email=email, role=Roles.MANAGER,
-						user=User.objects.create_user(username=usernames.pop(), password=password, email=email),
-						uid=fake.uuid4())
-				else:
-					employee = models.Employee(name=fake.name(),
-						branch=branches[fake.random_int(min=0, max=self.number_of_branches - 1)],
-						phone=fake.phone_number(), email=email, role=Roles.EMPLOYEE_FULL_GROOMING,
-						user=User.objects.create_user(username=usernames.pop(), password=password, email=email),
-						uid=fake.uuid4())
+			elif ind == 49:
+				employee = models.Employee(name=fake.name(),
+				                           branch=branches[fake.random_int(min=0, max=self.number_of_branches - 1)],
+				                           phone=fake.phone_number(),
+				                           email=email,
+				                           role=Roles.ADMIN,
+				                           user=User.objects.create_user(username=usernames.pop(), password=password,
+				                                                         email=email),
+				                           uid=fake.uuid4())
 
 			employee.save()  # Save the employee to the database
 			employees.append(employee)  # Add the employee to the list of employees

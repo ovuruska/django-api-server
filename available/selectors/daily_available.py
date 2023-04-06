@@ -1,5 +1,7 @@
 import datetime
 
+from django.apps import apps
+
 
 class IntervalEntity:
 	def __init__(self, start :datetime.datetime, end: datetime.datetime):
@@ -39,7 +41,8 @@ def get_slots(working_interval: IntervalEntity, appointments: [IntervalEntity], 
 
 def get_daily_available_slots(working_hours, appointments, duration, date: datetime.datetime):
 	all_slots = []
-
+	Employee = apps.get_model('scheduling', 'Employee')
+	Branch = apps.get_model('scheduling', 'Branch')
 	working_intervals = [IntervalEntity(start=datetime.datetime.combine(date, working_hour.start),
 	                                    end=datetime.datetime.combine(date, working_hour.end)) for working_hour in
 	                     working_hours]
@@ -56,7 +59,12 @@ def get_daily_available_slots(working_hours, appointments, duration, date: datet
 	                                                                 grouped_appointments):
 		available_slots = get_slots(working_interval, employee_appointments, duration)
 		all_slots.extend(
-			[{'start': slot[0], 'end': slot[1], 'employee': working_hour.employee_id, 'branch': working_hour.branch_id}
+			[{
+				'start': slot[0],
+				'end': slot[1],
+				'employee':Employee.objects.filter(id=working_hour.employee_id).first().to_dict(),
+				'branch': Branch.objects.filter(id=working_hour.branch_id).first().to_dict()
+			}
 			 for slot in available_slots])
 
 	return all_slots
