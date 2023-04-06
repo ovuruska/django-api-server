@@ -1,3 +1,16 @@
+"""
+from rest_framework import serializers
+
+
+class AvailableEmployeesRequestSerializer(serializers.Serializer):
+	date = serializers.DateTimeField()
+	branches = serializers.ListField(child=serializers.IntegerField(), required=False)
+	service = serializers.CharField()
+	times = serializers.ListField(child=serializers.CharField(), required=False)
+
+
+"""
+"""
 import datetime
 from django.test import TestCase
 
@@ -131,4 +144,15 @@ class DailyViewSerializerTestCase(TestCase):
 
 		serializer = DailyViewRequestSerializer(data=data)
 		self.assertFalse(serializer.is_valid())
+"""
+# Path: available/tests/serializers/requests/test_daily_employees.py
+from django.test import TestCase
+class TestAvailableEmployees(TestCase):
 
+	def test_valid_data(self):
+		data = {
+			'branches': [1, 2, 3],
+			'service': 'We Wash',
+			'date': '2020-01-01',
+			'times': ['10:00', '11:00']
+		}

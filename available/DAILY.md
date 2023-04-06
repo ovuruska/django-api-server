@@ -19,6 +19,7 @@ Request Parameters
 *   **service** (required): A string representing the service name.
 *   **date** (required): A string representing the target date in the format `YYYY-mm-dd`.
 *   **duration** (optional): An integer representing the duration of the appointment in minutes. Default is 60 minutes.
+*  **times** (optional): A list of strings representing the time of day. Default is an empty list `[]`. Possible values are: "Morning", "Afternoon", "Evening".
 
 Example Request
 ---------------
@@ -33,7 +34,8 @@ json
   "branches": [101, 102],
   "service": "Full Grooming",
   "date": "2023-04-01",
-  "duration": 60
+  "duration": 60,
+    "times": ["Morning", "Afternoon"],
 }
 ```
 

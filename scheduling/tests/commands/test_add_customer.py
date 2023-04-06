@@ -10,7 +10,7 @@ from scheduling.models import Customer
 This tests suite contains a single tests case:
 
 test_add_customer_success: Tests whether the command successfully creates a new User and Customer instance with the given input.
-To tests the user input, we use the unittest.mock.patch context manager to mock the input function. In this tests, the input function will return the values stored in self.username, self.password, and self.email when called.
+To tests the user input, we use the unittest.__mock__.patch context manager to __mock__ the input function. In this tests, the input function will return the values stored in self.username, self.password, and self.email when called.
 """
 class AddCustomerCommandTestCase(TestCase):
     def setUp(self):
