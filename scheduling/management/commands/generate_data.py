@@ -21,7 +21,7 @@ class Command(BaseCommand):
                  number_of_dogs: int = 500,
                  number_of_appointments: int = 200,
                  number_of_services: int = 10,
-                 number_of_products: int = 10,
+                 number_of_products: int = 50,
                  number_of_categories: int = 4,
                  appointment_interval: str = "1y"
 
@@ -47,8 +47,8 @@ class Command(BaseCommand):
         self.mock = Mock(
             number_of_branches = self.number_of_branches ,
             number_of_employees = self.number_of_employees ,
-            number_of_customers = self.number_of_customers * scale,
-            number_of_dogs = self.number_of_dogs * scale,
+            number_of_customers = self.number_of_customers,
+            number_of_dogs = self.number_of_dogs ,
             number_of_appointments = self.number_of_appointments * scale,
             number_of_services = self.number_of_services,
             number_of_products = self.number_of_products,
