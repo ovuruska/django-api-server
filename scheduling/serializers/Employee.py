@@ -10,11 +10,14 @@ class EmployeeModifySerializer(serializers.ModelSerializer):
 		fields = ('name', 'email', 'phone', 'branch', 'role')
 
 class EmployeeShallowSerializer(serializers.ModelSerializer):
+	id = serializers.IntegerField(required=False)
+
 	class Meta:
 		model = Employee
 		fields = ('id', 'name', 'email', 'phone', 'branch', 'role','created_at','updated_at')
 
 class EmployeeSerializer(serializers.ModelSerializer):
+
 	branch = BranchSerializer(allow_null=True, required=False)
 	class Meta:
 		model = Employee

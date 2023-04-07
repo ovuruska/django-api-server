@@ -11,6 +11,7 @@ tubs = models.IntegerField()
 
 
 class BranchSerializer(serializers.ModelSerializer):
+	id = serializers.IntegerField(required=False)
 	class Meta:
 		model = Branch
 		fields = "__all__"

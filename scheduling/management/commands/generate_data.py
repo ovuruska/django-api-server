@@ -24,7 +24,7 @@ class Command(BaseCommand):
         scale = int(scale)
         self.appointment_interval = options['interval']
         self.mock = Mock(
-            number_of_appointments = 1000 * scale,
+            number_of_appointments = 2000 * scale,
             appointment_interval= self.appointment_interval,
         )
         self.data = self.mock.generate()
