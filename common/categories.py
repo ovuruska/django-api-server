@@ -1,5 +1,3 @@
-from typing import List
-
 food_and_treats = [
     "Dry food (kibble)",
     "Wet food (canned)",
@@ -92,5 +90,80 @@ cleaning_and_odor_control = [
 ]
 
 
+categories = [
+	"Food and treats",
+	"Toys",
+	"Grooming supplies",
+	"Health and wellness",
+	"Bedding and furniture",
+	"Feeding and watering supplies",
+	"Collars, leashes, and harnesses",
+	"Training and behavior aids",
+	"Clothing and accessories",
+	"Cleaning and odor control"
+]
 
-all_categories: list[str] = food_and_treats + toys + grooming_supplies + health_and_wellness + bedding_and_furniture + feeding_and_watering_supplies + collars_leashes_and_harnesses + training_and_behavior_aids + clothing_and_accessories + cleaning_and_odor_control
+category_dict = {
+	"Food and treats": food_and_treats,
+	"Toys": toys,
+	"Grooming supplies": grooming_supplies,
+	"Health and wellness": health_and_wellness,
+	"Bedding and furniture": bedding_and_furniture,
+	"Feeding and watering supplies": feeding_and_watering_supplies,
+	"Collars, leashes, and harnesses": collars_leashes_and_harnesses,
+	"Training and behavior aids": training_and_behavior_aids,
+	"Clothing and accessories": clothing_and_accessories,
+	"Cleaning and odor control": cleaning_and_odor_control,
+    "General-purpose shampoos": [
+        "Mild shampoos",
+        "Deodorizing shampoos",
+        "Moisturizing shampoos"
+    ],
+    "Medicated shampoos": [
+        "Anti-fungal shampoos",
+        "Anti-bacterial shampoos",
+        "Anti-itch shampoos",
+        "Anti-dandruff shampoos",
+        "Hypoallergenic shampoos",
+        "Shampoos for sensitive skin"
+    ],
+    "Flea and tick shampoos": [
+        "Flea-repelling shampoos",
+        "Tick-repelling shampoos",
+        "Flea and tick treatment shampoos"
+    ],
+    "Coat-specific shampoos": [
+        "Shampoos for long-haired dogs",
+        "Shampoos for short-haired dogs",
+        "Shampoos for curly-haired dogs",
+        "Shampoos for wire-haired dogs",
+        "Shampoos for double-coated dogs"
+    ],
+    "Color-enhancing shampoos": [
+        "Shampoos for white coats",
+        "Shampoos for black coats",
+        "Shampoos for brown/red coats",
+        "Shampoos for multi-colored coats"
+    ],
+    "Puppy shampoos": [
+        "Gentle shampoos for puppies",
+        "Tear-free shampoos for puppies"
+    ],
+    "Natural and organic shampoos": [
+        "Vegan shampoos",
+        "Eco-friendly shampoos",
+        "Shampoos with essential oils",
+        "Herbal shampoos"
+    ],
+    "Specialty shampoos": [
+        "Whitening shampoos",
+        "De-shedding shampoos",
+        "De-matting shampoos",
+        "Waterless shampoos",
+        "Dry shampoos"
+    ]
+}
+
+
+
+all_sub_categories: list[str] = food_and_treats + toys + grooming_supplies + health_and_wellness + bedding_and_furniture + feeding_and_watering_supplies + collars_leashes_and_harnesses + training_and_behavior_aids + clothing_and_accessories + cleaning_and_odor_control
