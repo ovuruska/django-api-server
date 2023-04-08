@@ -14,7 +14,7 @@ from scheduling import models
 # from transactions.models import Transaction
 
 from .breeds import breeds
-from .categories import all_categories
+from .categories import category_dict
 from .roles import Roles
 
 
@@ -66,8 +66,7 @@ class Mock:
 		transactions = []
 		products = []
 		appointments = []
-		categories = all_categories
-
+		categories = category_dict
 		fake = Faker()
 		usernames = self.generate_unique_names(fake.user_name, self.number_of_employees + self.number_of_customers)
 
@@ -102,8 +101,7 @@ class Mock:
 			current_date += datetime.timedelta(days=1)
 
 		for ind in trange(self.number_of_branches, desc="Generating branches"):
-			branch = models.Branch(name=fake.company(), address=fake.address(), description=fake.text(),
-				tubs=fake.random_int(min=1, max=10), )
+			branch = models.Branch(name=fake.company(), address=fake.address(), description=fake.text() )
 			branch.save()
 			branches.append(branch)
 
@@ -112,13 +110,11 @@ class Mock:
 			password = fake.password()
 			if ind < 30:
 				employee = models.Employee(name=fake.name(),
-					branch=branches[fake.random_int(min=0, max=self.number_of_branches - 1)], phone=fake.phone_number(),
 					email=email,
 					user=User.objects.create_user(username=usernames.pop(), password=password, email=email),
 					uid=fake.uuid4())
 			elif ind < 40:
 				employee = models.Employee(name=fake.name(),
-				                           branch=branches[fake.random_int(min=0, max=self.number_of_branches - 1)],
 				                           phone=fake.phone_number(),
 				                           email=email,
 				                           role = Roles.EMPLOYEE_FULL_GROOMING,
@@ -128,7 +124,6 @@ class Mock:
 
 			elif ind < 45:
 				employee = models.Employee(name=fake.name(),
-				                           branch=branches[fake.random_int(min=0, max=self.number_of_branches - 1)],
 				                           phone=fake.phone_number(),
 				                           email=email,
 				                           role=Roles.MANAGER,
@@ -137,7 +132,6 @@ class Mock:
 				                           uid=fake.uuid4())
 			elif ind < 49:
 				employee = models.Employee(name=fake.name(),
-				                           branch=branches[fake.random_int(min=0, max=self.number_of_branches - 1)],
 				                           phone=fake.phone_number(),
 				                           email=email,
 				                           role=Roles.ACCOUNTANT,
@@ -147,7 +141,6 @@ class Mock:
 
 			elif ind == 49:
 				employee = models.Employee(name=fake.name(),
-				                           branch=branches[fake.random_int(min=0, max=self.number_of_branches - 1)],
 				                           phone=fake.phone_number(),
 				                           email=email,
 				                           role=Roles.ADMIN,
@@ -189,17 +182,13 @@ class Mock:
 			dog.save()
 			dogs.append(dog)
 
-		for ind in trange(self.number_of_services, desc="Generating services"):
-			service = models.Service(name=fake.company(), description=fake.bs(),
-				cost=fake.pyfloat(positive=True, min_value=1, max_value=100), duration=fake.time_delta(), )
-			service.save()
-			services.append(service)
+		for category in categories.keys():
+			for sub_category in categories[category]:
 
-		for ind in trange(self.number_of_products, desc="Generating products"):
-			product = models.Product(name=fake.company().split(" ")[0], description=fake.bs(),
-				category=fake.random.choice(categories), cost=fake.pyfloat(positive=True, min_value=1, max_value=100), )
-			product.save()
-			products.append(product)
+				product = models.Product(name=sub_category, description=fake.bs(),
+					category=category,sub_category=sub_category, cost=fake.pyfloat(positive=True, min_value=1, max_value=100), )
+				product.save()
+				products.append(product)
 
 		for ind in trange(self.number_of_appointments, desc='Generating Appointments'):
 			positive = "+" + self.appointment_interval
