@@ -166,4 +166,6 @@ category_dict = {
 
 
 
+
 all_sub_categories: list[str] = food_and_treats + toys + grooming_supplies + health_and_wellness + bedding_and_furniture + feeding_and_watering_supplies + collars_leashes_and_harnesses + training_and_behavior_aids + clothing_and_accessories + cleaning_and_odor_control
+
