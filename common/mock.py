@@ -182,16 +182,13 @@ class Mock:
 			dog.save()
 			dogs.append(dog)
 
-		for ind in trange(self.number_of_products, desc="Generating products"):
+		for category in categories.keys():
+			for sub_category in categories[category]:
 
-			category = fake.random.choice(list(categories.keys()))
-			sub_category = fake.random.choice(categories[category])
-
-
-			product = models.Product(name=fake.company().split(" ")[0], description=fake.bs(),
-				category=category,sub_category=sub_category, cost=fake.pyfloat(positive=True, min_value=1, max_value=100), )
-			product.save()
-			products.append(product)
+				product = models.Product(name=sub_category, description=fake.bs(),
+					category=category,sub_category=sub_category, cost=fake.pyfloat(positive=True, min_value=1, max_value=100), )
+				product.save()
+				products.append(product)
 
 		for ind in trange(self.number_of_appointments, desc='Generating Appointments'):
 			positive = "+" + self.appointment_interval
