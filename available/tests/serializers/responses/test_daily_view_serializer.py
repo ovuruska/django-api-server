@@ -1,11 +1,51 @@
+import datetime
+import zoneinfo
+
 from django.test import TestCase
 
 from available.serializers.responses.daily_view import DailyViewResponseSerializer
 
+"""
+class BranchNameSerializer(serializers.ModelSerializer):
+	id = serializers.IntegerField()
+	class Meta:
+		model = apps.get_model('scheduling', 'Branch')
+		fields = ('id','name')
 
+class EmployeeNameSerializer(serializers.ModelSerializer):
+	id = serializers.IntegerField()
+	class Meta:
+		model = apps.get_model('scheduling', 'Employee')
+		fields = ('id','name')
+
+"""
 class DailyViewResponseSerializerTestCase(TestCase):
 
-	def test_valid_data(self):
+	def test_valid(self):
+		data = {
+			'start': '2019-01-01 00:00:00',
+			'end':'2019-01-01 00:00:00',
+			'employee': {
+				'id': 1,
+				'name': 'Test Employee'
+			},
+			'branch': {
+				'id': 1,
+				'name': 'Test Branch'
+			}
+
+		}
+		serializer = DailyViewResponseSerializer(data=data)
+		self.assertTrue(serializer.is_valid())
+		validated_data = serializer.validated_data
+		self.assertEqual(validated_data['start'], datetime.datetime(2019, 1, 1, 0, 0, tzinfo=zoneinfo.ZoneInfo(key='UTC')))
+		self.assertEqual(validated_data['end'],  datetime.datetime(2019, 1, 1, 0, 0, tzinfo=zoneinfo.ZoneInfo(key='UTC')))
+		self.assertEqual(validated_data['employee'], data['employee'])
+		self.assertEqual(validated_data['branch'], data['branch'])
+
+
+
+	def test_invalid_data_with_ids(self):
 
 		data = {
 			'start': '2019-01-01 00:00:00',
@@ -14,7 +54,7 @@ class DailyViewResponseSerializerTestCase(TestCase):
 			'branch': 1
 		}
 		serializer = DailyViewResponseSerializer(data=data)
-		self.assertTrue(serializer.is_valid())
+		self.assertFalse(serializer.is_valid())
 
 	def test_invalid_start(self):
 		data = {
