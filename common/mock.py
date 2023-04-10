@@ -14,7 +14,7 @@ from scheduling import models
 # from transactions.models import Transaction
 
 from .breeds import breeds
-from .categories import all_categories
+from .categories import category_dict
 from .roles import Roles
 
 
@@ -29,8 +29,8 @@ class Mock:
 
 	def __init__(self,
 
-	             number_of_branches: int = 2, number_of_employees: int = 50, number_of_customers: int = 100,
-	             number_of_dogs: int = 200, number_of_appointments: int = 1000, number_of_services: int = 10,
+	             number_of_branches: int = 5, number_of_employees: int = 50, number_of_customers: int = 100,
+	             number_of_dogs: int = 250, number_of_appointments: int = 2000, number_of_services: int = 10,
 	             number_of_products: int = 30, appointment_interval: str = "1y",
 
 	             ):
@@ -66,8 +66,7 @@ class Mock:
 		transactions = []
 		products = []
 		appointments = []
-		categories = all_categories
-
+		categories = category_dict
 		fake = Faker()
 		usernames = self.generate_unique_names(fake.user_name, self.number_of_employees + self.number_of_customers)
 
@@ -102,8 +101,7 @@ class Mock:
 			current_date += datetime.timedelta(days=1)
 
 		for ind in trange(self.number_of_branches, desc="Generating branches"):
-			branch = models.Branch(name=fake.company(), address=fake.address(), description=fake.text(),
-				tubs=fake.random_int(min=1, max=10), )
+			branch = models.Branch(name=fake.company(), address=fake.address(), description=fake.text() )
 			branch.save()
 			branches.append(branch)
 
@@ -112,13 +110,11 @@ class Mock:
 			password = fake.password()
 			if ind < 30:
 				employee = models.Employee(name=fake.name(),
-					branch=branches[fake.random_int(min=0, max=self.number_of_branches - 1)], phone=fake.phone_number(),
 					email=email,
 					user=User.objects.create_user(username=usernames.pop(), password=password, email=email),
 					uid=fake.uuid4())
 			elif ind < 40:
 				employee = models.Employee(name=fake.name(),
-				                           branch=branches[fake.random_int(min=0, max=self.number_of_branches - 1)],
 				                           phone=fake.phone_number(),
 				                           email=email,
 				                           role = Roles.EMPLOYEE_FULL_GROOMING,
@@ -128,7 +124,6 @@ class Mock:
 
 			elif ind < 45:
 				employee = models.Employee(name=fake.name(),
-				                           branch=branches[fake.random_int(min=0, max=self.number_of_branches - 1)],
 				                           phone=fake.phone_number(),
 				                           email=email,
 				                           role=Roles.MANAGER,
@@ -137,7 +132,6 @@ class Mock:
 				                           uid=fake.uuid4())
 			elif ind < 49:
 				employee = models.Employee(name=fake.name(),
-				                           branch=branches[fake.random_int(min=0, max=self.number_of_branches - 1)],
 				                           phone=fake.phone_number(),
 				                           email=email,
 				                           role=Roles.ACCOUNTANT,
@@ -147,19 +141,19 @@ class Mock:
 
 			elif ind == 49:
 				employee = models.Employee(name=fake.name(),
-				                           branch=branches[fake.random_int(min=0, max=self.number_of_branches - 1)],
 				                           phone=fake.phone_number(),
 				                           email=email,
 				                           role=Roles.ADMIN,
 				                           user=User.objects.create_user(username=usernames.pop(), password=password,
 				                                                         email=email),
 				                           uid=fake.uuid4())
-
+			else:
+				break
 			employee.save()  # Save the employee to the database
 			employees.append(employee)  # Add the employee to the list of employees
 
 			for weekday in range(7):
-				start_time = datetime.time(hour=random.randint(9, 15), minute=0)
+				start_time = datetime.time(hour=random.randint(5, 15), minute=0)
 				end_time = datetime.time(hour=start_time.hour + random.randint(1, 8), minute=0)
 				wh = models.EmployeeWorkingHour.objects.create(employee=employee,
 					branch=branches[fake.random_int(min=0, max=self.number_of_branches - 1)], week_day=weekday,
@@ -179,7 +173,7 @@ class Mock:
 			customers.append(customer)
 
 		for ind in trange(self.number_of_dogs, desc="Generating dogs"):
-			dog = models.Dog(name=fake.name(),
+			dog = models.Dog(name=fake.name().split(" ")[0],
 				owner=customers[fake.random_int(min=0, max=self.number_of_customers - 1)],
 				breed=fake.random.choice(breeds), weight=fake.random.normalvariate(80, 20), employee_notes=fake.text(),
 				customer_notes=fake.text(), special_handling=fake.random.choice(5 * [True] + 95 * [False]),
@@ -188,34 +182,46 @@ class Mock:
 			dog.save()
 			dogs.append(dog)
 
-		for ind in trange(self.number_of_services, desc="Generating services"):
-			service = models.Service(name=fake.company(), description=fake.bs(),
-				cost=fake.pyfloat(positive=True, min_value=1, max_value=100), duration=fake.time_delta(), )
-			service.save()
-			services.append(service)
+		for category in categories.keys():
+			for sub_category in categories[category]:
 
-		for ind in trange(self.number_of_products, desc="Generating products"):
-			product = models.Product(name=fake.company(), description=fake.bs(),
-				category=fake.random.choice(categories), cost=fake.pyfloat(positive=True, min_value=1, max_value=100), )
-			product.save()
-			products.append(product)
+				product = models.Product(name=sub_category, description=fake.bs(),
+					category=category,sub_category=sub_category, cost=fake.pyfloat(positive=True, min_value=1, max_value=100), )
+				product.save()
+				products.append(product)
 
 		for ind in trange(self.number_of_appointments, desc='Generating Appointments'):
 			positive = "+" + self.appointment_interval
 			negative = "-" + self.appointment_interval
 
-			start = fake.date_between(start_date=negative, end_date=positive)
-			start = datetime.datetime.combine(start, datetime.time(fake.random_int(min=8, max=18),
-			                                                       fake.random.choice([0, 15, 30, 45])))
-			start = pytz.utc.localize(start)
+			start : datetime.date = fake.date_between(start_date=negative, end_date=positive)
+			working_hours = random.choice(models.EmployeeWorkingHour.objects.filter(week_day=start.weekday()))
+
+			working_start = datetime.datetime.combine(start,working_hours.start)
+			working_end = datetime.datetime.combine(start,working_hours.end)
+
+			def random_datetime(start, end,step = 15):
+				"""This function will return a random datetime between two datetime
+				objects with given step.
+				"""
+				date_time = fake.date_time_between(start_date=start,end_date=end,tzinfo=pytz.utc)
+				date_time = date_time.replace(second=0, microsecond=0)
+				if(date_time.minute % step != 0):
+					date_time = date_time + datetime.timedelta(minutes=step - date_time.minute % step)
+				return date_time
+
+			start = random_datetime(start=working_start, end=working_end)
+
+
+
 			end = start + datetime.timedelta(
 				minutes=fake.random.choice([15, 30, 45, 60, 75, 90, 105, 120, 135, 150, 165, 180]))
 
 			status = \
 			models.Appointment.Status.choices[fake.random_int(min=0, max=len(models.Appointment.Status.choices) - 1)][0]
 
-			employee = fake.random.choice(employees)
-			branch = employee.branch
+			employee = working_hours.employee
+			branch = working_hours.branch
 			appointment_type = fake.random.choice(models.Appointment.AppointmentType.choices)[0]
 
 			pet = fake.random.choice(dogs)
@@ -229,18 +235,13 @@ class Mock:
 				appointment_type=appointment_type,
 
 			)
-
-			appointment_services = fake.random.choices(services, k=fake.random_int(min=0, max=4))
 			appointment.save()
 
-			for appointment_service in appointment_services:
-				appointment.services.add(appointment_service)
 			appointment_products = fake.random.choices(products, k=fake.random_int(min=0, max=4))
 			for appointment_product in appointment_products:
 				appointment.products.add(appointment_product)
 			appointment.save()
 
-			appointments.append(appointment)
 
 		return {'ewhs': employee_whs, 'branches': branches, 'employees': employees, 'customers': customers,
 			'dogs': dogs, 'services': services, 'appointments': appointments, 'products': products,

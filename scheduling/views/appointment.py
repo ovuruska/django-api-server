@@ -39,18 +39,13 @@ class AppointmentEmployeeCreateAPIView(generics.CreateAPIView, PermissionRequire
 		dog_breed = request.data.get("dog_breed", "")
 		dog = create_pet_with_name(customer, dog_name, breed=dog_breed)
 
-		cost = Decimal('0.00')
+		cost = 0
 		products = request.data.get('products', [])
 		for product_id in products:
 			product = Product.objects.get(id=product_id)
 			cost += product.cost
 
-		services = request.data.get('services', [])
-		for service_id in services:
-			service = Service.objects.get(id=service_id)
-			cost += service.cost
-
-		tip = Decimal(request.data.get('tip', 0))
+		tip = request.data.get('tip', 0)
 		cost += tip
 
 		# Allow mutations for request.data
@@ -179,27 +174,19 @@ class AppointmentModifyAPIView(generics.RetrieveAPIView, generics.UpdateAPIView,
 		appointment = serializer.save()
 
 		# Recalculate the cost based on the new services and products, as well as the tip
-		cost = Decimal('0.00')
-		tip = request.data.get('tip', Decimal('0.00'))
+		cost = 0
+		tip = request.data.get('tip', 0)
 
-		for product in appointment.products.all():
-			cost += product.cost
 
-		for service in appointment.services.all():
-			cost += service.cost
 
 		# Add cost of new products
 		new_products = request.data.get('products', [])
 		for product in new_products:
-			cost += Decimal(product.get('cost', '0.00'))
+			cost += product.cost
 
-		# Add cost of new services
-		new_services = request.data.get('services', [])
-		for service in new_services:
-			cost += Decimal(service.get('cost', '0.00'))
 
 		# Add tip to total cost
-		cost += Decimal(tip)
+		cost += tip
 
 		# Update the appointment with the new cost
 		appointment.cost = cost

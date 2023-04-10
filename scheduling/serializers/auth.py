@@ -15,6 +15,15 @@ class CreateUserSerializer(serializers.ModelSerializer):
         return user
 
 
+class CreateCustomerSerializer(serializers.Serializer):
+
+	email = serializers.EmailField()
+	password = serializers.CharField()
+	first_name = serializers.CharField()
+	last_name = serializers.CharField()
+
+
+
 
 class UserSerializer(serializers.ModelSerializer):
     class Meta:

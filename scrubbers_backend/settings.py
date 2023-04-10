@@ -12,6 +12,7 @@ https://docs.djangoproject.com/en/4.0/ref/settings/
 import os
 from datetime import timedelta
 from pathlib import Path
+from .discord_webhook_handler import DiscordWebhookHandler
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -53,7 +54,9 @@ MIDDLEWARE = ['django.middleware.security.SecurityMiddleware', 'django.contrib.s
               'django.middleware.common.CommonMiddleware', 'common.DisableCSRFMiddleware',
               'django.contrib.auth.middleware.AuthenticationMiddleware',
               'django.contrib.messages.middleware.MessageMiddleware',
+'request_logging.middleware.LoggingMiddleware',
               'django.middleware.clickjacking.XFrameOptionsMiddleware', 'corsheaders.middleware.CorsMiddleware', ]
+
 
 ROOT_URLCONF = 'scrubbers_backend.urls'
 
@@ -70,6 +73,7 @@ WSGI_APPLICATION = 'scrubbers_backend.wsgi.application'
 # https://docs.djangoproject.com/en/4.0/ref/settings/#databases
 
 DATABASES = {'default': {'ENGINE': 'django.db.backends.sqlite3', 'NAME': BASE_DIR / 'db.sqlite3', }}
+
 
 # Password validation
 # https://docs.djangoproject.com/en/4.0/ref/settings/#auth-password-validators
@@ -105,3 +109,28 @@ USE_TZ = True
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 CRONJOBS = [('* * * * *', 'transactions.utils.delete_old_transactions'), ]
+
+
+LOGGING = {
+    "version": 1,
+    "disable_existing_loggers": False,
+    "handlers": {
+        "webhook": {
+	        "level": "DEBUG",
+            "class":"scrubbers_backend.discord_webhook_handler.DiscordWebhookHandler",
+	        "webhook_url": "https://discord.com/api/webhooks/1094364223959740486/9W69d8AHC0HWe67lpzyKVXos1Z07xxr5lyr_L9QKnxuNzQ4aJa4t5SfsiX5FPCpyx1tB"
+        },
+    },
+    'loggers': {
+	    "django.request":{
+            'handlers': ['webhook'],
+            'level': 'DEBUG',
+		    "propagate": False,
+	    }
+    },
+	'formatters': {
+	        'verbose': {
+	            'format': '%(asctime)s [%(levelname)s] %(name)s: %(message)s',
+	        },
+	    },
+}

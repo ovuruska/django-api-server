@@ -16,3 +16,5 @@ graphene-django>=3
 django_crontab
 pytz
 coverage
+django-request-logging==0.7.5
+aiohttp

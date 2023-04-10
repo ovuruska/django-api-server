@@ -86,8 +86,8 @@ class DailyAvailableScenarioTestCase(EmployeeAuthTestCase):
 			current_start = datetime.datetime.strptime('2019-01-08 08:00:00', '%Y-%m-%d %H:%M:%S')
 			current_end = current_start + datetime.timedelta(minutes=duration)
 			for slot in data:
-				self.assertEqual(slot['employee'], 2)
-				self.assertEqual(slot['branch'], 1)
+				self.assertEqual(slot['employee']['id'],2 )
+				self.assertEqual(slot['branch']['id'], 1)
 				self.assertEqual(datetime.datetime.strptime(slot['start'], '%Y-%m-%dT%H:%M:%SZ'),  current_start)
 				self.assertEqual(datetime.datetime.strptime(slot['end'], '%Y-%m-%dT%H:%M:%SZ'),  current_end)
 
