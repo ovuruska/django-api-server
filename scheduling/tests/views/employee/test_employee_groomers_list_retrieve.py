@@ -29,4 +29,4 @@ class EmployeeGroomerListRetrieveTestCase(AuthTestCase):
 
         # check the response
         self.assertEqual(response.status_code, 200)
-        self.assertEqual(response.json(), [{'id': self.employee.id, 'name': 'John Doe', 'email': 'john@example.com'}])
+        self.assertEqual(response.json(), [{'id': self.employee.id, 'name': 'John Doe', 'email': 'john@example.com','role':15}])

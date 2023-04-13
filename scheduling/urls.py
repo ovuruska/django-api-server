@@ -31,7 +31,6 @@ dogs = [
 
 appointments = [
 	path('appointment', views.AppointmentCreateAPIView.as_view(), name='appointment_create'),
-	path('appointment/<pk>', views.AppointmentCustomerRetrieve.as_view(), name='appointment_modify'),
 ]
 
 scheduling_appointments = [

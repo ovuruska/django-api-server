@@ -16,6 +16,7 @@ class EmployeeShallowSerializer(serializers.ModelSerializer):
 		model = Employee
 		fields = ('id', 'name', 'email', 'phone', 'branch', 'role','created_at','updated_at')
 
+
 class EmployeeSerializer(serializers.ModelSerializer):
 
 	branch = BranchSerializer(allow_null=True, required=False)
@@ -27,7 +28,7 @@ class EmployeeUserRetrieveSerializer(serializers.ModelSerializer):
 
 	class Meta:
 		model = Employee
-		fields = ('id','name', 'email')
+		fields = ('id','name', 'email','role')
 
 class EmployeeFilterSerializer(serializers.ModelSerializer):
 	branch = BranchSerializer()

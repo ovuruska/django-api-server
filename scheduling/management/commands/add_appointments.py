@@ -1,48 +1,85 @@
-from django.core.management.base import BaseCommand, CommandError
-from django.utils import timezone
-import random
+from django.apps import apps
+from django.core.management.base import BaseCommand
+from faker import Faker
+from django.contrib.auth.models import User
 
-from scheduling.models import Appointment, Customer, Dog, Branch, Employee
-from scheduling.models import Service, Product  # Import these if you use them in your Appointment model
+from common.roles import Roles
+from scheduling import models
+
+"""
+
+    Description: Add customer model to the database with the input that is taken from CLI
+    Usage: python manage.py add_customer
+
+"""
+
+
+Appointment = apps.get_model('scheduling', 'Appointment')
+Customer = apps.get_model('scheduling', 'Customer')
+Dog = apps.get_model('scheduling', 'Dog')
+Employee = apps.get_model('scheduling', 'Employee')
+Branch = apps.get_model('scheduling', 'Branch')
+Product = apps.get_model('scheduling', 'Product')
+EmployeeWorkingHour = apps.get_model('scheduling', 'EmployeeWorkingHour')
 
 class Command(BaseCommand):
-    help = 'Add given amount of appointments with specific status to the database'
+	help = "Creates appointments for a given customer. Customer is specified by his/her username."
 
-    def add_arguments(self, parser):
-        parser.add_argument('amount', type=int, help='The number of appointments to add')
-        parser.add_argument('status', type=str, help='The status of the appointments')
+	def handle(self, *args, **kwargs):
+		username = input("Enter username: ")
 
-    def handle(self, *args, **options):
-        amount = options['amount']
-        status = options['status']
+		fake = Faker()
 
-        if status not in dict(Appointment.Status.choices):
-            raise CommandError(f"Invalid status '{status}'. Available statuses: {', '.join(dict(Appointment.Status.choices).keys())}")
 
-        # Modify these queries to match your data
-        customers = list(Customer.objects.all())
-        dogs = list(Dog.objects.all())
-        branches = list(Branch.objects.all())
-        employees = list(Employee.objects.all())
-        services = list(Service.objects.all())
-        products = list(Product.objects.all())
+		# Get customer by username
+		customer = Customer.objects.get(user__username=username)
+		# If not found raise error
+		if customer is None:
+			raise Exception("Customer not found")
 
-        if not customers or not dogs or not branches or not employees:
-            raise CommandError("Required related objects (Customers, Dogs, Branches, or Employees) are missing from the database.")
+		dogs = Dog.objects.filter(owner=customer)
+		# If customer has no dog create one
+		if len(dogs) == 0:
+			dog = Dog(
+				name=fake.name(),
+				breed=fake.name(),
+				owner=customer
+			)
+			dog.save()
+			dogs = [dog]
 
-        for _ in range(amount):
-            appointment = Appointment(
-                customer=random.choice(customers),
-                dog=random.choice(dogs),
-                start=timezone.now(),
-                end=timezone.now(),
-                branch=random.choice(branches),
-                employee=random.choice(employees),
-                status=status,
-            )
-            appointment.save()
-            appointment.services.set(random.sample(services, k=random.randint(0, len(services))))
-            appointment.products.set(random.sample(products, k=random.randint(0, len(products))))
-            appointment.save()
 
-        self.stdout.write(self.style.SUCCESS(f'Successfully added {amount} appointments with status "{status}"'))
+		# Get number of appts.
+		num_appts = int(input("Enter number of appointments: "))
+
+		for _ in range(num_appts):
+
+
+			# Get random date from future
+			date = fake.date_time_between(start_date="-2y", end_date="+2y")
+			# Get random working hour at that date.
+			working_hours = EmployeeWorkingHour.objects.filter(week_day=date.weekday())
+			random_working_hour = working_hours[fake.random_int(min=0, max=len(working_hours)-1)]
+			start = date.replace(hour=random_working_hour.start.hour, minute=random_working_hour.start.minute)
+			end = date.replace(hour=random_working_hour.end.hour, minute=random_working_hour.end.minute)
+			random_dog = dogs[fake.random_int(min=0, max=len(dogs) - 1)]
+
+			tip = fake.random_int(min=0, max=100)
+			cost = fake.random_int(min=50, max=200)
+
+			appt = Appointment(
+				start=start,
+				end=end,
+				customer_notes=fake.text(),
+				tip=tip,
+				cost=cost,
+				branch=random_working_hour.branch,
+				employee=random_working_hour.employee,
+				customer=customer,
+				dog=random_dog,
+			)
+			appt.save()
+
+
+
+

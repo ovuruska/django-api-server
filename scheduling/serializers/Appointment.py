@@ -59,18 +59,6 @@ class AppointmentEmployeeSerializer(serializers.ModelSerializer):
 		fields = '__all__'
 
 
-class AppointmentCustomerRetrieveSerializer(serializers.ModelSerializer):
-	services = ServiceSerializer(many=True)
-	products = ProductSerializer(many=True)
-	branch = BranchSerializer()
-	employee = EmployeeShallowSerializer()
-	customer = CustomerSerializer()
-	dog = DogShallowSerializer()
-
-	class Meta:
-		model = Appointment
-		fields = ['id', 'start', 'dog', 'end', 'customer_notes', 'services', 'products', 'tip', 'cost', 'branch',
-		          'customer', 'employee', 'status']
 
 
 class GroomerEmptySlotSerializer(serializers.ModelSerializer):
