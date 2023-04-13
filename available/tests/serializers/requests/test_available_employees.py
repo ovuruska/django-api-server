@@ -31,8 +31,8 @@ class DailyViewSerializerTestCase(TestCase):
 			'date': self.get_future_date()
 		}
 
-		serializer = DailyViewRequestSerializer(data=data)
-		self.assertTrue(serializer.is_valid())
+		serializers = DailyViewRequestSerializer(data=data)
+		self.assertTrue(serializers.is_valid())
 
 
 	def test_invalid_service(self):
@@ -43,8 +43,8 @@ class DailyViewSerializerTestCase(TestCase):
 			'date': self.get_future_date()
 		}
 
-		serializer = DailyViewRequestSerializer(data=data)
-		self.assertFalse(serializer.is_valid())
+		serializers = DailyViewRequestSerializer(data=data)
+		self.assertFalse(serializers.is_valid())
 
 
 	def test_past_date(self):
@@ -55,8 +55,8 @@ class DailyViewSerializerTestCase(TestCase):
 			'date': '2020-01-01'
 		}
 
-		serializer = DailyViewRequestSerializer(data=data)
-		self.assertTrue(serializer.is_valid())
+		serializers = DailyViewRequestSerializer(data=data)
+		self.assertTrue(serializers.is_valid())
 
 	def test_empty_employees(self):
 
@@ -67,8 +67,8 @@ class DailyViewSerializerTestCase(TestCase):
 			'date': self.get_future_date()
 		}
 
-		serializer = DailyViewRequestSerializer(data=data)
-		self.assertTrue(serializer.is_valid())
+		serializers = DailyViewRequestSerializer(data=data)
+		self.assertTrue(serializers.is_valid())
 
 	def test_empty_branches(self):
 		data = {
@@ -78,8 +78,8 @@ class DailyViewSerializerTestCase(TestCase):
 			'date': self.get_future_date()
 		}
 
-		serializer = DailyViewRequestSerializer(data=data)
-		self.assertTrue(serializer.is_valid())
+		serializers = DailyViewRequestSerializer(data=data)
+		self.assertTrue(serializers.is_valid())
 
 	def test_empty_branches_and_employees(self):
 		data = {
@@ -89,8 +89,8 @@ class DailyViewSerializerTestCase(TestCase):
 			'date': self.get_future_date()
 		}
 
-		serializer = DailyViewRequestSerializer(data=data)
-		self.assertTrue(serializer.is_valid())
+		serializers = DailyViewRequestSerializer(data=data)
+		self.assertTrue(serializers.is_valid())
 
 
 	def test_invalid_no_service(self):
@@ -100,8 +100,8 @@ class DailyViewSerializerTestCase(TestCase):
 			'date': self.get_future_date()
 		}
 
-		serializer = DailyViewRequestSerializer(data=data)
-		self.assertFalse(serializer.is_valid())
+		serializers = DailyViewRequestSerializer(data=data)
+		self.assertFalse(serializers.is_valid())
 
 
 	def test_invalid_no_date(self):
@@ -111,14 +111,14 @@ class DailyViewSerializerTestCase(TestCase):
 			'service': 'We Wash',
 		}
 
-		serializer = DailyViewRequestSerializer(data=data)
-		self.assertFalse(serializer.is_valid())
+		serializers = DailyViewRequestSerializer(data=data)
+		self.assertFalse(serializers.is_valid())
 
 	def test_empty_object(self):
 		data = {}
 
-		serializer = DailyViewRequestSerializer(data=data)
-		self.assertFalse(serializer.is_valid())
+		serializers = DailyViewRequestSerializer(data=data)
+		self.assertFalse(serializers.is_valid())
 
 
 	def test_with_duration(self):
@@ -130,8 +130,8 @@ class DailyViewSerializerTestCase(TestCase):
 			'duration': 120
 		}
 
-		serializer = DailyViewRequestSerializer(data=data)
-		self.assertTrue(serializer.is_valid())
+		serializers = DailyViewRequestSerializer(data=data)
+		self.assertTrue(serializers.is_valid())
 
 	def test_with_negative_duration_fails(self):
 		data = {
@@ -142,8 +142,8 @@ class DailyViewSerializerTestCase(TestCase):
 			'duration': -120
 		}
 
-		serializer = DailyViewRequestSerializer(data=data)
-		self.assertFalse(serializer.is_valid())
+		serializers = DailyViewRequestSerializer(data=data)
+		self.assertFalse(serializers.is_valid())
 """
 # Path: available/tests/serializers/requests/test_daily_employees.py
 from django.test import TestCase

@@ -5,34 +5,34 @@ from capacity.serializers.requests.base import BaseRequestSerializer
 
 class BaseRequestSerializerTestCase(TestCase):
 	def test_check_valid(self   ):
-		# Create a serializer with valid data
+		# Create a serializers with valid data
 		serializer = BaseRequestSerializer(data={
 			"employees": [1, 2, 3],
 			"branches": [1, 2, 3],
 			"service": "Full Grooming",
 			"date": "01/2020",
 		})
-		# Check that the serializer is valid
+		# Check that the serializers is valid
 		self.assertTrue(serializer.is_valid())
 
 	def test_check_invalid_without_date(self):
-		# Create a serializer with invalid data
+		# Create a serializers with invalid data
 		serializer = BaseRequestSerializer(data={
 			"employees": [1, 2, 3],
 			"branches": [1, 2, 3],
 			"service": "Full Grooming",
 		})
-		# Check that the serializer is invalid
+		# Check that the serializers is invalid
 		self.assertFalse(serializer.is_valid())
 
 	def test_check_invalid_without_service(self):
-		# Create a serializer with invalid data
+		# Create a serializers with invalid data
 		serializer = BaseRequestSerializer(data={
 			"employees": [1, 2, 3],
 			"branches": [1, 2, 3],
 			"date": "01/2020",
 		})
-		# Check that the serializer is invalid
+		# Check that the serializers is invalid
 		self.assertFalse(serializer.is_valid())
 
 	def test_valid_without_branches(self):
