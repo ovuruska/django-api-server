@@ -110,6 +110,23 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 CRONJOBS = [('* * * * *', 'transactions.utils.delete_old_transactions'), ]
 
+# Mailchimp API key
+MAILCHIMP_API_KEY = '<e8a0bc3c49bf95ddc6347c8c4641c9a8-us9>'
+
+# Mailchimp API base URL
+MAILCHIMP_API_URL = 'https://us9.api.mailchimp.com/3.0'
+
+# Default from email address for transactional emails
+DEFAULT_FROM_EMAIL = '<support@quicker.com>'
+
+# Mailchimp template name for transactional emails
+MAILCHIMP_TEMPLATE_NAME = '<Quicker-Reset-Password>'
+
+# Configure the mailchimp_transactional package to use your Mailchimp API key and base URL
+MAILCHIMP_TRANSACTIONAL_API_KEY = MAILCHIMP_API_KEY
+MAILCHIMP_TRANSACTIONAL_API_BASE_URL = MAILCHIMP_API_URL
+
+
 
 LOGGING = {
     "version": 1,

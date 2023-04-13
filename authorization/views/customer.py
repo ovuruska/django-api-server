@@ -18,10 +18,16 @@ from rest_framework import status
 
 from django.contrib.auth import get_user_model
 from django.contrib.auth.tokens import default_token_generator
-from django.http import HttpResponse
+from django.http import HttpResponse, JsonResponse
 from django.utils.encoding import force_bytes
 from django.utils.http import urlsafe_base64_encode
-from mailchimp3 import MailChimp
+import mailchimp_transactional as MailchimpTransactional
+from mailchimp_transactional.api_client import ApiClientError
+from mailchimp_transactional.api_client import ApiClient
+
+
+from scrubbers_backend import settings
+
 
 class VerifyTokenView(APIView):
 	permission_classes = [IsAuthenticated]
@@ -76,23 +82,16 @@ class CustomerResetPasswordAPIView(GenericAPIView, PermissionRequiredMixin):
 
 			# Create the password reset link
 			password_reset_link = f'{request.scheme}://{request.get_host()}/reset/{uid}/{token}'
-			print(password_reset_link)
+			try:
+				MAILCHIMP_API_KEY = "e8a0bc3c49bf95ddc6347c8c4641c9a8-us9"
+				mailchimp = MailchimpTransactional.Client(MAILCHIMP_API_KEY)
+				response = mailchimp.users.ping()
+				print('API called successfully: {}'.format(response))
+			except ApiClientError as error:
+				print('An exception occurred: {}'.format(error.text))
 
-			# Send the email using Mailchimp
-			client = MailChimp(mc_api='cb0a4190cb9430ce9c08ffad42faa6fe-us9', mc_user='Quicker MailChimp')
-			data = {
-				'email_address': email,
-				'status': 'subscribed',
-				'merge_fields': {
-					'PASSWORD_RESET_LINK': password_reset_link,
-				},
-			}
-			response = client.lists.members.create('YOUR_LIST_ID', data)
+			mailchimp = MailchimpTransactional.Client(MAILCHIMP_API_KEY)
 
-			if response.get('status') == 'subscribed':
-				return HttpResponse(f'Password reset email sent to {email}')
-			else:
-				return HttpResponse(f'Error sending password reset email: {response}')
 
 
 
