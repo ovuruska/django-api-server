@@ -205,12 +205,7 @@ class AppointmentEmployeeRetrieveAPIView(generics.RetrieveAPIView, PermissionReq
 		return self.queryset.filter(id=self.kwargs['pk'])
 
 
-class AppointmentCustomerRetrieve(generics.RetrieveAPIView):
-	serializer_class = AppointmentCustomerRetrieveSerializer
-	queryset = Appointment.objects.all()
 
-	def get_queryset(self):
-		return self.queryset.filter(id=self.kwargs['pk'])
 
 
 class CustomerGetAppointmentsAPIView(generics.ListAPIView):

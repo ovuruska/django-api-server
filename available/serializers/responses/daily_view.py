@@ -24,7 +24,7 @@ class DailyViewResponseSerializer(serializers.Serializer):
 	employee = EmployeeShallowSerializer()
 	branch = BranchSerializer()
 
-	# Invalidate the serializer if the start date is after the end date
+	# Invalidate the serializers if the start date is after the end date
 	# Invalidate if extra fields are passed.
 	# Invalidate if the start or end date is not in the correct format
 	# Invalidate if the employee or branch is not an integer
@@ -34,6 +34,6 @@ class DailyViewResponseSerializer(serializers.Serializer):
 			raise serializers.ValidationError('The start date must be before the end date.')
 
 		if set(data.keys()) != {'start', 'end', 'employee', 'branch'}:
-			raise serializers.ValidationError('The serializer must only have the start, end, employee, and branch fields.')
+			raise serializers.ValidationError('The serializers must only have the start, end, employee, and branch fields.')
 		return data
 
