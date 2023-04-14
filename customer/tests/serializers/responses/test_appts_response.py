@@ -109,7 +109,7 @@ class Appointment(BaseModel):
 """
 from datetime import datetime, timezone
 
-# Path: customer/tests/selectors/responses/test_appts_response.py
+# Path: customer/tests/serializers/responses/test_appts_response.py
 
 from django.test import TestCase
 
