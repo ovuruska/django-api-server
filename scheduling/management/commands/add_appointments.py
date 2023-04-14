@@ -1,3 +1,6 @@
+import datetime
+import random
+
 from django.apps import apps
 from django.core.management.base import BaseCommand
 from faker import Faker
@@ -67,6 +70,12 @@ class Command(BaseCommand):
 			tip = fake.random_int(min=0, max=100)
 			cost = fake.random_int(min=50, max=200)
 
+			# start is before now.
+			if start < datetime.datetime.now():
+				status = random.choice(["Completed","Cancelled"])
+			else:
+				status = "Pending"
+
 			appt = Appointment(
 				start=start,
 				end=end,
@@ -77,6 +86,7 @@ class Command(BaseCommand):
 				employee=random_working_hour.employee,
 				customer=customer,
 				dog=random_dog,
+				status=status
 			)
 			appt.save()
 
