@@ -1,6 +1,6 @@
 from django.urls import reverse
 from common.auth_test_case import CustomerAuthTestCase
-from customer.tests.views.generate_customer_appts import generate_customer_appts
+from customer.tests.views.generate_utils import generate_customer_appts
 
 
 class TestAllAppts(CustomerAuthTestCase):
