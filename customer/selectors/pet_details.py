@@ -23,13 +23,13 @@ def get_customer_pet_details(customer):
 	we_washes_count_dict = {item['dog']: item['number_of_we_washes'] for item in number_of_we_washes}
 	groomings_count_dict = {item['dog']: item['number_of_groomings'] for item in number_of_groomings}
 
-	return [{
+	result = [{
 		**dog.to_dict(),
-		"number_of_wewashes":we_washes_count_dict[dog.id],
-		"number_of_groomings":groomings_count_dict[dog.id],
+		"number_of_wewashes":we_washes_count_dict.get(dog.id,0),
+		"number_of_groomings":groomings_count_dict.get(dog.id,0),
 		"owner":customer.id
 	} for dog in dogs]
 
-
+	return result
 
 

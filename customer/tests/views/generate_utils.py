@@ -16,7 +16,7 @@ def generate_customer_dogs(customer,N):
 		dog = Dog.objects.create(owner=customer, name="test_pet_{}".format(i))
 		dogs.append(dog)
 	return dogs
-def generate_customer_dogs_with_appointments(customer,number_of_appts=100,number_of_dogs=5):
+def generate_customer_dogs_with_appointments(customer,number_of_appts=100,number_of_dogs=5,appointment_types=("Full Grooming","We Wash")):
 	dogs = generate_customer_dogs(customer,number_of_dogs)
 
 	branch = Branch.objects.create()
@@ -28,7 +28,7 @@ def generate_customer_dogs_with_appointments(customer,number_of_appts=100,number
 
 	for i in range(number_of_appts):
 		pet = choice(dogs)
-		appointment_type = choice(["Full Grooming","We Wash"])
+		appointment_type = choice(appointment_types)
 		Appointment.objects.create(customer=customer, branch=branch, employee=employee,start="2020-01-01 00:00:00",end="2020-01-01 00:00:00",dog=pet,appointment_type=appointment_type)
 
 
