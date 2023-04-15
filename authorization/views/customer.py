@@ -1,5 +1,6 @@
 from django.contrib.auth.mixins import PermissionRequiredMixin
 from django.contrib.auth.models import User
+from django.db import IntegrityError
 from django.forms import model_to_dict
 from knox.models import AuthToken
 
@@ -17,14 +18,14 @@ from rest_framework.response import Response
 from rest_framework import status
 
 
-class VerifyTokenView(APIView):
+class CustomerVerifyTokenView(APIView):
 	permission_classes = [IsAuthenticated]
 
 	def get(self, request):
 		return Response(status=status.HTTP_200_OK)
 
 
-class RegisterCustomerAPIView(CreateAPIView, PermissionRequiredMixin):
+class CustomerRegisterAPIView(CreateAPIView, PermissionRequiredMixin):
 	permission_classes = [AllowAny]
 	serializer_class = RegisterCustomerRequestSerializer
 
@@ -33,7 +34,11 @@ class RegisterCustomerAPIView(CreateAPIView, PermissionRequiredMixin):
 		serialized_data = kwargs.get("serialized_data")
 		email = serialized_data.get("email")
 		password = serialized_data.get("password")
-		user = User.objects.create_user(username=email, password=password)
+		try:
+			user = User.objects.create_user(username=email, password=password)
+		except IntegrityError:
+			return Response({"error": "User already exists"}, status=status.HTTP_400_BAD_REQUEST)
+
 		first_name = serialized_data.get("first_name")
 		last_name = serialized_data.get("last_name")
 		name = f"{first_name} {last_name}"
