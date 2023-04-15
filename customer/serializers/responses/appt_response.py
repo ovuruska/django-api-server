@@ -16,6 +16,8 @@ class CustomerAppointmentResponseSerializer(serializers.ModelSerializer):
 	employee = EmployeeUserRetrieveSerializer()
 	customer = CustomerSerializer()
 	dog = DogShallowSerializer()
+	start = serializers.DateTimeField(format="%Y-%m-%d %H:%M:%S")
+	end = serializers.DateTimeField(format="%Y-%m-%d %H:%M:%S")
 
 	class Meta:
 		model = Appointment
