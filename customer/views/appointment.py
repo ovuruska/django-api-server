@@ -1,4 +1,4 @@
-from datetime import timedelta
+from datetime import timedelta, timezone, datetime
 
 from django.apps import apps
 from rest_framework import generics
@@ -15,6 +15,7 @@ Employee = apps.get_model("scheduling", "Employee")
 Branch = apps.get_model("scheduling", "Branch")
 Dog = apps.get_model("scheduling", "Dog")
 Product = apps.get_model("scheduling", "Product")
+
 
 class CustomerCreateAppointment(generics.CreateAPIView):
 	serializer_class = CustomerAppointmentRequestSerializer
@@ -48,34 +49,45 @@ class CustomerCreateAppointment(generics.CreateAPIView):
 		appointment = Appointment.objects.create(
 			customer=customer,
 			employee=employee,
-			start = start,
-			appointment_type = service,
-			branch = branch,
+			start=start,
+			appointment_type=service,
+			branch=branch,
 			end=end,
-			customer_notes=serialized_data.get("customer_notes",""),
+			customer_notes=serialized_data.get("customer_notes", ""),
 			dog=Dog.objects.get(id=serialized_data.get("pet")),
 
 		)
 		appointment.save()
-		appointment.products.set( products)
+		appointment.products.set(products)
 		serializer = CustomerAppointmentResponseSerializer(appointment)
 		return Response(serializer.data)
 
-class CustomerGetAppointment(generics.ListAPIView):
+
+class CustomerCancelAppointment(generics.UpdateAPIView):
 	serializer_class = CustomerAppointmentResponseSerializer
 	permission_classes = [IsAuthenticated]
+	#	path('appointment/cancel/<int:appointment_id>', CustomerCancelAppointment.as_view(), name="customer/appointment/cancel"),
 
 	def get_queryset(self):
 		customer = self.request.user.customer
-		return Appointment.objects.filter(customer=customer)
+		app_id = self.kwargs.get("appointment_id")
 
-class CustomerRemoveAppointment(generics.DestroyAPIView):
-	serializer_class = CustomerAppointmentResponseSerializer
-	permission_classes = [IsAuthenticated]
+		return Appointment.objects.get(id=app_id, customer=customer)
 
-	def get_queryset(self):
-		# Check appointment with pk exists
-		# Check appointment belongs to customer
+	def update(self, request, *args, **kwargs):
+		try:
+			appt = self.get_queryset()
+		except Appointment.DoesNotExist:
+			return Response({"error": "Appointment not found"}, status=404)
+		if appt is None:
+			return Response({"error": "Appointment not found"}, status=404)
+		if appt.status == "Cancelled":
+			return Response({"error": "Appointment already cancelled"}, status=400)
 		# Check if appointment has more than 24 hours to start.
-		customer = self.request.user.customer
-		return Appointment.objects.filter(customer=customer)
+		if appt.start - datetime.now(timezone.utc) < timedelta(hours=24):
+			return Response({"error": "Appointment cannot be cancelled within 24 hours of start time"}, status=400)
+
+		appt.status = "Cancelled"
+		appt.save()
+		serializer = CustomerAppointmentResponseSerializer(appt)
+		return Response(serializer.data)
