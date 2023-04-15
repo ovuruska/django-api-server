@@ -42,7 +42,7 @@ class CustomerRegisterAPIView(CreateAPIView, PermissionRequiredMixin):
 		first_name = serialized_data.get("first_name")
 		last_name = serialized_data.get("last_name")
 		name = f"{first_name} {last_name}"
-		customer = Customer.objects.create(user=user,name=name)
+		customer = Customer.objects.create(user=user,name=name,email=email)
 		return Response({"user": UserSerializer(user, context=self.get_serializer_context()).data,
 		                 "token": AuthToken.objects.create(user)[1], "profile": model_to_dict(customer)})
 
