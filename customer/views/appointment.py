@@ -90,4 +90,4 @@ class CustomerCancelAppointment(generics.UpdateAPIView):
 		appt.status = "Cancelled"
 		appt.save()
 		serializer = CustomerAppointmentResponseSerializer(appt)
-		return Response(serializer.data)
+		return Response(serializer.data,status=200)

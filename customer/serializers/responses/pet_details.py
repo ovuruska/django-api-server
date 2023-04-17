@@ -17,6 +17,7 @@ class CustomerPetDetailsResponseSerializer(serializers.Serializer):
 	special_handling = serializers.BooleanField()
 	coat_type = serializers.CharField()
 	owner = serializers.IntegerField()
+	gender = serializers.CharField(default="Male")
 	number_of_groomings = serializers.IntegerField()
 	number_of_wewashes = serializers.IntegerField()
 	total_grooming_cost = serializers.IntegerField(default=0)
