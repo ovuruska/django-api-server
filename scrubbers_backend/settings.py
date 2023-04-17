@@ -39,7 +39,7 @@ ALLOWED_HOSTS = ["*"]
 
 INSTALLED_APPS = ['django.contrib.admin', 'django.contrib.auth', 'django.contrib.contenttypes',
                   'django.contrib.sessions', 'django.contrib.messages', 'rest_framework', 'knox',
-                  'django.contrib.staticfiles', 'transactions', 'django_crontab',
+                  'django.contrib.staticfiles', 'transactions', 'django_crontab', 'drf_yasg',
 
                   'authorization', 'corsheaders', 'scheduling', 'django_filters', 'graphene_django', 'search',
                   'analytics', 'capacity', 'available']
@@ -47,7 +47,8 @@ INSTALLED_APPS = ['django.contrib.admin', 'django.contrib.auth', 'django.contrib
 FIREBASE_CONFIG = os.path.join(BASE_DIR, 'firebase-config.json')
 REST_FRAMEWORK = {'DEFAULT_FILTER_BACKENDS': ['django_filters.rest_framework.DjangoFilterBackend'],
                   'DEFAULT_PERMISSION_CLASSES': ('rest_framework.permissions.IsAuthenticated',),
-                  'DEFAULT_AUTHENTICATION_CLASSES': ('knox.auth.TokenAuthentication',), }
+                  'DEFAULT_AUTHENTICATION_CLASSES': ('knox.auth.TokenAuthentication',),
+                  'DEFAULT_SCHEMA_CLASS': 'rest_framework.schemas.coreapi.AutoSchema',}
 CORS_ORIGIN_ALLOW_ALL = True
 
 MIDDLEWARE = ['django.middleware.security.SecurityMiddleware', 'django.contrib.sessions.middleware.SessionMiddleware',

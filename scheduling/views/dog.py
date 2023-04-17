@@ -31,7 +31,9 @@ class PetModifyRetrieveDestroyAPIView(RetrieveAPIView, DestroyAPIView, UpdateAPI
     queryset = Dog.objects.all()
 
     def get_queryset(self):
-        return self.queryset.filter(id=self.kwargs['pk'])
+        if 'pk' in self.kwargs:
+            return self.queryset.filter(id=self.kwargs['pk'])
+        return self.queryset.none()
 
     def patch(self, request, *args, **kwargs):
         pk = self.kwargs.get("pk")

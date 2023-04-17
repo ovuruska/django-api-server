@@ -145,7 +145,9 @@ class AppointmentModifyAPIView(generics.RetrieveAPIView, generics.UpdateAPIView,
 	queryset = Appointment.objects.all()
 
 	def get_queryset(self):
-		return self.queryset.filter(id=self.kwargs['pk'])
+		if 'pk' in self.kwargs:
+			return self.queryset.filter(id=self.kwargs['pk'])
+		return self.queryset.none()
 
 	def get(self, request, *args, **kwargs):
 		"""
@@ -202,10 +204,9 @@ class AppointmentEmployeeRetrieveAPIView(generics.RetrieveAPIView, PermissionReq
 	queryset = Appointment.objects.all()
 
 	def get_queryset(self):
-		return self.queryset.filter(id=self.kwargs['pk'])
-
-
-
+		if 'pk' in self.kwargs:
+			return self.queryset.filter(id=self.kwargs['pk'])
+		return self.queryset.none()
 
 
 class CustomerGetAppointmentsAPIView(generics.ListAPIView):

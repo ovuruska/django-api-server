@@ -40,8 +40,9 @@ class CustomerPetsListAPIView(ListAPIView):
 	filter_backends = [DjangoFilterBackend]
 
 	def get_queryset(self):
-		# Get query params
-		pk = self.kwargs['pk']
+		if 'pk' in self.kwargs:
+			pk = self.kwargs['pk']
+			queryset = self.Pet.objects.all().filter(owner=pk)
+			return queryset
+		return self.queryset.none()
 
-		queryset = self.Pet.objects.all().filter(owner=pk)
-		return queryset
