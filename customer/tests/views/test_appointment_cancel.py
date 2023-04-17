@@ -14,7 +14,7 @@ faker = Faker()
 faker.random.seed(0)
 start = faker.future_datetime(end_date="+30d", tzinfo=timezone.utc).replace(hour=12, minute=0, second=0, microsecond=0) + timedelta(hours=48)
 
-# Path: customer/tests/views/test_appointment.py
+# Path: customer/tests/views/test_create_appointment.py
 Employee = apps.get_model("scheduling", "Employee")
 Dog = apps.get_model("scheduling", "Dog")
 Product = apps.get_model("scheduling", "Product")

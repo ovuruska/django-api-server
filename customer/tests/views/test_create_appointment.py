@@ -13,7 +13,7 @@ faker = Faker()
 faker.random.seed(0)
 start = faker.future_datetime(end_date="+30d", tzinfo=timezone.utc).replace(hour=12, minute=0, second=0, microsecond=0)
 
-# Path: customer/tests/views/test_appointment.py
+# Path: customer/tests/views/test_create_appointment.py
 Employee = apps.get_model("scheduling", "Employee")
 Dog = apps.get_model("scheduling", "Dog")
 Product = apps.get_model("scheduling", "Product")
@@ -85,3 +85,10 @@ class TestCustomerCreateAppointment(CustomerAuthTestCase):
 		self.assertEqual(response_data["employee"]["id"], self.employee.id)
 		self.assertEqual(response_data["products"][0]["id"], self.product.id)
 		self.assertEqual(response_data["customer_notes"], data["customer_notes"])
+
+	def test_real_Case(self):
+		data = {"employee": 37, "branch": 3, "pet": 251, "service": "Grooming", "start": "2023-04-17T14:30:00Z",
+		 "products": [46, 77]}
+		response = self.client.post(self.url, data=data,format="json",**self.customer_headers)
+		response_data = response.json()
+		self.assertEqual(response.status_code, 400)
