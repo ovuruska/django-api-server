@@ -88,7 +88,8 @@ branches = [
 ]
 
 urlpatterns = [
-	path('branch/<int:pk>', scheduling.views.branch.BranchRetrieveModifyAPIView.as_view(), name="admin_branch_modify"),
+	path('branches/all', views.BranchListAllAPIView.as_view(), name="branch_list_all"),
+	path('branch/<pk>', scheduling.views.branch.BranchRetrieveModifyAPIView.as_view(), name="admin_branch_modify"),
 ]
 
 signed_url = [

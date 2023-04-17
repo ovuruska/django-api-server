@@ -12,6 +12,9 @@ from scheduling.selectors.working_hours import get_branch_employees, get_branch_
 from scheduling.serializers.Branch import BranchSerializer, BranchAvailableEmployeesBranchSerializer
 from scheduling.serializers.Employee import BranchAvailableEmployeesEmployeeSerializer
 
+class BranchListAllAPIView(ListAPIView):
+	serializer_class = BranchSerializer
+	queryset = Branch.objects.all()
 
 class BranchRetrieveModifyAPIView(RetrieveAPIView,ListAPIView,DestroyAPIView,UpdateAPIView):
 	serializer_class = BranchSerializer
