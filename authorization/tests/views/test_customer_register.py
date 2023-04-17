@@ -24,7 +24,7 @@ class TestCustomerRegisterAPIView(TestCase):
 		self.assertEqual(response_json.get("profile").get("validated"), True)
 		self.assertEqual(response_json.get("profile").get("id"), 1)
 		self.assertEqual(response_json.get("profile").get("uid"), "")
-		self.assertEqual(response_json.get("profile").get("email"), "")
+		self.assertEqual(response_json.get("profile").get("email"), "test@tenet.com")
 		self.assertEqual(response_json.get("profile").get("phone"), "")
 		self.assertEqual(response_json.get("profile").get("address"), "")
 

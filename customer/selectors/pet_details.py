@@ -5,10 +5,12 @@ Dog = apps.get_model("scheduling","Dog")
 Appointment = apps.get_model("scheduling","Appointment")
 
 
-def get_customer_pet_details(customer):
+def get_customer_pet_details(customer,pet_name=None):
 
-	dogs = Dog.objects.filter(owner=customer)
-
+	if pet_name:
+		dogs = Dog.objects.filter(owner=customer,name=pet_name)
+	else:
+		dogs = Dog.objects.filter(owner=customer)
 	dog_appts = Appointment.objects.filter(
 		dog__in=dogs,
 	)

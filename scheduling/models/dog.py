@@ -22,8 +22,12 @@ class Dog(BaseModel):
 	employee_notes = models.TextField(default="", max_length=1000)
 	customer_notes = models.TextField(default="", max_length=1000)
 	special_handling = models.BooleanField(default=False)
-
+	gender = models.CharField(max_length=6,default="Male")
 	coat_type = models.CharField(max_length=20, choices=CoatType.choices, default=CoatType.SMOOTH_LONG)
+
+
+	class Meta:
+		unique_together = ('owner', 'name')
 
 	def to_dict(self):
 		return {
@@ -39,4 +43,5 @@ class Dog(BaseModel):
 			"customer_notes": self.customer_notes,
 			"special_handling": self.special_handling,
 			"coat_type": self.coat_type,
+			"gender":self.gender
 		}
