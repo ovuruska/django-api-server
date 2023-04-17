@@ -45,7 +45,10 @@ class AuthTestCase(TestCase):
 
 class TestAppointmentModifyAPIView(AuthTestCase):
 
-
+    def get_queryset(self):
+        if 'pk' in self.kwargs:
+            return self.queryset.filter(id=self.kwargs['pk'])
+        return self.queryset.none()
 
     def test_appointment_modify_view(self):
 
