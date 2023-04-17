@@ -77,26 +77,30 @@ class CustomerLoginAPIView(GenericAPIView, PermissionRequiredMixin):
 			                 "token": AuthToken.objects.create(user)[1], "profile": model_to_dict(customer)})
 
 class CustomerResetPasswordAPIView(GenericAPIView, PermissionRequiredMixin):
-	permission_classes = [AllowAny]
-	def post(self, request, *args, **kwargs):
-		email = request.data.get("email")
-		user = User.objects.get(email=email)
-		if user:
-			token = default_token_generator.make_token(user)
-			uid = urlsafe_base64_encode(force_bytes(user.pk))
+    permission_classes = [AllowAny]
+    def post(self, request):
+        try:
+            email = request.data.get("email")
+            user = User.objects.get(email=email)
+            if user:
+                token = default_token_generator.make_token(user)
+                uid = urlsafe_base64_encode(force_bytes(user.pk))
 
-			# Create the password reset link
-			password_reset_link = f'{request.scheme}://{request.get_host()}/reset/{uid}/{token}'
-			try:
-				MAILCHIMP_API_KEY = "e8a0bc3c49bf95ddc6347c8c4641c9a8-us9"
-				mailchimp = MailchimpTransactional.Client(MAILCHIMP_API_KEY)
-				response = mailchimp.users.ping()
-				print('API called successfully: {}'.format(response))
-			except ApiClientError as error:
-				print('An exception occurred: {}'.format(error.text))
+                # Create the password reset link
+                password_reset_link = f'{request.scheme}://{request.get_host()}/reset/{uid}/{token}'
 
-			mailchimp = MailchimpTransactional.Client(MAILCHIMP_API_KEY)
-
+            mailchimp = MailchimpTransactional.Client("md-tR-YgWbvBPO7GPGjzBD-eg")
+            response = mailchimp.messages.send({
+                'message': {
+                    'from_email': 'support@makequicker.com',
+                    'subject': 'Reset Password',
+                    'text': '',
+                    'to': [{'email': f'{email}', 'type': 'to'}]
+                }
+            })
+            return HttpResponse(f'Successfully sent email: {response}')
+        except ApiClientError as error:
+            return HttpResponse(f'An error occurred: {error.text}')
 
 
 

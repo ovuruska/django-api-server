@@ -10,6 +10,6 @@ urlpatterns = [
 
 	path("customer/register", views.CustomerRegisterAPIView.as_view(), name="authorization/customer-register"),
 	path('customer/verify', CustomerVerifyTokenView.as_view(), name='authorization/verify-token'),
-
+	path('customer/reset-password', views.CustomerResetPasswordAPIView.as_view(), name='authorization/reset-password'),
 
 ]
