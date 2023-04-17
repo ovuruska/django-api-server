@@ -18,3 +18,5 @@ pytz
 coverage
 django-request-logging==0.7.5
 aiohttp
+mailchimp_transactional
+drf_yasg
