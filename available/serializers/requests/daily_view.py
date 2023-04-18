@@ -26,7 +26,7 @@ Service must be one of the following:
 
 	def validate(self, data):
 		# Validate the date
-		if data['service'] not in ['We Wash', 'Full Grooming']:
+		if data['service'] not in ['We Wash', 'Full Grooming','Grooming']:
 			raise ValidationError('The service must be either "We Wash" or "Full Grooming".')
 		if data['duration'] < 0:
 			raise ValidationError('The duration must be at least 60 minutes.')
