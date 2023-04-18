@@ -95,7 +95,7 @@ class AppointmentCreateAPIView(generics.CreateAPIView, PermissionRequiredMixin):
 		products = request.data.get('products', [])
 		for product_id in products:
 			product = Product.objects.get(id=product_id)
-			cost += product.cost
+			cost += Decimal(product.cost)
 
 		services = request.data.get('services', [])
 		for service_id in services:

@@ -1,19 +1,4 @@
-"""class CustomerCreatePetView(generics.CreateAPIView):
-	serializer_class = CustomerPetDetailsResponseSerializer
 
-	@validate_request(CreatePetRequestSerializer)
-	def create(self, request, *args, **kwargs):
-		serialized_data = kwargs.get("serialized_data")
-		customer = request.user.customer
-		pet_name = serialized_data.get("name")
-		pet = Dog.objects.create(owner=customer, name=pet_name, breed=serialized_data.get("breed"),
-			age=serialized_data.get("age"), weight=serialized_data.get("weight"), gender=serialized_data.get("gender"))
-		pet_details = get_customer_pet_details(customer, pet_name)
-
-		serializer = CustomerPetDetailsResponseSerializer(pet_details)
-
-		return Response(serializer.data)
-"""
 from django.apps import apps
 from django.test import TestCase
 from django.urls import reverse

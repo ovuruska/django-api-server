@@ -30,7 +30,7 @@ class CustomerAppointmentRequestSerializer(serializers.Serializer):
 		if start < datetime.now(tz=start.tzinfo):
 			raise serializers.ValidationError("Start should be in the future")
 
-		if service == "Grooming":
+		if service == "Grooming" or service == "Full Grooming":
 			if employee is None:
 				raise serializers.ValidationError("Employee is required for grooming service")
 

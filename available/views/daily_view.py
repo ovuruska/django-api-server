@@ -25,7 +25,7 @@ class DailyAvailableView(APIView):
 		date = serialized_data['date']
 		service = serialized_data['service']
 		duration = serialized_data['duration']
-		if service == "Full Grooming":
+		if service == "Full Grooming" or service == "Grooming":
 			role = Roles.EMPLOYEE_FULL_GROOMING
 		else:
 			role = Roles.EMPLOYEE_WE_WASH

@@ -19,7 +19,7 @@ class GetDailyCapacityView(APIView):
 	def post(self, request, *args, **kwargs):
 		date = request.data['date']
 		service = request.data['service']
-		if service == "Full Grooming":
+		if service == "Full Grooming" or service == "Grooming":
 			role = Roles.EMPLOYEE_FULL_GROOMING
 		else:
 			role = Roles.EMPLOYEE_WE_WASH

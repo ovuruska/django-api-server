@@ -42,3 +42,13 @@ class DailyAvailableViewTestCase(EmployeeAuthTestCase):
 		}
 		response = self.client.post(self.url, data=data, **self.employee_headers)
 		self.assertEqual(response.status_code, 400)
+
+	def test_invalid_date_invalid_service(self):
+		data = {
+			"employees": [1, 2],
+			"branches": [1, 2],
+			"service": "invalid",
+			"date": "2020/01/01"
+		}
+		response = self.client.post(self.url, data=data, **self.employee_headers)
+		self.assertEqual(response.status_code, 400)

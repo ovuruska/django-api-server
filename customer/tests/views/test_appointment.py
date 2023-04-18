@@ -85,3 +85,11 @@ class TestCustomerCreateAppointment(CustomerAuthTestCase):
 		self.assertEqual(response_data["employee"]["id"], self.employee.id)
 		self.assertEqual(response_data["products"][0]["id"], self.product.id)
 		self.assertEqual(response_data["customer_notes"], data["customer_notes"])
+
+	def test_fail(self):
+		data = {"employee": 38, "branch": 4, "pet": 251, "service": "Full Grooming", "start": "2023-04-19T11:00:00Z",
+		 "products": []}
+
+		response = self.client.post(self.url, data=data,format="json",**self.customer_headers)
+		response_data = response.json()
+		self.assertEqual(response.status_code, 400)
