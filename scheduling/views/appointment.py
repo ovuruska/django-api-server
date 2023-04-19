@@ -9,6 +9,7 @@ from django.http import QueryDict
 from rest_framework import generics
 from rest_framework.permissions import AllowAny
 from rest_framework.response import Response
+from rest_framework.status import HTTP_201_CREATED, HTTP_400_BAD_REQUEST
 
 from common.get_slots import get_slots
 from common.pagination import pagination
@@ -43,7 +44,7 @@ class AppointmentEmployeeCreateAPIView(generics.CreateAPIView, PermissionRequire
 		products = request.data.get('products', [])
 		for product_id in products:
 			product = Product.objects.get(id=product_id)
-			cost += product.cost
+			cost += Decimal(product.cost)
 
 		tip = request.data.get('tip', 0)
 		cost += tip
@@ -55,16 +56,22 @@ class AppointmentEmployeeCreateAPIView(generics.CreateAPIView, PermissionRequire
 			pass
 
 		try:
+			start = request.data["start"]
+			end = request.data.get("end",None)
+			if end is None:
+				# Convert start to date time with day month hour
+				start_datetime = datetime.strptime(start, "%Y-%m-%dT%H:%M:%S")
+				end = start_datetime + timedelta(hours=1)
 
-			appointment = Appointment(start=request.data["start"], end=request.data["end"], customer=customer, dog=dog,
+			appointment = Appointment(start=request.data["start"], end=end, customer=customer, dog=dog,
 			                          employee_id=request.data["employee_id"], branch_id=request.data["branch_id"],
 			                          status=Appointment.Status.CONFIRMED, cost=cost)
 			appointment.save()
 			# Return the appointment as JSON
 			serializer = AppointmentEmployeeSerializer(appointment)
-			return Response(serializer.data)
+			return Response(serializer.data,status = HTTP_201_CREATED)
 		except KeyError as e:
-			return Response({"error": str(e)}, status=400)
+			return Response({"error": str(e)}, status=HTTP_400_BAD_REQUEST)
 
 
 class AppointmentCreateAPIView(generics.CreateAPIView, PermissionRequiredMixin):
