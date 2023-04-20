@@ -11,7 +11,7 @@ class CustomerResetPasswordAPIViewTestCase(TestCase):
 		self.user = User.objects.create_user(username='testuser', email='test@example.com', password='testpassword')
 
 	#@patch('authorization.views.customer.MailChimp')
-	def test_send_password_reset_email(self, mock_mailchimp):
+	def test_send_password_reset_email(self):
 		pass
 		# Set up the mock MailChimp client
 

@@ -24,6 +24,7 @@ class Dog(BaseModel):
 	special_handling = models.BooleanField(default=False)
 	gender = models.CharField(max_length=6,default="Male")
 	coat_type = models.CharField(max_length=20, choices=CoatType.choices, default=CoatType.SMOOTH_LONG)
+	birth_date = models.DateField(null=True, blank=True)
 
 
 	class Meta:
@@ -43,5 +44,6 @@ class Dog(BaseModel):
 			"customer_notes": self.customer_notes,
 			"special_handling": self.special_handling,
 			"coat_type": self.coat_type,
-			"gender":self.gender
+			"gender":self.gender,
+			"birth_date":self.birth_date,
 		}
