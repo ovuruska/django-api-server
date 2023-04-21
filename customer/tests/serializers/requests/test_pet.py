@@ -94,3 +94,4 @@ class CreatePetRequestSerializerTestCase(TestCase):
 		serializer = CreatePetRequestSerializer(data=data)
 		self.assertFalse(serializer.is_valid())
 
+

@@ -6,7 +6,7 @@ class CreatePetRequestSerializer(serializers.Serializer):
 	breed = serializers.CharField(max_length=128)
 	weight = serializers.IntegerField()
 	gender = serializers.CharField(max_length=6)
-	birth_date = serializers.DateField()
+	birth_date = serializers.DateField(input_formats=["%Y-%m-%d","%Y-%m-%dT%H:%M:%S.%fZ"])
 	special_handling = serializers.CharField(max_length=1000,default="")
 	def validate(self, data):
 		if data["gender"] not in ["Male","Female"]:

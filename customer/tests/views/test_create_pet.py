@@ -76,3 +76,7 @@ class CustomerCreatePetViewTestCase(CustomerAuthTestCase):
 
 
 
+	def test_response(self):
+		data = {"name":"Oğuz Vuruşkaner","breed":"Bulldog","gender":"Male","birth_date":"2023-03-14T21:00:00.000Z","special_handling":"","weight":51}
+		response = self.client.post(self.url, data=data,**self.customer_headers)
+		self.assertEqual(response.status_code, 200)
