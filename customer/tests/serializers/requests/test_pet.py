@@ -1,3 +1,4 @@
+from datetime import datetime
 
 from django.test import TestCase
 
@@ -11,7 +12,7 @@ class CreatePetRequestSerializerTestCase(TestCase):
 			"name": "Fido",
 			"breed": "Poodle",
 			"weight": 10,
-			"age": 2,
+			"birth_date": "2019-01-01",
 			"gender":"Male"
 		}
 
@@ -21,8 +22,58 @@ class CreatePetRequestSerializerTestCase(TestCase):
 		self.assertEqual(validated_data["name"], data["name"])
 		self.assertEqual(validated_data["breed"], data["breed"])
 		self.assertEqual(validated_data["weight"], data["weight"])
-		self.assertEqual(validated_data["age"], data["age"])
+		self.assertEqual(validated_data["birth_date"], datetime.strptime(data["birth_date"],"%Y-%m-%d").date())
 		self.assertEqual(validated_data["gender"],data["gender"])
+
+	def test_valid_data_with_special_handling(self):
+		data = {
+			"name": "Fido",
+			"breed": "Poodle",
+			"weight": 10,
+			"birth_date": "2019-01-01",
+			"gender": "Male",
+			"special_handling": "test"
+		}
+		serializer = CreatePetRequestSerializer(data=data)
+		self.assertTrue(serializer.is_valid())
+		validated_data = serializer.validated_data
+		self.assertEqual(validated_data["name"], data["name"])
+		self.assertEqual(validated_data["breed"], data["breed"])
+		self.assertEqual(validated_data["weight"], data["weight"])
+		self.assertEqual(validated_data["birth_date"], datetime.strptime(data["birth_date"],"%Y-%m-%d").date())
+		self.assertEqual(validated_data["gender"],data["gender"])
+		self.assertEqual(validated_data["special_handling"],data["special_handling"])
+
+	def test_valid_data_with_special_handling_with_1000_chars(self):
+		data = {
+			"name": "Fido",
+			"breed": "Poodle",
+			"weight": 10,
+			"birth_date": "2019-01-01",
+			"gender": "Male",
+			"special_handling": 1000*"q"
+		}
+		serializer = CreatePetRequestSerializer(data=data)
+		self.assertTrue(serializer.is_valid())
+		validated_data = serializer.validated_data
+		self.assertEqual(validated_data["name"], data["name"])
+		self.assertEqual(validated_data["breed"], data["breed"])
+		self.assertEqual(validated_data["weight"], data["weight"])
+		self.assertEqual(validated_data["birth_date"], datetime.strptime(data["birth_date"], "%Y-%m-%d").date())
+		self.assertEqual(validated_data["gender"], data["gender"])
+		self.assertEqual(validated_data["special_handling"], data["special_handling"])
+
+	def test_invalid_data_with_special_handling_with_1001_chars(self):
+		data = {
+			"name": "Fido",
+			"breed": "Poodle",
+			"weight": 10,
+			"birth_date": "2019-01-01",
+			"gender": "Male",
+			"special_handling": 1001 * "q"
+		}
+		serializer = CreatePetRequestSerializer(data=data)
+		self.assertFalse(serializer.is_valid())
 
 	def test_invalid_data_missing_fields(self):
 		data = {
