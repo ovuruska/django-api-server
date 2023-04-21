@@ -28,7 +28,8 @@ class CustomerCreatePetView(generics.CreateAPIView):
 		customer = request.user.customer
 		pet_name = serialized_data.get("name")
 		try:
-			pet = Dog.objects.create(owner=customer, name=pet_name, breed=serialized_data.get("breed"),
+			pet = Dog.objects.create(owner=customer, name=pet_name, breed=serialized_data.get("breed"),birth_date=serialized_data.get("birth_date"),
+			                         customer_notes=serialized_data.get("special_handling"),
 				age=serialized_data.get("age"), weight=serialized_data.get("weight"), gender=serialized_data.get("gender"))
 		except django.db.utils.IntegrityError:
 			return Response({"message": "Pet already exists"}, status=400)
