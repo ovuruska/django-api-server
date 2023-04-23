@@ -45,5 +45,5 @@ class Dog(BaseModel):
 			"special_handling": self.special_handling,
 			"coat_type": self.coat_type,
 			"gender":self.gender,
-			"birth_date":self.birth_date,
+			"birth_date":self.birth_date.isoformat(),
 		}

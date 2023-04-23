@@ -1,16 +1,15 @@
-FROM python:3.8
-WORKDIR /app
+# Use the AWS Lambda Python runtime as the base image
+FROM public.ecr.aws/lambda/python:3.8
+WORKDIR ${LAMBDA_TASK_ROOT}
 
-COPY ./requirements.txt ./
-RUN pip install -r requirements.txt
+# Install GCC
+RUN yum install -y gcc postgresql-devel
+# Copy the requirements.txt file and install dependencies
+COPY requirements.txt  .
+RUN  pip3 install -r requirements.txt --target "${LAMBDA_TASK_ROOT}"
 
-COPY ./ ./
+# Copy the Django app
+COPY ./ ${LAMBDA_TASK_ROOT}
 
-RUN python3 manage.py makemigrations
-RUN python3 manage.py migrate
-ENV PORT=80
-ENV DJANGO_DEBUG=False
-
-RUN python3 manage.py collectstatic --noinput
-#RUN python3 manage.py celery -A scrubbers_backend worker -l info
-CMD [ "python", "./manage.py", "runserver", "0.0.0.0:80", "--settings=scrubbers_backend.settings" ]
+# Set the handler to your Django lambda_handler
+CMD ["app.handler"]

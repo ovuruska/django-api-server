@@ -13,9 +13,11 @@ import os
 from datetime import timedelta
 from pathlib import Path
 from .discord_webhook_handler import DiscordWebhookHandler
+from dotenv import load_dotenv
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
+load_dotenv(BASE_DIR / '.env')
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/4.0/howto/deployment/checklist/
@@ -26,8 +28,7 @@ SECRET_KEY = 'django-insecure-n72^h9zigpr59^p)+n99w*t#yb793s89rboma3hjqjx_z46bk-
 PORT = os.environ.get('PORT', 8000)
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = os.environ.get('DJANGO_DEBUG', '') != 'False'
-DEBUG = True
+DEBUG = os.environ.get('DJANGO_DEBUG', None) or 'False'
 
 REST_KNOX = {'SECURE_HASH_ALGORITHM': 'cryptography.hazmat.primitives.hashes.SHA512', 'AUTH_TOKEN_CHARACTER_LENGTH': 64,
              'TOKEN_TTL': timedelta(days=5), 'USER_SERIALIZER': 'scheduling.serializers.auth.UserSerializer',
@@ -73,7 +74,17 @@ WSGI_APPLICATION = 'scrubbers_backend.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/4.0/ref/settings/#databases
 
-DATABASES = {'default': {'ENGINE': 'django.db.backends.sqlite3', 'NAME': BASE_DIR / 'db.sqlite3', }}
+DATABASES = {
+	'default':
+		{
+			'ENGINE': 'django.db.backends.postgresql',
+			'NAME': os.environ['DB_NAME'],
+			'USER': os.environ['DB_USER'],
+			'PASSWORD': os.environ['DB_PASSWORD'],
+			'HOST': os.environ['DB_HOST'],
+			'PORT': os.environ['DB_PORT'],
+		}
+}
 
 
 # Password validation

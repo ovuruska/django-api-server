@@ -6,8 +6,6 @@ from dateutil.relativedelta import relativedelta
 
 import pytz
 from django.contrib.auth.models import User
-from django.utils import timezone
-from faker import Faker
 from tqdm import tqdm, trange
 
 from scheduling import models
@@ -16,6 +14,9 @@ from scheduling import models
 from .breeds import breeds
 from .categories import category_dict
 from .roles import Roles
+from faker import Faker
+from time import time
+Faker.seed(time())
 
 
 class Mock:
@@ -173,7 +174,7 @@ class Mock:
 			customers.append(customer)
 
 		for ind in trange(self.number_of_dogs, desc="Generating dogs"):
-			dog = models.Dog(name=fake.name().split(" ")[0],
+			dog = models.Dog(name=fake.name(),
 				owner=customers[fake.random_int(min=0, max=self.number_of_customers - 1)],
 				breed=fake.random.choice(breeds), weight=fake.random.normalvariate(80, 20), employee_notes=fake.text(),
 				customer_notes=fake.text(), special_handling=fake.random.choice(5 * [True] + 95 * [False]),
