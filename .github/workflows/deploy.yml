@@ -3,7 +3,7 @@ name: Test, Build and Push Docker Image
 on:
   push:
     branches:
-      - main # or the branch you want to trigger the workflow
+      - master # or the branch you want to trigger the workflow
       
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
