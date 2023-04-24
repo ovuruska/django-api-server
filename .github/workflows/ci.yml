@@ -5,6 +5,8 @@ on:
     branches:
       - master 
   pull_request:
+    branches:
+      - main # Replace with your main branch name
 
 jobs:
   build-and-test:
