@@ -1,12 +1,9 @@
-name: Build and Run unit testse
+name: Build and Run unit tests on pull requests
 
 on:
-  push:
-    branches:
-      - master 
   pull_request:
     branches:
-      - main # Replace with your main branch name
+      - main 
 
 jobs:
   build-and-test:
