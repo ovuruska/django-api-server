@@ -40,6 +40,12 @@ jobs:
     - name: Build and push Docker image
       uses: docker/build-push-action@v2
       with:
-        context: .
+        context: . 
         push: true
-        tags: ${{ steps.login-ecr.outputs.registry }}/your-ecr-repo-name:${{ github.sha }}
+        tags: | 
+          ${{ steps.login-ecr.outputs.registry }}/quicker-api:${{ github.sha }}
+          ${{ steps.login-ecr.outputs.registry }}/quicker-api:latest
+
+
+
+
