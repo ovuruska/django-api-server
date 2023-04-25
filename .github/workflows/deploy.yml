@@ -66,9 +66,7 @@ jobs:
       with:
         context: . 
         push: true
-        tags: | 
-          ${{ steps.login-ecr.outputs.registry }}/quicker-api:${{ github.sha }}
-          ${{ steps.login-ecr.outputs.registry }}/quicker-api:latest
+        tags: ${{ steps.login-ecr.outputs.registry }}/quicker-api:${{ github.sha }}, ${{ steps.login-ecr.outputs.registry }}/quicker-api:latest
         build-args: |
           DB_NAME: ${{ secrets.DB_NAME }}
           DB_USER: ${{ secrets.DB_USER }}
