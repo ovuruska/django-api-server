@@ -77,6 +77,7 @@ USE_SQLITE = os.environ.get('USE_SQLITE', None) or 'False'
 if USE_SQLITE == 'True':
 	DATABASES = {'default': {'ENGINE': 'django.db.backends.sqlite3', 'NAME': BASE_DIR / 'db.sqlite3', }}
 else:
+
 	DATABASES = {
 		'default':
 			{
@@ -165,4 +166,8 @@ LOGGING = {
 	            'format': '%(asctime)s [%(levelname)s] %(name)s: %(message)s',
 	        },
 	    },
+}
+
+TEST = {
+    'ATOMIC_REQUESTS': True,
 }

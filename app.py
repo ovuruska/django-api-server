@@ -14,7 +14,5 @@ application = get_wsgi_application()
 
 
 def handler(event, context):
-	print("event: ", event)
-	return {'statusCode': 200, 'headers': {'Content-Type': 'application/json'}, 'body': '{"message": "Hello, world!"}'}
-	#return handle_request(application, event, context)
+	return handle_request(application, event, context)
 

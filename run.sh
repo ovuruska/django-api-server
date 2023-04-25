@@ -7,7 +7,11 @@ docker stop postgres-container || true
 docker rm -f postgres-container || true
 docker run --rm --name  postgres-container -e POSTGRES_DB=$DB_NAME -e POSTGRES_USER=$DB_USER  -e POSTGRES_PASSWORD=$DB_PASSWORD -p 5432:5432 -d postgres
 
-docker build -t lambda-docker-image .
+BUILD_ARGS=$(cat .env | awk -F= '{printf("--build-arg %s=%s ", $1, $2)}')
+docker build $BUILD_ARGS -t lambda-docker-image .
 
-sam build -t template.dev.yaml --use-container
-sam local start-api -t template.dev.yaml --debug
+PARAMS=$(cat .env | awk -F= '{printf("ParameterKey=%s,ParameterValue=%s ", $1, $2)}')
+
+
+sam build --use-container
+sam local start-api --debug --parameter-overrides $PARAMS
