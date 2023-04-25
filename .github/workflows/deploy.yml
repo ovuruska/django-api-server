@@ -61,6 +61,7 @@ jobs:
         envkey_DB_PASSWORD: ${{ secrets.DB_PASSWORD }}
         envkey_DB_HOST: ${{ secrets.DB_HOST }}
         envkey_DB_PORT: ${{ secrets.DB_PORT }}
+        envkey_DJANGO_SECRET_KEY: ${{ secrets.DJANGO_SECRET_KEY }}
     - name: Build and push Docker image
       uses: docker/build-push-action@v2
       with:
