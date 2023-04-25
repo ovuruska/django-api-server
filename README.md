@@ -3,6 +3,8 @@
 Quicker Backend
 ==============
 
+[![Deployment](https://github.com/make-quicker/backend/actions/workflows/deploy.yml/badge.svg)](https://github.com/make-quicker/backend/actions/workflows/deploy.yml)
+
 This Django project is a comprehensive scheduling and management application for appointments, transactions, and capacity planning. It features various APIs and modules that help manage the app's functionality, including analytics, authorization, search, and more.
 
 Table of Contents
