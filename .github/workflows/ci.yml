@@ -1,0 +1,31 @@
+name: Build and Run unit tests on pull requests
+
+on: [pull_request]
+
+jobs:
+  build-and-test:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Check out repository
+      uses: actions/checkout@v2
+
+    - name: Set up Python
+      uses: actions/setup-python@v2
+      with:
+        python-version: 3.8
+    - name: Make envfile
+      uses: SpicyPizza/create-envfile@v1.3
+      with:
+        envkey_USE_SQLITE: true
+
+    - name: Install dependencies
+      run: |
+        python -m pip install --upgrade pip
+        pip install -r requirements.txt # Assuming you have a requirements.txt file with your dependencies
+        pip install coverage
+    - name: Run tests
+      run: |
+        coverage run --source='.' --omit='*/tests/*' --omit='*/tests/*'  manage.py test
+        coverage report
+    
