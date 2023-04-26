@@ -81,8 +81,8 @@ Resources:
         AllowHeaders: "'*'"
         AllowMethods: "'*'"
       MethodSettings:
-        - ResourcePath: /*/ANY
-          HttpMethod: ANY
+        - ResourcePath: "/*"
+          HttpMethod: "*"
           LoggingLevel: INFO
           DataTraceEnabled: true
 
