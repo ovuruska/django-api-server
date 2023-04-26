@@ -63,17 +63,10 @@ jobs:
         envkey_DB_PORT: ${{ secrets.DB_PORT }}
         envkey_DJANGO_SECRET_KEY: ${{ secrets.DJANGO_SECRET_KEY }}
     - name: Build and push Docker image
-      uses: docker/build-push-action@v2
-      with:
-        context: . 
-        push: true
-        tags: ${{ steps.login-ecr.outputs.registry }}/quicker-api:${{ github.sha }}, ${{ steps.login-ecr.outputs.registry }}/quicker-api:latest
-        build-args: |
-          DB_NAME: ${{ secrets.DB_NAME }}
-          DB_USER: ${{ secrets.DB_USER }}
-          DB_PASSWORD: ${{ secrets.DB_PASSWORD }}
-          DB_HOST: ${{ secrets.DB_HOST }}
-          DB_PORT: ${{ secrets.DB_PORT }}
+      run: |
+        docker build -t lambda-docker-image -t ${{ steps.login-ecr.outputs.registry }}/quicker-api:${{ github.sha }} -t ${{ steps.login-ecr.outputs.registry }}/quicker-api:latest .
+        docker push ${{ steps.login-ecr.outputs.registry }}/quicker-api:${{ github.sha }}
+        docker push ${{ steps.login-ecr.outputs.registry }}/quicker-api:latest
     - name: Build SAM application
       run: |
         sam package --output-template-file packaged.yaml --output-template-file formation.yaml --image-repository ${{ steps.login-ecr.outputs.registry }}/quicker-api:latest
