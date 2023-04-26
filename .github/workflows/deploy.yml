@@ -76,7 +76,7 @@ jobs:
           DB_PORT: ${{ secrets.DB_PORT }}
     - name: Update Lambda function
       run: |
-        IMAGE_URI="${{ steps.login-ecr.outputs.registry }}/my-repo:latest"
+        IMAGE_URI="${{ steps.login-ecr.outputs.registry }}/quicker-api:latest"
         aws lambda update-function-code --function-name quicker-api-lambda --image-uri "$IMAGE_URI"
 
 
