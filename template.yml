@@ -36,13 +36,56 @@ Resources:
       ImageUri: !Ref LambdaImageUri
       Role: !GetAtt LambdaExecutionRole.Arn
       Events:
-        ApiRoot:
+        Api:
           Type: Api
           Properties:
-            Path: /
-            Method: ANY
-        ApiGreedy:
-          Type: Api
-          Properties:
+            RestApiId: !Ref MyApiGateway
             Path: /{proxy+}
             Method: ANY
+
+  MyApiGateway:
+    Type: AWS::Serverless::Api
+    Properties:
+      StageName: Prod
+      DefinitionBody:
+        swagger: "2.0"
+        info:
+          title: My API Gateway
+        paths:
+          "/{proxy+}":
+            x-amazon-apigateway-any-method:
+              responses:
+                default:
+                  statusCode: "200"
+                  responseParameters:
+                    method.response.header.Access-Control-Allow-Origin: "'*'"
+                    method.response.header.Access-Control-Allow-Headers: "'*'"
+                    method.response.header.Access-Control-Allow-Methods: "'*'"
+              x-amazon-apigateway-integration:
+                httpMethod: POST
+                type: aws_proxy
+                uri: !Sub arn:aws:apigateway:${AWS::Region}:lambda:path/2015-03-31/functions/${LambdaDockerImage.Arn}/invocations
+                responses:
+                  default:
+                    statusCode: "200"
+                    responseParameters:
+                      method.response.header.Access-Control-Allow-Origin: "'*'"
+                      method.response.header.Access-Control-Allow-Headers: "'*'"
+                      method.response.header.Access-Control-Allow-Methods: "'*'"
+      EndpointConfiguration: REGIONAL
+      Cors:
+        AllowOrigin: "'*'"
+        AllowHeaders: "'*'"
+        AllowMethods: "'*'"
+      MethodSettings:
+        - ResourcePath: /*/ANY
+          HttpMethod: ANY
+          LoggingLevel: INFO
+          DataTraceEnabled: true
+
+  ApiGatewayExecutionLogGroup:
+    Type: AWS::Logs::LogGroup
+    Properties:
+      LogGroupName: /aws/apigateway/${MyApiGateway}/Prod
+
+      RetentionInDays: 14
