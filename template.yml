@@ -53,20 +53,23 @@ Resources:
           title: My API Gateway
         paths:
           "/{proxy+}":
-            x-amazon-apigateway-any-method:
+            any:
               responses:
-                default:
-                  statusCode: "200"
-                  responseParameters:
-                    method.response.header.Access-Control-Allow-Origin: "'*'"
-                    method.response.header.Access-Control-Allow-Headers: "'*'"
-                    method.response.header.Access-Control-Allow-Methods: "'*'"
+                '200':
+                  description: OK
+                  headers:
+                    Access-Control-Allow-Origin:
+                      type: string
+                    Access-Control-Allow-Headers:
+                      type: string
+                    Access-Control-Allow-Methods:
+                      type: string
               x-amazon-apigateway-integration:
                 httpMethod: POST
                 type: aws_proxy
                 uri: !Sub arn:aws:apigateway:${AWS::Region}:lambda:path/2015-03-31/functions/${LambdaDockerImage.Arn}/invocations
                 responses:
-                  default:
+                  '200':
                     statusCode: "200"
                     responseParameters:
                       method.response.header.Access-Control-Allow-Origin: "'*'"
@@ -83,9 +86,8 @@ Resources:
           LoggingLevel: INFO
           DataTraceEnabled: true
 
-
-ApiGatewayExecutionLogGroup:
-  Type: AWS::Logs::LogGroup
-  Properties:
-    LogGroupName: !Sub /aws/apigateway/${MyApiGateway}/Prod
-    RetentionInDays: 14
+  ApiGatewayExecutionLogGroup:
+    Type: AWS::Logs::LogGroup
+    Properties:
+      LogGroupName: !Sub /aws/apigateway/${MyApiGateway}/Prod
+      RetentionInDays: 14
