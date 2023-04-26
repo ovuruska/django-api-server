@@ -6,6 +6,7 @@ Parameters:
   LambdaImageUri:
     Type: String
     Description: The URI of the Lambda Docker image
+    Default: lambda-docker-image
 
 Globals:
   Function:
@@ -26,6 +27,17 @@ Resources:
               - sts:AssumeRole
       ManagedPolicyArns:
         - arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole
+      Policies:
+        - PolicyName: ApiGatewayLogs
+          PolicyDocument:
+            Version: '2012-10-17'
+            Statement:
+              - Effect: Allow
+                Action:
+                  - logs:CreateLogGroup
+                  - logs:CreateLogStream
+                  - logs:PutLogEvents
+                Resource: "*"
 
   LambdaDockerImage:
     Type: AWS::Serverless::Function
@@ -50,7 +62,7 @@ Resources:
       DefinitionBody:
         swagger: "2.0"
         info:
-          title: My API Gateway
+          title: Quicker API
         paths:
           "/{proxy+}":
             any:
@@ -91,3 +103,8 @@ Resources:
     Properties:
       LogGroupName: !Sub /aws/apigateway/${MyApiGateway}/Prod
       RetentionInDays: 14
+
+  ApiGatewayAccount:
+    Type: AWS::ApiGateway::Account
+    Properties:
+      CloudWatchRoleArn: !GetAtt LambdaExecutionRole.Arn
