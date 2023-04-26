@@ -70,5 +70,5 @@ jobs:
         docker push ${{ steps.login-ecr.outputs.registry }}/quicker-api:latest
     - name: Build SAM application
       run: |
-        sam package --output-template-file packaged.yaml --output-template-file formation.yaml --image-repository ${{ steps.login-ecr.outputs.registry }}/quicker-api:latest
+        sam package --output-template-file packaged.yaml --image-repository ${{ steps.login-ecr.outputs.registry }}/quicker-api:latest
         sam deploy --template-file packaged.yaml --stack-name quicker-api --capabilities CAPABILITY_IAM
