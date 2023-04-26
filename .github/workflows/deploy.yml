@@ -67,9 +67,6 @@ jobs:
         BUILD_ARGS=$(cat .env | awk -F= '{printf("--build-arg %s=%s ", $1, $2)}')
         docker build $BUILD_ARG -t lambda-docker-image -t ${{ steps.login-ecr.outputs.registry }}/quicker-api:${{ github.sha }} -t ${{ steps.login-ecr.outputs.registry }}/quicker-api:latest .
         docker push ${{ steps.login-ecr.outputs.registry }}/quicker-api:latest
-    - name: Remove existing Cloud Formation stack
-      run: |
-        aws cloudformation delete-stack --stack-name quicker-api
     - name: Package SAM application
       run: |
         sam package --output-template-file packaged.yaml --image-repository ${{ steps.login-ecr.outputs.registry }}/quicker-api:latest
