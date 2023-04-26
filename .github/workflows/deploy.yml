@@ -62,20 +62,32 @@ jobs:
         envkey_DB_HOST: ${{ secrets.DB_HOST }}
         envkey_DB_PORT: ${{ secrets.DB_PORT }}
         envkey_DJANGO_SECRET_KEY: ${{ secrets.DJANGO_SECRET_KEY }}
-    - name: Delete existing stack (if exists)
-      run: |
-        aws cloudformation delete-stack --stack-name quicker-api || true
+
     - name: Build and push Docker image
       run: |
         BUILD_ARGS=$(cat .env | awk -F= '{printf("--build-arg %s=%s ", $1, $2)}')
         docker build $BUILD_ARG -t lambda-docker-image -t ${{ steps.login-ecr.outputs.registry }}/quicker-api:${{ github.sha }} -t ${{ steps.login-ecr.outputs.registry }}/quicker-api:latest .
         docker push ${{ steps.login-ecr.outputs.registry }}/quicker-api:latest
-    - name: Package SAM application
+    - name: Check if CloudFormation stack exists
+      id: check-stack
       run: |
-        sam package --output-template-file packaged.yaml --image-repository $LAMBDA_IMAGE_URI
+        aws cloudformation describe-stacks --stack-name quicker-api >/dev/null 2>&1
+        if [ $? -eq 0 ]; then
+          echo "::set-output name=stack_exists::true"
+        else
+          echo "::set-output name=stack_exists::false"
+        fi
+
+    - name: Update Lambda function code
+      if: steps.check-stack.outputs.stack_exists == 'true'
+      run: |
+        aws lambda update-function-code --function-name $LAMBDA_FUNCTION_NAME --image-uri $LAMBDA_IMAGE_URI
       env:
+        LAMBDA_FUNCTION_NAME: ${{ secrets.LAMBDA_FUNCTION_NAME }}
         LAMBDA_IMAGE_URI: ${{ steps.login-ecr.outputs.registry }}/quicker-api:latest
+
     - name: Deploy SAM application
+      if: steps.check-stack.outputs.stack_exists == 'false'
       run: |
         sam deploy --template-file packaged.yaml --stack-name quicker-api --capabilities CAPABILITY_IAM --parameter-overrides LambdaImageUri=$LAMBDA_IMAGE_URI --image-repository $LAMBDA_IMAGE_URI
       env:
