@@ -12,6 +12,8 @@ docker build $BUILD_ARGS -t lambda-docker-image .
 
 PARAMS=$(cat .env | awk -F= '{printf("ParameterKey=%s,ParameterValue=%s ", $1, $2)}')
 
+docker run --rm --entrypoint python lambda-docker-image manage.py collectstatic --noinput
+docker run --rm --entrypoint python lambda-docker-image manage.py migrate
 
 sam build --use-container
-sam local start-api --debug --parameter-overrides $PARAMS
+sam local start-api --debug

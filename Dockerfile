@@ -24,8 +24,7 @@ ENV DB_PORT=${DB_PORT:-""}
 # Copy the Django app
 COPY ./ ${LAMBDA_TASK_ROOT}
 
-RUN python manage.py collectstatic --noinput
-RUN python manage.py migrate
+
 
 # Set the handler to your Django lambda_handler
 CMD ["app.handler"]

@@ -178,3 +178,4 @@ cython_debug/
 .DS_Store
 *.icloud
 .aws-sam
+staticfiles
