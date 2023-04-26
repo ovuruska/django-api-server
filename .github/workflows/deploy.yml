@@ -74,10 +74,11 @@ jobs:
           DB_PASSWORD: ${{ secrets.DB_PASSWORD }}
           DB_HOST: ${{ secrets.DB_HOST }}
           DB_PORT: ${{ secrets.DB_PORT }}
-    - name: Update Lambda function
+    - name: Build SAM application
       run: |
-        IMAGE_URI="${{ steps.login-ecr.outputs.registry }}/quicker-api:latest"
-        aws lambda update-function-code --function-name quicker-api-lambda --image-uri "$IMAGE_URI"
+        sam package --output-template-file template.yaml --image-repository ${{ steps.login-ecr.outputs.registry }}/quicker-api:latest
+        sam deploy --template-file template.yaml --stack-name quicker-api --capabilities CAPABILITY_IAM
+
 
 
 
