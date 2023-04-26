@@ -1,6 +1,6 @@
 AWSTemplateFormatVersion: '2010-09-09'
 Transform: AWS::Serverless-2016-10-31
-Description: Run Lambda Docker Image Locally
+Description: Quicker API
 
 Globals:
   Function:
@@ -13,7 +13,7 @@ Resources:
       MemorySize: 128
       Timeout: 10
       PackageType: Image
-      ImageUri: lambda-docker-image
+      ImageUri: !Ref LambdaImageUri
       Events:
         ApiRoot:
           Type: Api
@@ -25,3 +25,9 @@ Resources:
           Properties:
             Path: /{proxy+}
             Method: ANY
+
+Parameters:
+  LambdaImageUri:
+    Type: String
+    Decsription: URI of the Docker image to use for the Lambda function
+    Default: lambda-docker-image
