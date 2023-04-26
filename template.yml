@@ -2,11 +2,31 @@ AWSTemplateFormatVersion: '2010-09-09'
 Transform: AWS::Serverless-2016-10-31
 Description: Quicker API
 
+Parameters:
+  LambdaImageUri:
+    Type: String
+    Description: The URI of the Lambda Docker image
+
 Globals:
   Function:
     Timeout: 10
 
 Resources:
+  LambdaExecutionRole:
+    Type: AWS::IAM::Role
+    Properties:
+      AssumeRolePolicyDocument:
+        Version: '2012-10-17'
+        Statement:
+          - Effect: Allow
+            Principal:
+              Service:
+                - lambda.amazonaws.com
+            Action:
+              - sts:AssumeRole
+      ManagedPolicyArns:
+        - arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole
+
   LambdaDockerImage:
     Type: AWS::Serverless::Function
     Properties:
@@ -14,6 +34,7 @@ Resources:
       Timeout: 10
       PackageType: Image
       ImageUri: !Ref LambdaImageUri
+      Role: !GetAtt LambdaExecutionRole.Arn
       Events:
         ApiRoot:
           Type: Api
@@ -25,9 +46,3 @@ Resources:
           Properties:
             Path: /{proxy+}
             Method: ANY
-
-Parameters:
-  LambdaImageUri:
-    Type: String
-    Description: URI of the Docker image to use for the Lambda function
-    Default: lambda-docker-image
