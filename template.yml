@@ -29,5 +29,5 @@ Resources:
 Parameters:
   LambdaImageUri:
     Type: String
-    Decsription: URI of the Docker image to use for the Lambda function
+    Description: URI of the Docker image to use for the Lambda function
     Default: lambda-docker-image
