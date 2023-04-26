@@ -83,6 +83,7 @@ Resources:
           LoggingLevel: INFO
           DataTraceEnabled: true
 
+
 ApiGatewayExecutionLogGroup:
   Type: AWS::Logs::LogGroup
   Properties:
