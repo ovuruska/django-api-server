@@ -76,8 +76,8 @@ jobs:
           DB_PORT: ${{ secrets.DB_PORT }}
     - name: Build SAM application
       run: |
-        sam package --output-template-file template.yaml --image-repository ${{ steps.login-ecr.outputs.registry }}/quicker-api:latest
-        sam deploy --template-file template.yaml --stack-name quicker-api --capabilities CAPABILITY_IAM
+        sam package --output-template-file packaged.yaml --output-template-file formation.yaml --image-repository ${{ steps.login-ecr.outputs.registry }}/quicker-api:latest
+        sam deploy --template-file packaged.yaml --stack-name quicker-api --capabilities CAPABILITY_IAM
 
 
 
