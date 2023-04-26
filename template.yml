@@ -6,7 +6,6 @@ Parameters:
   LambdaImageUri:
     Type: String
     Description: The URI of the Lambda Docker image
-    Default: lambda-docker-image
 
 Globals:
   Function:
@@ -27,17 +26,6 @@ Resources:
               - sts:AssumeRole
       ManagedPolicyArns:
         - arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole
-      Policies:
-        - PolicyName: ApiGatewayLogs
-          PolicyDocument:
-            Version: '2012-10-17'
-            Statement:
-              - Effect: Allow
-                Action:
-                  - logs:CreateLogGroup
-                  - logs:CreateLogStream
-                  - logs:PutLogEvents
-                Resource: "*"
 
   LambdaDockerImage:
     Type: AWS::Serverless::Function
@@ -48,63 +36,13 @@ Resources:
       ImageUri: !Ref LambdaImageUri
       Role: !GetAtt LambdaExecutionRole.Arn
       Events:
-        Api:
+        ApiRoot:
           Type: Api
           Properties:
-            RestApiId: !Ref MyApiGateway
+            Path: /
+            Method: ANY
+        ApiGreedy:
+          Type: Api
+          Properties:
             Path: /{proxy+}
             Method: ANY
-
-  MyApiGateway:
-    Type: AWS::Serverless::Api
-    Properties:
-      StageName: Prod
-      DefinitionBody:
-        swagger: "2.0"
-        info:
-          title: Quicker API
-        paths:
-          "/{proxy+}":
-            any:
-              responses:
-                '200':
-                  description: OK
-                  headers:
-                    Access-Control-Allow-Origin:
-                      type: string
-                    Access-Control-Allow-Headers:
-                      type: string
-                    Access-Control-Allow-Methods:
-                      type: string
-              x-amazon-apigateway-integration:
-                httpMethod: POST
-                type: aws_proxy
-                uri: !Sub arn:aws:apigateway:${AWS::Region}:lambda:path/2015-03-31/functions/${LambdaDockerImage.Arn}/invocations
-                responses:
-                  '200':
-                    statusCode: "200"
-                    responseParameters:
-                      method.response.header.Access-Control-Allow-Origin: "'*'"
-                      method.response.header.Access-Control-Allow-Headers: "'*'"
-                      method.response.header.Access-Control-Allow-Methods: "'*'"
-      EndpointConfiguration: REGIONAL
-      Cors:
-        AllowOrigin: "'*'"
-        AllowHeaders: "'*'"
-        AllowMethods: "'*'"
-      MethodSettings:
-        - ResourcePath: "/*"
-          HttpMethod: "*"
-          LoggingLevel: INFO
-          DataTraceEnabled: true
-
-  ApiGatewayExecutionLogGroup:
-    Type: AWS::Logs::LogGroup
-    Properties:
-      LogGroupName: !Sub /aws/apigateway/${MyApiGateway}/Prod
-      RetentionInDays: 14
-
-  ApiGatewayAccount:
-    Type: AWS::ApiGateway::Account
-    Properties:
-      CloudWatchRoleArn: !GetAtt LambdaExecutionRole.Arn
