@@ -31,6 +31,7 @@ class Dog(BaseModel):
 		unique_together = ('owner', 'name')
 
 	def to_dict(self):
+		birth_date = self.birth_date.isoformat() if self.birth_date else None
 		return {
 			"id": self.id,
 			"name": self.name,
@@ -45,5 +46,5 @@ class Dog(BaseModel):
 			"special_handling": self.special_handling,
 			"coat_type": self.coat_type,
 			"gender":self.gender,
-			"birth_date":self.birth_date,
+			"birth_date":birth_date,
 		}

@@ -4,10 +4,8 @@ import random
 from django.apps import apps
 from django.core.management.base import BaseCommand
 from faker import Faker
-from django.contrib.auth.models import User
-
-from common.roles import Roles
-from scheduling import models
+from time import time
+Faker.seed(time())
 
 """
 
@@ -24,6 +22,8 @@ Employee = apps.get_model('scheduling', 'Employee')
 Branch = apps.get_model('scheduling', 'Branch')
 Product = apps.get_model('scheduling', 'Product')
 EmployeeWorkingHour = apps.get_model('scheduling', 'EmployeeWorkingHour')
+
+
 
 class Command(BaseCommand):
 	help = "Creates appointments for a given customer. Customer is specified by his/her username."

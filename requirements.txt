@@ -20,3 +20,6 @@ django-request-logging==0.7.5
 aiohttp
 mailchimp_transactional
 drf_yasg
+zappa
+serverless-wsgi
+psycopg2-binary
