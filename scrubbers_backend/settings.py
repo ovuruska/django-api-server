@@ -73,8 +73,8 @@ WSGI_APPLICATION = 'scrubbers_backend.wsgi.application'
 
 # Database
 # https://docs.djangoproject.com/en/4.0/ref/settings/#databases
-USE_SQLITE = os.environ.get('USE_SQLITE', None) or 'False'
-if USE_SQLITE == 'True':
+USE_SQLITE = os.environ.get('USE_SQLITE', False)
+if USE_SQLITE:
 	DATABASES = {'default': {'ENGINE': 'django.db.backends.sqlite3', 'NAME': BASE_DIR / 'db.sqlite3', }}
 else:
 
