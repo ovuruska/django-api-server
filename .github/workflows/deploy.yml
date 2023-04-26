@@ -64,16 +64,11 @@ jobs:
         envkey_DJANGO_SECRET_KEY: ${{ secrets.DJANGO_SECRET_KEY }}
     - name: Build and push Docker image
       run: |
-        docker build -t lambda-docker-image -t ${{ steps.login-ecr.outputs.registry }}/quicker-api:${{ github.sha }} -t ${{ steps.login-ecr.outputs.registry }}/quicker-api:latest .
+        BUILD_ARGS=$(cat .env | awk -F= '{printf("--build-arg %s=%s ", $1, $2)}')
+        docker build $BUILD_ARG -t lambda-docker-image -t ${{ steps.login-ecr.outputs.registry }}/quicker-api:${{ github.sha }} -t ${{ steps.login-ecr.outputs.registry }}/quicker-api:latest .
         docker push ${{ steps.login-ecr.outputs.registry }}/quicker-api:${{ github.sha }}
         docker push ${{ steps.login-ecr.outputs.registry }}/quicker-api:latest
     - name: Build SAM application
       run: |
         sam package --output-template-file packaged.yaml --output-template-file formation.yaml --image-repository ${{ steps.login-ecr.outputs.registry }}/quicker-api:latest
         sam deploy --template-file packaged.yaml --stack-name quicker-api --capabilities CAPABILITY_IAM
-
-
-
-
-
-
