@@ -88,5 +88,3 @@ ApiGatewayExecutionLogGroup:
   Properties:
     LogGroupName: !Sub /aws/apigateway/${MyApiGateway}/Prod
     RetentionInDays: 14
-
-      RetentionInDays: 14
