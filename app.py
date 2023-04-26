@@ -14,5 +14,11 @@ application = get_wsgi_application()
 
 
 def handler(event, context):
+	print("DB NAME: ",os.environ.get("DB_NAME", None))
+	print("DB USER: ",os.environ.get("DB_USER", None))
+	print("DB PASSWORD: ",os.environ.get("DB_PASSWORD", None))
+	print("DB HOST: ",os.environ.get("DB_HOST", None))
+	print("DB PORT: ",os.environ.get("DB_PORT", None))
+
 	return handle_request(application, event, context)
 
