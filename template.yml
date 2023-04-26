@@ -83,9 +83,10 @@ Resources:
           LoggingLevel: INFO
           DataTraceEnabled: true
 
-  ApiGatewayExecutionLogGroup:
-    Type: AWS::Logs::LogGroup
-    Properties:
-      LogGroupName: /aws/apigateway/${MyApiGateway}/Prod
+ApiGatewayExecutionLogGroup:
+  Type: AWS::Logs::LogGroup
+  Properties:
+    LogGroupName: !Sub /aws/apigateway/${MyApiGateway}/Prod
+    RetentionInDays: 14
 
       RetentionInDays: 14
