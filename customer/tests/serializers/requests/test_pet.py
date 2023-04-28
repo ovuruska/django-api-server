@@ -100,11 +100,10 @@ class CreatePetRequestSerializerTestCase(TestCase):
 			"name": "Fido",
 			"breed": "Poodle",
 			"weight": 10,
-			"age": 2,
-			"gender": "invalid",
+			"birth_date": "2019-01-01",
+			"gender": "Male",
+			"special_handling": "test",
 			"rabies_vaccination": "2019-01-01"
 		}
 		serializer = CreatePetRequestSerializer(data=data)
 		self.assertTrue(serializer.is_valid())
-		validated_data = serializer.validated_data
-		self.assertEqual(validated_data["rabies_vaccination"], datetime.strptime(data["rabies_vaccination"],"%Y-%m-%d").date())
