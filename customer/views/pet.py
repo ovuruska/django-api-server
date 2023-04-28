@@ -29,6 +29,7 @@ class CustomerCreatePetView(generics.CreateAPIView):
 		pet_name = serialized_data.get("name")
 		try:
 			pet = Dog.objects.create(owner=customer, name=pet_name, breed=serialized_data.get("breed"),birth_date=serialized_data.get("birth_date"),
+			                         rabies_vaccination=serialized_data.get("rabies_vaccination"),
 			                         customer_notes=serialized_data.get("special_handling"),
 				age=serialized_data.get("age"), weight=serialized_data.get("weight"), gender=serialized_data.get("gender"))
 		except django.db.utils.IntegrityError:

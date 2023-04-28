@@ -6,6 +6,7 @@ Parameters:
   LambdaImageUri:
     Type: String
     Description: The URI of the Lambda Docker image
+    Default: lambda-docker-image
 
 Globals:
   Function:
@@ -46,3 +47,4 @@ Resources:
           Properties:
             Path: /{proxy+}
             Method: ANY
+

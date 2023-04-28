@@ -11,7 +11,7 @@ class CustomerPetDetailsResponseSerializer(serializers.Serializer):
 	age = serializers.IntegerField()
 	weight = serializers.IntegerField()
 	description = serializers.CharField()
-	rabies_vaccination = serializers.DateTimeField()
+	rabies_vaccination = serializers.DateField()
 	employee_notes = serializers.CharField()
 	customer_notes = serializers.CharField()
 	special_handling = serializers.BooleanField()
@@ -22,3 +22,4 @@ class CustomerPetDetailsResponseSerializer(serializers.Serializer):
 	number_of_wewashes = serializers.IntegerField()
 	total_grooming_cost = serializers.IntegerField(default=0)
 	total_wewash_cost = serializers.IntegerField(default=0)
+	birth_date = serializers.DateField()

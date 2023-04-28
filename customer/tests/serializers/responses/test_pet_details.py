@@ -68,3 +68,4 @@ class CustomerPetDetailsResponseSerializerTestCase(TestCase):
 			self.assertEqual(validated_data["number_of_wewashes"], self.data["number_of_wewashes"])
 			self.assertEqual(validated_data["total_grooming_cost"], self.data["total_grooming_cost"])
 			self.assertEqual(validated_data["total_wewash_cost"], self.data["total_wewash_cost"])
+

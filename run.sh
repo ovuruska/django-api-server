@@ -10,10 +10,9 @@ docker run --rm --name  postgres-container -e POSTGRES_DB=$DB_NAME -e POSTGRES_U
 BUILD_ARGS=$(cat .env | awk -F= '{printf("--build-arg %s=%s ", $1, $2)}')
 docker build $BUILD_ARGS -t lambda-docker-image .
 
+docker run  --rm --entrypoint python lambda-docker-image manage.py collectstatic --noinput
+docker run --rm --entrypoint python lambda-docker-image manage.py migrate
 PARAMS=$(cat .env | awk -F= '{printf("ParameterKey=%s,ParameterValue=%s ", $1, $2)}')
 
-docker run --rm --entrypoint python lambda-docker-image manage.py collectstatic --noinput
-docker run --rm --entrypoint python lambda-docker-image manage.py migrate
-
 sam build --use-container
-sam local start-api --debug
+sam local start-api --debug --parameter-overrides $PARAMS

@@ -8,6 +8,7 @@ class CreatePetRequestSerializer(serializers.Serializer):
 	gender = serializers.CharField(max_length=6)
 	birth_date = serializers.DateField(input_formats=["%Y-%m-%d","%Y-%m-%dT%H:%M:%S.%fZ"])
 	special_handling = serializers.CharField(max_length=1000,default="")
+	rabies_vaccination = serializers.DateField(input_formats=["%Y-%m-%d","%Y-%m-%dT%H:%M:%S.%fZ"],required=False)
 	def validate(self, data):
 		if data["gender"] not in ["Male","Female"]:
 			raise serializers.ValidationError("Invalid gender")
