@@ -38,7 +38,7 @@ jobs:
 
 
   build-and-push:
-    #needs: test
+    needs: test
     if: github.event_name == 'push'
     runs-on: ubuntu-latest
     steps:
