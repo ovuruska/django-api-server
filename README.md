@@ -1,78 +1,74 @@
-
-
 Quicker Backend
 ==============
 
-[![Deployment](https://github.com/make-quicker/backend/actions/workflows/deploy.yml/badge.svg)](https://github.com/make-quicker/backend/actions/workflows/deploy.yml)
 
 This Django project is a comprehensive scheduling and management application for appointments, transactions, and capacity planning. It features various APIs and modules that help manage the app's functionality, including analytics, authorization, search, and more.
 
-Table of Contents
------------------
+Quicker Backend
 
-*   [Getting Started](#getting-started)
-    *   [Prerequisites](#prerequisites)
-    *   [Installation](#installation)
-*   [Usage](#usage)
-*   [API Endpoints](#api-endpoints)
-*   [Contributing](#contributing)
-*   [License](#license)
+======================
 
-Getting Started
----------------
+[![Test, Build and Push Docker Image](https://github.com/make-quicker/backend/actions/workflows/deploy.yml/badge.svg)](https://github.com/make-quicker/backend/actions/workflows/deploy.yml)
+This README file contains instructions on how to set up and run our project's backend server on a local device. We utilize two different servers for different purposes: a SAM (Serverless Application Model) server to simulate AWS Lambda calls, and a naive Django server for testing and documentation purposes. Each server has its own setup and configuration requirements, which are outlined below.
 
-These instructions will help you set up the project on your local machine for development and testing purposes.
+SAM Server Setup
+----------------
+
+The SAM server is used for development purposes, allowing developers to test and debug their code locally by simulating AWS Lambda calls.
 
 ### Prerequisites
 
-*   Python 3.7 or later
-*   Docker
-*   Docker Compose
+*   AWS CLI
+*   AWS SAM CLI
 
-### Installation
+### Configuration
 
-1.  Clone the repository:
+1.  Configure your `.env.dev` file with your desired development environment settings.
+2.  Rename the `.env.dev` file to `.env` so that the SAM server can use it.
 
-bash
+### Running the SAM Server
 
-```bash
-git clone https://github.com/make-quicker/backend.git
-cd backend
-```
-
-2.  Build and run Docker containers:
-
-bash
+To run the SAM server, simply execute the following command in your terminal:
 
 ```bash
-docker-compose -f dev.docker-compose.yml up --build
+bash run.sh
 ```
 
-The application should now be running at `http://localhost:8000/`.
+This will start the SAM server locally, allowing you to test and debug your Lambda functions.
 
-Usage
------
+Naive Django Server Setup
+-------------------------
 
-You can interact with the APIs by sending requests to the provided endpoints. For more information on available endpoints, see the [API Endpoints](#api-endpoints) section.
+The naive Django server is used for testing and documentation purposes, enabling you to run tests and view the Swagger/ReDoc API documentation.
 
-API Endpoints
--------------
+### Prerequisites
 
-Here's a list of the main API endpoints:
+*   Python 3
+*   Django
+*   pip
 
-*   `/api/analytics/`: Analytics API for generating insights and reporting
-*   `/api/authorization/`: Authorization API for managing authentication and user permissions
-*   `/api/capacity/`: Capacity API for managing and calculating resource capacity
-*   `/api/scheduling/`: Scheduling API for managing appointments and availability
-*   `/api/search/`: Search API for querying and filtering data
-*   `/api/transactions/`: Transactions API for managing appointment transactions.
+### Configuration
 
-Contributing
-------------
+1.  Copy the `.env.test` file to a new file named `.env`.
+2.  Configure the naive Django server by editing the `.env` file with your desired test environment settings.
 
-We welcome contributions from the community. To get started, please fork the repository, create a new branch for your changes, and submit a pull request when you're ready.
+### Running the Naive Django Server
 
-License
--------
+To run the naive Django server, execute the following command in your terminal:
 
-This project is licensed under the [MIT License](LICENSE). Please refer to the license file for more information.
+```bash
+python manage.py runserver
+```
+
+This will start the Django server locally, allowing you to run tests and view the Swagger/ReDoc API documentation.
+
+Server Missions
+---------------
+
+As mentioned earlier, our backend utilizes two different servers for different purposes:
+
+*   **SAM Server**: Used for development purposes, allowing developers to simulate AWS Lambda calls and debug their code locally.
+*   **Naive Django Server**: Used for testing and documentation purposes, enabling you to run tests and view the Swagger/ReDoc API documentation.
+
+Please ensure that you follow the appropriate setup and configuration instructions for each server depending on your intended use.
+
