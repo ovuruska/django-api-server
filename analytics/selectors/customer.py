@@ -24,10 +24,10 @@ def get_customer_invoice_distribution(customer_id):
 	products = appointments.aggregate(Sum('products__cost'))["products__cost__sum"] or 0
 
 	invoice_distribution = {
-		'We Wash': float(round(we_wash,2)),
-		'Full Grooming': float(round(grooming,2)),
-		'Tips': float(round(tips,2)),
-		'Products': float(round(products,2))
+		'we_wash': float(round(we_wash,2)),
+		'grooming': float(round(grooming,2)),
+		'tips': float(round(tips,2)),
+		'products': float(round(products,2))
 	}
 
 	return invoice_distribution
@@ -39,8 +39,8 @@ def get_appointment_type_count_distribution(customer_id):
 	we_wash_count = appointments.filter( appointment_type='We Wash').count()
 	grooming_count = appointments.filter( appointment_type='Full Grooming').count()
 	return {
-		'We Wash': we_wash_count,
-		'Full Grooming': grooming_count
+		'we_wash': we_wash_count,
+		'grooming': grooming_count
 	}
 
 def get_appointment_cancellation_rate(customer_id):
@@ -77,7 +77,7 @@ def get_yearly_appointment_summary(customer_id):
 	summary = defaultdict(lambda: {
 		"tip": 0,
 		"we_wash": 0,
-		"full_grooming": 0,
+		"grooming": 0,
 		"products": 0,
 	})
 
@@ -88,13 +88,13 @@ def get_yearly_appointment_summary(customer_id):
 		if appointment.appointment_type == 'We Wash':
 			summary[month]["we_wash"] +=  appointment.services.aggregate(sum=Sum('cost'))['sum'] or 0
 		else:
-			summary[month]["full_grooming"] +=  appointment.services.aggregate(sum=Sum('cost'))['sum'] or 0
+			summary[month]["grooming"] +=  appointment.services.aggregate(sum=Sum('cost'))['sum'] or 0
 	for month in range(1, 13):
 		if month not in summary:
 			summary[month] = {
 				"tip": 0,
 				"we_wash": 0,
-				"full_grooming": 0,
+				"grooming": 0,
 				"products": 0,
 			}
 
