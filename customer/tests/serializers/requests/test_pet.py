@@ -13,6 +13,7 @@ class CreatePetRequestSerializerTestCase(TestCase):
 			"breed": "Poodle",
 			"weight": 10,
 			"birth_date": "2019-01-01",
+			"rabies_vaccination": "2019-01-01",
 			"gender":"Male"
 		}
 
@@ -32,6 +33,7 @@ class CreatePetRequestSerializerTestCase(TestCase):
 			"weight": 10,
 			"birth_date": "2019-01-01",
 			"gender": "Male",
+			"rabies_vaccination": "2019-01-01",
 			"special_handling": "test"
 		}
 		serializer = CreatePetRequestSerializer(data=data)
@@ -51,7 +53,8 @@ class CreatePetRequestSerializerTestCase(TestCase):
 			"weight": 10,
 			"birth_date": "2019-01-01",
 			"gender": "Male",
-			"special_handling": 1000*"q"
+			"special_handling": 1000*"q",
+			"rabies_vaccination": "2019-01-01"
 		}
 		serializer = CreatePetRequestSerializer(data=data)
 		self.assertTrue(serializer.is_valid())
