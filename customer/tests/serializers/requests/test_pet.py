@@ -107,3 +107,8 @@ class CreatePetRequestSerializerTestCase(TestCase):
 		}
 		serializer = CreatePetRequestSerializer(data=data)
 		self.assertTrue(serializer.is_valid())
+
+	def test_valid(self):
+		data = {'name': 'Johnnie', 'breed': 'French Bulldog', 'gender': 'Male', 'birth_date': '2020-04-14T21:00:00.000Z', 'special_handling': '', 'weight': 101, 'rabies_vaccination': '2023-04-30T13:09:47.455Z'}
+		serializer = CreatePetRequestSerializer(data=data)
+		self.assertTrue(serializer.is_valid())

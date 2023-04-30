@@ -80,3 +80,13 @@ class CustomerCreatePetViewTestCase(CustomerAuthTestCase):
 		data = {"name":"Oğuz Vuruşkaner","breed":"Bulldog","gender":"Male","birth_date":"2023-03-14T21:00:00.000Z","special_handling":"","weight":51}
 		response = self.client.post(self.url, data=data,**self.customer_headers)
 		self.assertEqual(response.status_code, 200)
+
+
+	def test_response_2(self):
+		data = {"name":"Johnnie","breed":"German Shepherd","gender":"Male","birth_date":"2023-04-30T11:15:21.908Z","special_handling":"","weight":21,"rabies_vaccination":"2023-04-30T11:15:21.908Z"}
+		response = self.client.post(self.url, data=data,**self.customer_headers)
+		self.assertEqual(response.status_code, 200)
+		data = {"name":"Johnnie","breed":"German Shepherd","gender":"Male","birth_date":"2023-04-30T11:15:21.908Z","special_handling":"","weight":21,"rabies_vaccination":"2023-04-30T11:15:21.908Z"}
+		response = self.client.post(self.url, data=data,**self.customer_headers)
+		self.assertEqual(response.status_code, 400)
+
