@@ -6,10 +6,12 @@ from drf_yasg.utils import swagger_auto_schema
 from rest_framework.generics import RetrieveAPIView
 
 from analytics.selectors import customer
+from scheduling.views import Appointment
 
 
 @method_decorator(cache_page(60 * 60 * 24), name='dispatch')
 class GetCustomerInvoiceDistributionView(RetrieveAPIView):
+	queryset= Appointment.objects.all()
 
 	@swagger_auto_schema(operation_description="Get customer invoice distribution", responses={
 		200: openapi.Response(description="Customer invoice distribution",
@@ -22,6 +24,8 @@ class GetCustomerInvoiceDistributionView(RetrieveAPIView):
 
 @method_decorator(cache_page(60 * 60 * 24), name='dispatch')
 class GetAppointmentTypeCountDistributionView(RetrieveAPIView):
+	queryset= Appointment.objects.all()
+
 	@swagger_auto_schema(operation_description="Get customer appointment type count distribution", responses={
 		200: openapi.Response(description="Customer appointment type count distribution",
 			examples={"application/json": {"we_wash": 25, "grooming": 50}})})
@@ -34,6 +38,8 @@ class GetAppointmentTypeCountDistributionView(RetrieveAPIView):
 
 @method_decorator(cache_page(60 * 60 * 24), name='dispatch')
 class GetAppointmentCancellationRateView(RetrieveAPIView):
+	queryset= Appointment.objects.all()
+
 	@swagger_auto_schema(operation_description="Get customer cancellation rate", responses={
 		200: openapi.Response(description="Percentage of appointments that were cancelled",
 			examples={"application/json": {"rate": 25}})})
@@ -45,6 +51,8 @@ class GetAppointmentCancellationRateView(RetrieveAPIView):
 
 @method_decorator(cache_page(60 * 60 * 24), name='dispatch')
 class GetAppointmentNoShowRateView(RetrieveAPIView):
+	queryset= Appointment.objects.all()
+
 	@swagger_auto_schema(operation_description="Get customer no show rate", responses={
 		200: openapi.Response(description="Percentage of appointments that were no shows",
 			examples={"application/json": {"rate": 35}})})
@@ -57,6 +65,7 @@ class GetAppointmentNoShowRateView(RetrieveAPIView):
 
 @method_decorator(cache_page(60 * 60 * 24), name='dispatch')
 class GetYearlyAppointmentSummaryView(RetrieveAPIView):
+	queryset= Appointment.objects.all()
 	@swagger_auto_schema(operation_description="Get customer no show rate", responses={
 		200: openapi.Response(description="Percentage of appointments that were no shows", examples={
 			"application/json": {"01-05-2022": {"tip": 10, "we_wash": 50, "grooming": 80, "products": 20},

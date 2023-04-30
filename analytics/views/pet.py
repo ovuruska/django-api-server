@@ -7,12 +7,15 @@ from rest_framework import serializers
 from rest_framework.generics import RetrieveAPIView
 
 from analytics.selectors import get_average_service_time
+from scheduling.views import Appointment
+
 
 class AverageServiceTimeSerializer(serializers.Serializer):
 	average_service_time = serializers.FloatField()
 
 @method_decorator(cache_page(60 * 60 * 24), name='dispatch')
 class AverageServiceTimeView(RetrieveAPIView):
+	queryset= Appointment.objects.all()
 
 	serializer_class = AverageServiceTimeSerializer
 

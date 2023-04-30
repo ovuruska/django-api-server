@@ -37,6 +37,8 @@ class CustomerFilterAPIView2(CustomerFilterAPIView):
 class CustomerPetsListAPIView(ListAPIView):
 	Pet = apps.get_model('scheduling', 'Dog')
 	serializer_class = DogSerializer
+	queryset= Pet.objects.all()
+
 	filter_backends = [DjangoFilterBackend]
 
 	def get_queryset(self):

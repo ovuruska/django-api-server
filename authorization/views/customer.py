@@ -50,7 +50,7 @@ class CustomerRegisterAPIView(CreateAPIView, PermissionRequiredMixin):
 		first_name = serialized_data.get("first_name")
 		last_name = serialized_data.get("last_name")
 		name = f"{first_name} {last_name}"
-		customer = Customer.objects.create(user=user,name=name,email=email)
+		customer = Customer.objects.create(user=user, name=name, email=email)
 		return Response({"user": UserSerializer(user, context=self.get_serializer_context()).data,
 		                 "token": AuthToken.objects.create(user)[1], "profile": model_to_dict(customer)})
 
@@ -73,32 +73,26 @@ class CustomerLoginAPIView(GenericAPIView):
 			return Response({"user": UserSerializer(user, context=self.get_serializer_context()).data,
 			                 "token": AuthToken.objects.create(user)[1], "profile": model_to_dict(customer)})
 
+
 class CustomerResetPasswordAPIView(GenericAPIView, PermissionRequiredMixin):
-    permission_classes = [AllowAny]
-    def post(self, request):
-        try:
-            email = request.data.get("email")
-            user = User.objects.get(email=email)
-            if user:
-                token = default_token_generator.make_token(user)
-                uid = urlsafe_base64_encode(force_bytes(user.pk))
 
-                # Create the password reset link
-                password_reset_link = f'{request.scheme}://{request.get_host()}/reset/{uid}/{token}'
+	permission_classes = [AllowAny]
 
-            mailchimp = MailchimpTransactional.Client("md-tR-YgWbvBPO7GPGjzBD-eg")
-            response = mailchimp.messages.send({
-                'message': {
-                    'from_email': 'support@makequicker.com',
-                    'subject': 'Reset Password',
-                    'text': '',
-                    'to': [{'email': f'{email}', 'type': 'to'}]
-                }
-            })
-            return HttpResponse(f'Successfully sent email: {response}')
-        except ApiClientError as error:
-            return HttpResponse(f'An error occurred: {error.text}')
+	def post(self, request):
+		try:
+			email = request.data.get("email")
+			user = User.objects.get(email=email)
+			if user:
+				token = default_token_generator.make_token(user)
+				uid = urlsafe_base64_encode(force_bytes(user.pk))
 
+				# Create the password reset link
+				password_reset_link = f'{request.scheme}://{request.get_host()}/reset/{uid}/{token}'
 
-
-
+			mailchimp = MailchimpTransactional.Client("md-tR-YgWbvBPO7GPGjzBD-eg")
+			response = mailchimp.messages.send({
+				'message': {'from_email': 'support@makequicker.com', 'subject': 'Reset Password', 'text': '',
+					'to': [{'email': f'{email}', 'type': 'to'}]}})
+			return HttpResponse(f'Successfully sent email: {response}')
+		except ApiClientError as error:
+			return HttpResponse(f'An error occurred: {error.text}')

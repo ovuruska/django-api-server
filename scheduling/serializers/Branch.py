@@ -21,7 +21,8 @@ class FreeHoursSerializer(serializers.Serializer):
 	free_hours = serializers.ListField(child=serializers.DateTimeField())
 
 class BranchAvailableEmployeesBranchSerializer(serializers.Serializer):
-
+	appointments = serializers.ModelSerializer(many=True)
+	employees = serializers.ModelSerializer(many=True)
 	class Meta:
 		model = Branch
 		fields = ('id', 'name')

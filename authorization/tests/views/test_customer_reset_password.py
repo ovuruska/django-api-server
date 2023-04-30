@@ -3,10 +3,13 @@ from django.test import TestCase
 from django.urls import reverse
 from unittest.mock import patch
 
+from scheduling.models import Customer
+
 User = get_user_model()
 
 
 class CustomerResetPasswordAPIViewTestCase(TestCase):
+	queryset = Customer.objects.all()
 	def setUp(self):
 		self.user = User.objects.create_user(username='testuser', email='test@example.com', password='testpassword')
 
