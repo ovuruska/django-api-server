@@ -33,7 +33,7 @@ class CustomerVerifyTokenView(APIView):
 
 
 class CustomerRegisterAPIView(CreateAPIView, PermissionRequiredMixin):
-	permission_classes = ([])
+	permission_classes = [AllowAny]
 	authentication_classes = ([])
 	serializer_class = RegisterCustomerRequestSerializer
 
@@ -58,6 +58,7 @@ class CustomerRegisterAPIView(CreateAPIView, PermissionRequiredMixin):
 class CustomerLoginAPIView(GenericAPIView):
 	serializer_class = LoginCustomerRequestSerializer
 	authentication_classes = ([])
+	permission_classes = [AllowAny]
 
 	@validate_request(LoginCustomerRequestSerializer)
 	def post(self, request, *args, **kwargs):
