@@ -10,7 +10,7 @@ from scheduling.serializers.auth import UserSerializer, LoginUserSerializer
 
 class EmployeeLoginAPIView(GenericAPIView, PermissionRequiredMixin):
 	permission_classes = [AllowAny]
-
+	authentication_classes = []
 	serializer_class = LoginUserSerializer
 	def post(self, request, *args, **kwargs):
 		serializer = self.get_serializer(data=request.data)

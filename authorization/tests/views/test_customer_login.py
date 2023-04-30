@@ -42,4 +42,10 @@ class TestCustomerLogin(TestCase):
 		response = self.client.post(self.url,body,format="json")
 		self.assertEqual(response.status_code, 400)
 
+	def test_correct_account_with_token(self):
+		token = "2c0d19194c042d7fe976fb9240915007a402b3d8228a1958b59b54daf816fb84"
+		headers = {'HTTP_AUTHORIZATION': f'Token {token}'}
+		body = {"email": self.email, "password": self.password}
+		response = self.client.post(self.url,body,format="json",**headers)
+		self.assertEqual(response.status_code, 200)
 

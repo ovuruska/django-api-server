@@ -48,3 +48,14 @@ class TestCustomerRegisterAPIView(TestCase):
 		response = self.client.post(self.url, data=data, format="json")
 		self.assertEqual(response.status_code, 400)
 
+	def test_correct_account_with_token(self):
+		token = "2c0d19194c042d7fe976fb9240915007a402b3d8228a1958b59b54daf816fb84"
+		headers = {'HTTP_AUTHORIZATION': f'Token {token}'}
+		data = {
+			"email": "new@tenet.com",
+			"password": "test1234",
+			"first_name": "test",
+			"last_name": "lastname"
+		}
+		response = self.client.post(self.url,data=data,format="json",**headers)
+		self.assertEqual(response.status_code, 200)

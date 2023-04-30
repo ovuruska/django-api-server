@@ -2,14 +2,28 @@ Quicker Backend
 ==============
 
 
-This Django project is a comprehensive scheduling and management application for appointments, transactions, and capacity planning. It features various APIs and modules that help manage the app's functionality, including analytics, authorization, search, and more.
-
-Quicker Backend
-
-======================
-
 [![Test, Build and Push Docker Image](https://github.com/make-quicker/backend/actions/workflows/deploy.yml/badge.svg)](https://github.com/make-quicker/backend/actions/workflows/deploy.yml)
 This README file contains instructions on how to set up and run our project's backend server on a local device. We utilize two different servers for different purposes: a SAM (Serverless Application Model) server to simulate AWS Lambda calls, and a naive Django server for testing and documentation purposes. Each server has its own setup and configuration requirements, which are outlined below.
+
+
+This Django project is a comprehensive scheduling and management application for appointments, transactions, and capacity planning. It features various APIs and modules that help manage the app's functionality, including analytics, authorization, search, and more.
+
+Errors
+--------------
+If you are getting this error
+```
+django.db.utils.NotSupportedError: deterministic=True requires SQLite 3.8.3 or higher
+```
+*You have to switch to dev environment.*
+<br>
+<br>
+Else if you are getting this error
+```
+django.db.utils.OperationalError: could not translate host name "host.docker.internal" to address: nodename nor servname provided, or not known
+```
+*You have to switch to test environment.*
+
+**If you are getting another error, please create an issue and notify [project manager](https://github.com/ovuruska).**
 
 SAM Server Setup
 ----------------
@@ -71,4 +85,5 @@ As mentioned earlier, our backend utilizes two different servers for different p
 *   **Naive Django Server**: Used for testing and documentation purposes, enabling you to run tests and view the Swagger/ReDoc API documentation.
 
 Please ensure that you follow the appropriate setup and configuration instructions for each server depending on your intended use.
+
 

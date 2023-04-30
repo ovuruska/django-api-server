@@ -17,17 +17,12 @@ from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework import status
 
-from django.contrib.auth import get_user_model
 from django.contrib.auth.tokens import default_token_generator
 from django.http import HttpResponse, JsonResponse
 from django.utils.encoding import force_bytes
 from django.utils.http import urlsafe_base64_encode
 import mailchimp_transactional as MailchimpTransactional
 from mailchimp_transactional.api_client import ApiClientError
-from mailchimp_transactional.api_client import ApiClient
-
-
-from scrubbers_backend import settings
 
 
 class CustomerVerifyTokenView(APIView):
@@ -38,7 +33,8 @@ class CustomerVerifyTokenView(APIView):
 
 
 class CustomerRegisterAPIView(CreateAPIView, PermissionRequiredMixin):
-	permission_classes = [AllowAny]
+	permission_classes = ([])
+	authentication_classes = ([])
 	serializer_class = RegisterCustomerRequestSerializer
 
 	@validate_request(RegisterCustomerRequestSerializer)
@@ -59,9 +55,9 @@ class CustomerRegisterAPIView(CreateAPIView, PermissionRequiredMixin):
 		                 "token": AuthToken.objects.create(user)[1], "profile": model_to_dict(customer)})
 
 
-class CustomerLoginAPIView(GenericAPIView, PermissionRequiredMixin):
-	permission_classes = [AllowAny]
+class CustomerLoginAPIView(GenericAPIView):
 	serializer_class = LoginCustomerRequestSerializer
+	authentication_classes = ([])
 
 	@validate_request(LoginCustomerRequestSerializer)
 	def post(self, request, *args, **kwargs):
