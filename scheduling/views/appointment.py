@@ -6,6 +6,7 @@ from django.contrib.auth.mixins import PermissionRequiredMixin
 from django.core.signing import Signer
 from django.db.models import Q
 from django.http import QueryDict
+from drf_yasg.utils import swagger_auto_schema
 from rest_framework import generics
 from rest_framework.permissions import AllowAny
 from rest_framework.response import Response
@@ -17,6 +18,7 @@ from common.permissions.AppointmentPermissions import CanCreateAppointment, CanU
 	CanAppointmentEmployeeRetrieve
 from common.roles import Roles
 from common.save_transaction import save_transaction
+from common.validate_request import validate_request
 from ..models import Customer, Service, Product, EmployeeWorkingHour, Employee, Branch
 from ..selectors import get_last_appointment_by_same_customer
 from ..serializers.Appointment import *
@@ -28,17 +30,21 @@ class AppointmentEmployeeCreateAPIView(generics.CreateAPIView, PermissionRequire
 	permission_required = [CanCreateAppointment]
 	Customer = apps.get_model('scheduling', 'Customer')
 	Dog = apps.get_model('scheduling', 'Dog')
-	serializer_class = AppointmentEmployeeCreateSerializer
+	serializer_class = AppointmentEmployeeSerializer
 
+	@swagger_auto_schema(
+		request_body=AppointmentEmployeeCreateSerializer,
+		operation_description="Create an appointment",
+		responses={201: AppointmentEmployeeSerializer}
+	)
+	@validate_request(AppointmentEmployeeCreateSerializer)
 	def post(self, request, *args, **kwargs):
-		customer_name = request.data.get("customer_name")
-		customer_email = request.data.get("customer_email", "")
-		customer_phone = request.data.get("customer_phone", "")
-		customer = create_customer_with_name(customer_name, email=customer_email, phone=customer_phone)
 
-		dog_name = request.data.get("dog_name")
-		dog_breed = request.data.get("dog_breed", "")
-		dog = create_pet_with_name(customer, dog_name, breed=dog_breed)
+		customer = request.data.get('customer')
+		pet = request.data.get('pet')
+		employee = request.data.get('employee')
+		branch = request.data.get('branch')
+
 
 		cost = 0
 		products = request.data.get('products', [])
@@ -49,29 +55,22 @@ class AppointmentEmployeeCreateAPIView(generics.CreateAPIView, PermissionRequire
 		tip = request.data.get('tip', 0)
 		cost += tip
 
-		# Allow mutations for request.data
-		try:
-			request.data._mutable = True
-		except AttributeError:
-			pass
+		start = request.data["start"]
+		end = request.data.get("end",None)
+		if end is None:
+			# Convert start to date time with day month hour
+			start_datetime = datetime.strptime(start, "%Y-%m-%dT%H:%M:%S")
+			end = start_datetime + timedelta(hours=1)
 
-		try:
-			start = request.data["start"]
-			end = request.data.get("end",None)
-			if end is None:
-				# Convert start to date time with day month hour
-				start_datetime = datetime.strptime(start, "%Y-%m-%dT%H:%M:%S")
-				end = start_datetime + timedelta(hours=1)
+		appointment = Appointment(start=request.data["start"], end=end, customer_id=customer, dog_id=pet,
+		                          employee_id=employee, branch_id=branch
+		                          ,
+		                          status=Appointment.Status.CONFIRMED, cost=cost)
+		appointment.save()
+		# Return the appointment as JSON
+		serializer = AppointmentEmployeeSerializer(appointment)
+		return Response(serializer.data,status = HTTP_201_CREATED)
 
-			appointment = Appointment(start=request.data["start"], end=end, customer=customer, dog=dog,
-			                          employee_id=request.data["employee_id"], branch_id=request.data["branch_id"],
-			                          status=Appointment.Status.CONFIRMED, cost=cost)
-			appointment.save()
-			# Return the appointment as JSON
-			serializer = AppointmentEmployeeSerializer(appointment)
-			return Response(serializer.data,status = HTTP_201_CREATED)
-		except KeyError as e:
-			return Response({"error": str(e)}, status=HTTP_400_BAD_REQUEST)
 
 
 class AppointmentCreateAPIView(generics.CreateAPIView, PermissionRequiredMixin):

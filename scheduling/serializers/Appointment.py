@@ -9,21 +9,22 @@ from scheduling.serializers.Employee import EmployeeSerializer, EmployeeShallowS
 from scheduling.serializers.Product import ProductSerializer
 from scheduling.serializers.Service import ServiceSerializer
 
-class AppointmentEmployeeCreateSerializer(serializers.ModelSerializer):
-	dog_name = serializers.CharField( read_only=True)
-	customer_name = serializers.CharField( read_only=True)
-	class Meta:
-		model = Appointment
-		fields = [
-			"employee",
-			"start",
-			"end",
-			"dog_name",
-			"customer_name"
-		]
-		extra_kwargs = {"employee": {"required": True, "allow_null": False}}
 
+class AppointmentEmployeeCreateSerializer(serializers.Serializer):
+	pet = serializers.IntegerField(required=True)
+	customer = serializers.IntegerField(required=True)
+	employee = serializers.IntegerField(required=True)
+	branch = serializers.IntegerField(required=True)
+	start = serializers.DateTimeField(required=True)
+	end = serializers.DateTimeField(required=True)
+	products = serializers.ListField(child=serializers.IntegerField(), required=False, default=[])
+	service = serializers.CharField(required=True)
 
+	def validate(self, data):
+		if data['start'] > data['end']:
+			raise serializers.ValidationError("Start date must be before end date")
+
+		return data
 
 class AppointmentCreateSerializer(serializers.ModelSerializer):
 	class Meta:

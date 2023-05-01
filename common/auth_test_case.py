@@ -24,6 +24,7 @@ class EmployeeAuthTestCase(TestCase):
 		self.employee_headers = {'HTTP_AUTHORIZATION': f'Token {token}'}
 
 
+
 class CustomerAuthTestCase(TestCase):
 
 	def setUp(self):
@@ -40,3 +41,4 @@ class CustomerAuthTestCase(TestCase):
 		# Login
 		token_instance, token = AuthToken.objects.create(self.user)
 		self.customer_headers = {'HTTP_AUTHORIZATION': f'Token {token}'}
+
