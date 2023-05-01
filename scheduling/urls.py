@@ -29,18 +29,14 @@ dogs = [
 	path('pets', views.PetFilterView.as_view(), name="dog_filter"),
 ]
 
-appointments = [
-	path('appointment', views.AppointmentCreateAPIView.as_view(), name='appointment_create'),
-]
 
 scheduling_appointments = [
 	path('schedule/appointment/<int:pk>', views.AppointmentModifyAPIView.as_view(), name='appointment'),
 	path('schedule/appointments/<int:pk>', views.AppointmentEmployeeRetrieveAPIView.as_view(), name='appointment'),
 	path('customer/appointments', views.CustomerGetAppointmentsAPIView.as_view(), name='customer-appointments'),
 	path('schedule/appointments', views.AppointmentFilterListViewV2_1.as_view(), name='appointment_filter_and_list'),
-	path('schedule/appointment', views.EmployeeCreateAppointmentView.as_view(),
-	     name='appointment_employee_create_api_view'),
-	path('schedule/appointment-employee', views.AppointmentEmployeeCreateAPIView.as_view(),name='scheduling/appointment-employee-create'),
+	path('schedule/appointment', views.AppointmentEmployeeCreateAPIView.as_view(),
+	     name='scheduling/appointment-employee-create'),
 ]
 
 auth = [
@@ -94,5 +90,5 @@ signed_url = [
 	path('confirmation/<token>/reschedule', views.SignedUrlRescheduleAPIView.as_view(), name='signed_url_reschedule'),
 ]
 
-urlpatterns = urlpatterns + branch_working_hour + products + services + dogs + appointments + employees \
+urlpatterns = urlpatterns + branch_working_hour + products + services + dogs +  employees \
               + employee_working_hour + scheduling_appointments + payrolls + signed_url + branches + customers + auth + branch_employees
