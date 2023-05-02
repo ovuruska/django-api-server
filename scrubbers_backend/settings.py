@@ -12,7 +12,6 @@ https://docs.djangoproject.com/en/4.0/ref/settings/
 import os
 from datetime import timedelta
 from pathlib import Path
-from .discord_webhook_handler import DiscordWebhookHandler
 from dotenv import load_dotenv
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -141,32 +140,6 @@ MAILCHIMP_TEMPLATE_NAME = '<Quicker-Reset-Password>'
 # Configure the mailchimp_transactional package to use your Mailchimp API key and base URL
 MAILCHIMP_TRANSACTIONAL_API_KEY = MAILCHIMP_API_KEY
 MAILCHIMP_TRANSACTIONAL_API_BASE_URL = MAILCHIMP_API_URL
-
-
-
-LOGGING = {
-    "version": 1,
-    "disable_existing_loggers": False,
-    "handlers": {
-        "webhook": {
-	        "level": "DEBUG",
-            "class":"scrubbers_backend.discord_webhook_handler.DiscordWebhookHandler",
-	        "webhook_url": "https://discord.com/api/webhooks/1094364223959740486/9W69d8AHC0HWe67lpzyKVXos1Z07xxr5lyr_L9QKnxuNzQ4aJa4t5SfsiX5FPCpyx1tB"
-        },
-    },
-    'loggers': {
-	    "django.request":{
-            'handlers': ['webhook'],
-            'level': 'DEBUG',
-		    "propagate": False,
-	    }
-    },
-	'formatters': {
-	        'verbose': {
-	            'format': '%(asctime)s [%(levelname)s] %(name)s: %(message)s',
-	        },
-	    },
-}
 
 TEST = {
     'ATOMIC_REQUESTS': True,
