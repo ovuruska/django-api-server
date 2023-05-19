@@ -10,7 +10,8 @@ def validate_request(serializer: Type[Serializer]) -> Callable:
 		def wrapper(*args, **kwargs):
 			request = args[1]
 			serializer_instance = serializer(data=request.data)
-			if serializer_instance.is_valid():
+			is_valid = serializer_instance.is_valid()
+			if is_valid:
 				serialized_data = serializer_instance.validated_data
 				return func(*args, serialized_data=serialized_data,**kwargs)
 			else:
