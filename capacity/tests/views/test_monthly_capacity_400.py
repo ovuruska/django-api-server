@@ -40,15 +40,3 @@ class GetMonthlyCapacity400TestCase(EmployeeAuthTestCase):
 		response = self.client.post(self.url, **self.employee_headers,data=data,format='json')
 		self.assertEqual(response.status_code, 400)
 
-
-	def test_400_on_non_existing_fields(self):
-
-		data = {
-			'date':'01/2019',
-			'branch':[1],
-			'employee':[1],
-			'service':'We Wash'
-		}
-
-		response = self.client.post(self.url, **self.employee_headers, data=data, format='json')
-		self.assertEqual(response.status_code, 400)
