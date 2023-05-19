@@ -1,20 +1,3 @@
-"""
-from django.apps import apps
-from rest_framework.response import Response
-from rest_framework.views import APIView
-
-from payment.serializers.models.credit_card import CreditCardSerializer
-
-CreditCard = apps.get_model('payment.CreditCard')
-
-class ListCustomerCardsView(APIView):
-	def get(self, request, *args, **kwargs):
-		user = request.user
-		customer = user.customer
-		cards = CreditCard.objects.find(owner=customer)
-		serializer = CreditCardSerializer(cards, many=True)
-		return Response(serializer.data)
-"""
 from django.apps import apps
 from django.urls import reverse
 

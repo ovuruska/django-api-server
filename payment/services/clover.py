@@ -68,15 +68,6 @@ class CloverService:
 			**card_data,
 		}
 
-	def create_customer(self, email, first_name, last_name, card_token):
-		url = f'{self.base_url}/customers'
-		headers = {'accept': 'application/json', 'authorization': f'Bearer {self.access_token}',
-			'content-type': 'application/json'}
-		data = {'email': email, 'firstName': first_name, 'lastName': last_name, 'source': card_token}
-		response = requests.post(url, headers=headers, json=data)
-		response.raise_for_status()
-		return response.json()
-
 	def charge(self, amount, currency, source,idempotency_key:str,tip_amount=None):
 		url = f'{self.base_url}/charges'
 		headers = {'accept': 'application/json', 'authorization': f'Bearer {self.access_token}',
@@ -90,12 +81,5 @@ class CloverService:
 		return response.json()
 
 	def delete_credit_card(self,customer_token : str, card_token : str):
-		headers = {
-			"accept": "application/json",
-			"authorization": f"Bearer {self.access_token}",
-		}
-		url = f"{self.base_url}/customers/{customer_token}/cards/{card_token}"
-		response = requests.delete(url, headers=headers)
-		response.raise_for_status()
-		return response.json()
+		return None
 
