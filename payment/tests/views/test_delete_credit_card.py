@@ -32,8 +32,9 @@ class DeleteCreditCardTestCase(CustomerAuthTestCase):
 	}
 	credit_card = CreditCardWrapper(CreditCardMock(**credit_card_data))
 
+	@patch.object(CloverService,'__init__',return_value=None)
 	@patch.object(CloverService, 'delete_credit_card')
-	def test_delete_customer_credit_card(self,mock_delete_credit_card):
+	def test_delete_customer_credit_card(self,mock_delete_credit_card,mock_init):
 		with patch('payment.models.CreditCard.objects.get', return_value=self.credit_card) as mock_get:
 				credit_card_id = self.credit_card.id
 				url = reverse('payment/delete-card', kwargs={'pk': credit_card_id})
@@ -43,10 +44,12 @@ class DeleteCreditCardTestCase(CustomerAuthTestCase):
 					mock_get.assert_called_once_with(id=credit_card_id, owner=self.customer)
 					mock_delete_credit_card.assert_called_once_with(self.credit_card.customer_token, self.credit_card.card_token)
 					mock_delete.assert_called_once()
+					mock_init.assert_called_once()
 
 
+	@patch.object(CloverService,'__init__',return_value=None)
 	@patch.object(CloverService, 'delete_credit_card')
-	def test_delete_customer_credit_card_not_found(self,mock_delete_credit_card):
+	def test_delete_customer_credit_card(self,mock_delete_credit_card,mock_init):
 		with patch('payment.models.CreditCard.objects.get', return_value=None) as mock_get:
 				credit_card_id = 2
 				url = reverse('payment/delete-card', kwargs={'pk': credit_card_id})
@@ -58,9 +61,9 @@ class DeleteCreditCardTestCase(CustomerAuthTestCase):
 					mock_delete.assert_not_called()
 					response_data = response.json()
 					self.assertEqual(response_data['detail'], f'Credit card with id {credit_card_id} not found')
-
+	@patch.object(CloverService,'__init__',return_value=None)
 	@patch.object(CloverService, 'delete_credit_card', side_effect=HTTPError('Test Exception'))
-	def test_delete_customer_credit_card_exception(self,mock_delete_credit_card):
+	def test_delete_customer_credit_card(self,mock_delete_credit_card,mock_init):
 		with patch('payment.models.CreditCard.objects.get', return_value=self.credit_card) as mock_get:
 				credit_card_id = self.credit_card.id
 				url = reverse('payment/delete-card', kwargs={'pk': credit_card_id})

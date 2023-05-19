@@ -13,32 +13,37 @@ class CreateCreditCardTestCase(CustomerAuthTestCase):
 	credit_card_response = {"exp_month": "12", "exp_year": "2026", "cvv": "123", "first6": "601136", "last4": "6668",
 		"brand": "DISCOVER", "card_token": "card_1234", "customer_token": "customer_1234"}
 
+	@patch('payment.services.clover.CloverService.__init__', return_value=None)
 	@patch('payment.services.clover.CloverService.create_credit_card', return_value={})
-	def test_with_invalid_card_number_request_returns_400(self, _):
+	def test_with_invalid_card_number_request_returns_400(self, _,__):
 		data = {**self.credit_card_information, 'card_number': 'invalid'}
 		response = self.client.post(self.url, data=data, format='json', **self.customer_headers)
 		self.assertEqual(response.status_code, 400)
 
+	@patch('payment.services.clover.CloverService.__init__', return_value=None)
 	@patch('payment.services.clover.CloverService.create_credit_card', return_value={})
-	def test_with_invalid_cvv_number_request_returns_400(self, _):
+	def test_with_invalid_card_number_request_returns_400(self, _,__):
 		data = {**self.credit_card_information, 'cvv': '1234'}
 		response = self.client.post(self.url, data=data, format='json', **self.customer_headers)
 		self.assertEqual(response.status_code, 400)
 
+	@patch('payment.services.clover.CloverService.__init__', return_value=None)
 	@patch('payment.services.clover.CloverService.create_credit_card', return_value={})
-	def test_with_past_exp_date_request_returns_400(self, _):
+	def test_with_invalid_card_number_request_returns_400(self, _,__):
 		data = {**self.credit_card_information, 'exp_date': '12/2020'}
 		response = self.client.post(self.url, data=data, format='json', **self.customer_headers)
 		self.assertEqual(response.status_code, 400)
 
+	@patch('payment.services.clover.CloverService.__init__', return_value=None)
 	@patch('payment.services.clover.CloverService.create_credit_card', return_value={})
-	def test_with_invalid_exp_date_request_returns_400(self, mock_create_credit_card):
+	def test_with_invalid_card_number_request_returns_400(self, _,__):
 		data = {**self.credit_card_information, 'exp_date': 'invalid'}
 		response = self.client.post(self.url, data=data, format='json', **self.customer_headers)
 		self.assertEqual(response.status_code, 400)
 
+	@patch('payment.services.clover.CloverService.__init__', return_value=None)
 	@patch('payment.services.clover.CloverService.create_credit_card', return_value=credit_card_response)
-	def test_with_valid_card_request_returns_201(self, mock_create_credit_card):
+	def test_with_valid_card_request_returns_201(self, mock_create_credit_card,mock_clover_service_init):
 		data = self.credit_card_information
 		response = self.client.post(self.url, data=data, format='json', content_type="application/json",
 		                            **self.customer_headers)
@@ -53,9 +58,11 @@ class CreateCreditCardTestCase(CustomerAuthTestCase):
 		self.assertEqual(response_data['first6'], self.credit_card_response['first6'])
 		self.assertEqual(response_data['last4'], self.credit_card_response['last4'])
 		mock_create_credit_card.assert_called_once()
+		mock_clover_service_init.assert_called_once()
 
+	@patch('payment.services.clover.CloverService.__init__', return_value=None)
 	@patch('payment.services.clover.CloverService.create_credit_card', return_value=credit_card_response)
-	def test_allow_address_line_2_is_blank(self, _):
+	def test_allow_address_line_2_is_blank(self, _,__):
 		data = {
 			**self.credit_card_information,
 		}
@@ -63,8 +70,10 @@ class CreateCreditCardTestCase(CustomerAuthTestCase):
 		response = self.client.post(self.url, data=data, format='json', content_type="application/json",
 		                            **self.customer_headers)
 		self.assertEqual(response.status_code, 201)
+
+	@patch('payment.services.clover.CloverService.__init__', return_value=None)
 	@patch('payment.services.clover.CloverService.create_credit_card', return_value=credit_card_response)
-	def test_allow_address_line_2_is_empty(self,_):
+	def test_allow_address_line_2_is_empty(self,_,__):
 		data = {
 			**self.credit_card_information,
 		}
