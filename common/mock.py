@@ -179,7 +179,7 @@ class Mock:
 				breed=fake.random.choice(breeds), weight=fake.random.normalvariate(80, 20), employee_notes=fake.text(),
 				customer_notes=fake.text(), special_handling=fake.random.choice(5 * [True] + 95 * [False]),
 				rabies_vaccination=fake.date_time_between(start_date="-3m", end_date="+2y", tzinfo=pytz.utc),
-				age=fake.random_int(min=1, max=20), coat_type=fake.random.choice(models.Dog.CoatType.choices), )
+				age=fake.random_int(min=1, max=20) )
 			dog.save()
 			dogs.append(dog)
 
