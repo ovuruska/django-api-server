@@ -31,7 +31,7 @@ class CreateCreditCardSerializerTestCase(TestCase):
 			**self.base,
 			"card_number": "1234123412341234",
 			"cvv": "123",
-			"exp_date": "12/2020",
+			"exp_date": "12/2412",
 		}
 		serializer = CreateCreditCardRequestSerializer(data=data)
 		self.assertTrue(serializer.is_valid())
@@ -54,7 +54,7 @@ class CreateCreditCardSerializerTestCase(TestCase):
 		serializer = CreateCreditCardRequestSerializer(data=data)
 		self.assertFalse(serializer.is_valid())
 
-	def test_invalid_exp_date(self):
+	def test_invalid_past_exp_date(self):
 		data = {
 			**self.base,
 			"cvv": "123",
@@ -62,21 +62,56 @@ class CreateCreditCardSerializerTestCase(TestCase):
 			"exp_date": "12/20",
 		}
 		serializer = CreateCreditCardRequestSerializer(data=data)
-		self.assertFalse(serializer.is_valid())
+		valid = serializer.is_valid()
+		self.assertFalse(valid)
 
-
+	def test_invalid_past_exp_date_2(self):
+		data = {
+			**self.base,
+			"cvv": "123",
+			"card_number": "1234123412341234",
+			"exp_date": "12/2019",
+		}
+		serializer = CreateCreditCardRequestSerializer(data=data)
+		valid = serializer.is_valid()
+		self.assertFalse(valid)
 	def test_check_address_fields_are_serialized_correctly(self):
 		data ={
 			**self.base,
 			"card_number": "1234123412341234",
 			"cvv": "123",
-			"exp_date": "12/2020",
+			"exp_date": "12/2400",
 		}
 		serializer = CreateCreditCardRequestSerializer(data=data)
-		serializer.is_valid()
+		self.assertTrue(serializer.is_valid())
 		self.assertEqual(serializer.data['address']['city'], data['address']['city'])
 		self.assertEqual(serializer.data['address']['country'], data['address']['country'])
 		self.assertEqual(serializer.data['address']['address_line_1'], data['address']['address_line_1'])
 		self.assertEqual(serializer.data['address']['address_line_2'], data['address']['address_line_2'])
 		self.assertEqual(serializer.data['address']['postal_code'], data['address']['postal_code'])
 		self.assertEqual(serializer.data['address']['state'], data['address']['state'])
+
+	def test_allowed_address_line_2_blank(self):
+		data = {
+			**self.base,
+			"card_number": "1234123412341234",
+			"cvv": "123",
+			"exp_date": "12/2400",
+		}
+		data['address']['address_line_2'] = ''
+		serializer = CreateCreditCardRequestSerializer(data=data)
+		self.assertTrue(serializer.is_valid())
+
+	def test_allowed_address_line_2_empty(self):
+		data = {
+			**self.base,
+			"address": {
+				**self.base['address'],
+			},
+			"card_number": "1234123412341234",
+			"cvv": "123",
+			"exp_date": "12/2400",
+		}
+		del data['address']['address_line_2']
+		serializer = CreateCreditCardRequestSerializer(data=data)
+		self.assertTrue(serializer.is_valid())

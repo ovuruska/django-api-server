@@ -7,7 +7,7 @@ class AddressSerializer(serializers.Serializer):
 	city = serializers.CharField()
 	country = serializers.CharField()
 	address_line_1 = serializers.CharField()
-	address_line_2 = serializers.CharField()
+	address_line_2 = serializers.CharField(allow_blank=True,allow_null=True,default="")
 	postal_code = serializers.CharField()
 	state = serializers.CharField()
 
@@ -32,9 +32,12 @@ class CreateCreditCardRequestSerializer(serializers.Serializer):
 			raise serializers.ValidationError("Expiration date must be in the format 'MM/YY'.")
 
 		# Validate if the date is in the future
+		try:
+			exp_datetime = datetime.strptime(exp_date, '%m/%y')
+		except ValueError:
+			exp_datetime = datetime.strptime(exp_date, '%m/%Y')
 		current_date = datetime.now()
-		current_date = datetime.strftime(current_date, '%m/%y')
-		if exp_date <= current_date:
+		if exp_datetime <= current_date:
 			raise serializers.ValidationError("Expiration date must be in the future.")
 
 		card_number = re.sub(r'\s', '', card_number)
