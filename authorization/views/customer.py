@@ -31,7 +31,6 @@ class CustomerVerifyTokenView(APIView):
 	def get(self, request):
 		return Response(status=status.HTTP_200_OK)
 
-
 class CustomerRegisterAPIView(CreateAPIView, PermissionRequiredMixin):
 	permission_classes = [AllowAny]
 	authentication_classes = ([])

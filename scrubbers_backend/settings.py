@@ -44,9 +44,15 @@ INSTALLED_APPS = ['django.contrib.admin', 'django.contrib.auth', 'django.contrib
                   'authorization', 'corsheaders', 'scheduling', 'django_filters', 'graphene_django', 'search',
                   'analytics', 'capacity', 'available','payment']
 
+
 FIREBASE_CONFIG = os.path.join(BASE_DIR, 'firebase-config.json')
+ALLOW_UNAUTHENTICATED = os.environ.get('ALLOW_UNAUTHENTICATED') or False
+DEFAULT_PERMISSION_CLASSES = 'rest_framework.permissions.AllowAny' if ALLOW_UNAUTHENTICATED else 'rest_framework.permissions.IsAuthenticated',
+
+
+
 REST_FRAMEWORK = {'DEFAULT_FILTER_BACKENDS': ['django_filters.rest_framework.DjangoFilterBackend'],
-                  'DEFAULT_PERMISSION_CLASSES': ('rest_framework.permissions.IsAuthenticated',),
+                  'DEFAULT_PERMISSION_CLASSES': (DEFAULT_PERMISSION_CLASSES),
                   'DEFAULT_AUTHENTICATION_CLASSES': ('knox.auth.TokenAuthentication',),
                   'DEFAULT_SCHEMA_CLASS': 'rest_framework.schemas.coreapi.AutoSchema',}
 CORS_ORIGIN_ALLOW_ALL = True
