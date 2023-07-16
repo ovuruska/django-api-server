@@ -68,7 +68,7 @@ class CustomerListView(ListAPIView):
 			                  default='name'),
 			openapi.Parameter('page', openapi.IN_QUERY, description="Page number", type=openapi.TYPE_INTEGER,
 			                  default=0),
-			openapi.Parameter('pageCount', openapi.IN_QUERY, description="Items per page", type=openapi.TYPE_INTEGER,
+			openapi.Parameter('pageSize', openapi.IN_QUERY, description="Items per page", type=openapi.TYPE_INTEGER,
 			                  default=20),
 			openapi.Parameter('name', openapi.IN_QUERY, description="Filter by name", type=openapi.TYPE_STRING),
 		],
@@ -92,7 +92,7 @@ class CustomerListView(ListAPIView):
 		# Retrieve query parameters
 		sort = request.GET.get('sort', 'name')
 		page = int(request.GET.get('page', '0'))
-		page_count = int(request.GET.get('pageCount', '20'))
+		page_size = int(request.GET.get('pageSize', '20'))
 		name_query = request.GET.get('name')
 
 		# Create a Q object for name__icontains filter
@@ -103,7 +103,7 @@ class CustomerListView(ListAPIView):
 		customers = Customer.objects.filter(name_filter).order_by(sort)
 
 		# Use Django's built-in pagination
-		paginator = Paginator(customers, page_count)
+		paginator = Paginator(customers, page_size)
 
 		try:
 			customers = paginator.page(page + 1)
