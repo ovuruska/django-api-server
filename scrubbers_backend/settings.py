@@ -45,8 +45,7 @@ INSTALLED_APPS = ['django.contrib.admin', 'django.contrib.auth', 'django.contrib
                   'analytics', 'capacity', 'available','payment']
 
 
-ALLOW_UNAUTHENTICATED = os.environ.get('ALLOW_UNAUTHENTICATED') or False
-DEFAULT_PERMISSION_CLASSES = 'rest_framework.permissions.AllowAny' if ALLOW_UNAUTHENTICATED else 'rest_framework.permissions.IsAuthenticated',
+DEFAULT_PERMISSION_CLASSES = 'rest_framework.permissions.AllowAny',
 
 
 
