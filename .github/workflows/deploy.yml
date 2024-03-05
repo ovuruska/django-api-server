@@ -47,6 +47,12 @@ jobs:
         docker push ${{ steps.login-ecr.outputs.registry }}/quicker-api:latest
     - name: Deploy SAM application
       run: |
-        sam deploy --template-file template.yaml --stack-name quicker-api --capabilities CAPABILITY_IAM --parameter-overrides LambdaImageUri=$LAMBDA_IMAGE_URI --image-repository $LAMBDA_IMAGE_URI
+        sam deploy --template-file template.yaml --stack-name quicker-api --capabilities CAPABILITY_IAM --parameter-overrides LambdaImageUri=$LAMBDA_IMAGE_URI --image-repository $LAMBDA_IMAGE_URI --no-fail-on-empty-changeset
       env:
+        LAMBDA_IMAGE_URI: ${{ steps.login-ecr.outputs.registry }}/quicker-api:latest
+    - name: Update Lambda function code
+      run: |
+        aws lambda update-function-code --function-name $LAMBDA_FUNCTION_NAME --image-uri $LAMBDA_IMAGE_URI
+      env:
+        LAMBDA_FUNCTION_NAME: ${{ secrets.LAMBDA_FUNCTION_NAME }}
         LAMBDA_IMAGE_URI: ${{ steps.login-ecr.outputs.registry }}/quicker-api:latest
