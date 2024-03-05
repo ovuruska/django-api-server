@@ -26,8 +26,7 @@ from ..services import create_pet_with_name
 from ..services.customer import create_customer_with_name
 
 
-class AppointmentEmployeeCreateAPIView(generics.CreateAPIView, PermissionRequiredMixin):
-	permission_required = [CanCreateAppointment]
+class AppointmentEmployeeCreateAPIView(generics.CreateAPIView):
 	Customer = apps.get_model('scheduling', 'Customer')
 	Dog = apps.get_model('scheduling', 'Dog')
 	serializer_class = AppointmentEmployeeSerializer
@@ -71,11 +70,10 @@ class AppointmentEmployeeCreateAPIView(generics.CreateAPIView, PermissionRequire
 		serializer = AppointmentEmployeeSerializer(appointment)
 		return Response(serializer.data,status = HTTP_201_CREATED)
 
-class AppointmentModifyAPIView(generics.RetrieveAPIView, generics.UpdateAPIView, PermissionRequiredMixin):
+class AppointmentModifyAPIView(generics.RetrieveAPIView, generics.UpdateAPIView):
 	"""
 	This view will be used in employee application to update the status of the appointment.
 	"""
-	permission_classes = [CanUpdateAppointment]
 	serializer_class = AppointmentModifySerializer
 	queryset = Appointment.objects.all()
 
