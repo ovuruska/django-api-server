@@ -32,7 +32,7 @@ Resources:
     Type: AWS::Serverless::Function
     Properties:
       MemorySize: 128
-      Timeout: 10
+      Timeout: 30
       PackageType: Image
       ImageUri: !Ref LambdaImageUri
       Role: !GetAtt LambdaExecutionRole.Arn
