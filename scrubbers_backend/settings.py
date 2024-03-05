@@ -45,7 +45,6 @@ INSTALLED_APPS = ['django.contrib.admin', 'django.contrib.auth', 'django.contrib
                   'analytics', 'capacity', 'available','payment']
 
 
-FIREBASE_CONFIG = os.path.join(BASE_DIR, 'firebase-config.json')
 ALLOW_UNAUTHENTICATED = os.environ.get('ALLOW_UNAUTHENTICATED') or False
 DEFAULT_PERMISSION_CLASSES = 'rest_framework.permissions.AllowAny' if ALLOW_UNAUTHENTICATED else 'rest_framework.permissions.IsAuthenticated',
 
