@@ -12,8 +12,7 @@ from scheduling.models import Appointment, Branch
 from scheduling.serializers.Appointment import AppointmentEmployeeSerializer
 
 
-class AppointmentFilterListView(generics.ListAPIView, PermissionRequiredMixin):
-	permission_classes = [CanViewAllAppointments]
+class AppointmentFilterListView(generics.ListAPIView):
 	serializer_class = AppointmentEmployeeSerializer
 	filter_backends = (DjangoFilterBackend,)
 

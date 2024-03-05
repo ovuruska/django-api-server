@@ -133,8 +133,7 @@ class AppointmentModifyAPIView(generics.RetrieveAPIView, generics.UpdateAPIView,
 		return Response(serializer.data)
 
 
-class AppointmentEmployeeRetrieveAPIView(generics.RetrieveAPIView, PermissionRequiredMixin):
-	permission_classes = [CanAppointmentEmployeeRetrieve]
+class AppointmentEmployeeRetrieveAPIView(generics.RetrieveAPIView):
 	serializer_class = AppointmentEmployeeSerializer
 	queryset = Appointment.objects.all()
 
