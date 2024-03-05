@@ -10,7 +10,7 @@ Parameters:
 
 Globals:
   Function:
-    Timeout: 10
+    Timeout: 30
 
 Resources:
   LambdaExecutionRole:
@@ -47,4 +47,29 @@ Resources:
           Properties:
             Path: /{proxy+}
             Method: ANY
-
+  MyApi:
+    Type: AWS::Serverless::Api
+    Properties:
+      StageName: Prod
+      DefinitionBody:
+        swagger: '2.0'
+        info:
+          title: !Ref AWS::StackName
+        paths:
+          /{proxy+}:
+            x-amazon-apigateway-any-method:
+              produces:
+                - application/json
+              responses: { }
+              x-amazon-apigateway-integration:
+                httpMethod: POST
+                type: aws_proxy
+                uri:
+                  Fn::Sub: arn:aws:apigateway:${AWS::Region}:lambda:path/2015-03-31/functions/${LambdaDockerImage.Arn}/invocations
+        x-amazon-apigateway-cors:
+          allowOrigins:
+            - "'*'"
+          allowHeaders:
+            - "'Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token'"
+          allowMethods:
+            - "'DELETE,GET,HEAD,OPTIONS,PATCH,POST,PUT'"

@@ -59,7 +59,7 @@ class Command(BaseCommand):
 
 
 			# Get random date from future
-			date = fake.date_time_between(start_date="-2y", end_date="+2y")
+			date = fake.date_time_between(start_date="-1w", end_date="+1y")
 			# Get random working hour at that date.
 			working_hours = EmployeeWorkingHour.objects.filter(week_day=date.weekday())
 			random_working_hour = working_hours[fake.random_int(min=0, max=len(working_hours)-1)]

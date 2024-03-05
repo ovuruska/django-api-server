@@ -179,3 +179,4 @@ cython_debug/
 *.icloud
 .aws-sam
 staticfiles
+.env
